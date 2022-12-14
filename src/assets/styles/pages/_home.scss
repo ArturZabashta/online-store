@@ -1,17 +1,16 @@
 .shop{
     display: flex;
     padding: 2rem;
-    width: 100vh;
     height: 80vh;
     gap: 2%;
 
     &__tools{
-        flex:1;
+        width:20%;
         background-color : $color-background;
     }
     &__items{
         display: flex;
-        flex: 3;
+        width:70%;
         background-color: #f5f5f5;
         padding: 1rem;
         flex-wrap: wrap;

@@ -40,6 +40,10 @@ const baseConfig = {
           patterns: [
             {from: path.resolve(__dirname, './src/public/favicon.ico'),
             to: path.resolve(__dirname, './dist')},            
+            {from: path.resolve(__dirname, './src/public/rslogo.svg'),
+            to: path.resolve(__dirname, './dist/assets')},            
+            {from: path.resolve(__dirname, './src/public/store-logo.png'),
+            to: path.resolve(__dirname, './dist/assets')},            
           ], 
         }),
         new CleanWebpackPlugin(),
