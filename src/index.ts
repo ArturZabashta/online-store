@@ -1,4 +1,4 @@
 import './assets/styles/main.scss';
-import './route.js'
+import './assets/ts/route.ts'
 
 console.log('hi')
