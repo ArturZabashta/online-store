@@ -1,14 +1,14 @@
 import { IProducts, IProduct, Categories } from '../interfaces/api-interfaces';
-import { API_URL, API_METHODS, API_STATUS } from '../constants/constants';
+import { API_URL, ApiMethods, ApiStatus } from '../constants/constants';
 
 class HTTPClient {
   
   async getAllProducts(): Promise<IProducts | undefined> {     
     try {             
       const request = await fetch(`${API_URL.MAIN_URL}/products?limit=10&skip=20`, {
-        method: `${API_METHODS.GET}`});
+        method: `${ApiMethods.GET}`});
 
-      if (request.status === API_STATUS.REAL_SUCCESS) {        
+      if (request.status === ApiStatus.REAL_SUCCESS) {        
         return await request.json();
       } else throw new Error (`status ${request.status}`)
      
@@ -21,9 +21,9 @@ class HTTPClient {
     //limit - number products per page, skip - from which product to output 
     try {             
       const request = await fetch(`${API_URL.MAIN_URL}/products?limit=${limit}&skip=${skip}`, {
-        method: `${API_METHODS.GET}`});
+        method: `${ApiMethods.GET}`});
 
-      if (request.status === API_STATUS.REAL_SUCCESS) {        
+      if (request.status === ApiStatus.REAL_SUCCESS) {        
         return await request.json();
       } else throw new Error (`status ${request.status}`)
      
@@ -35,9 +35,9 @@ class HTTPClient {
   async getOneProduct(id: number): Promise<IProduct | undefined> {
     try {
       const request = await fetch(`${API_URL.MAIN_URL}/products/${id}`, {
-        method: `${API_METHODS.GET}`});
+        method: `${ApiMethods.GET}`});
 
-      if (request.status === API_STATUS.REAL_SUCCESS) {        
+      if (request.status === ApiStatus.REAL_SUCCESS) {        
         return await request.json();
       } else throw new Error (`status ${request.status}`)
      
@@ -50,9 +50,9 @@ class HTTPClient {
   async searchProducts(queryStr: string): Promise<IProducts | undefined> {
     try {
       const request = await fetch(`${API_URL.MAIN_URL}/products/search?q=${queryStr}`, {
-        method: `${API_METHODS.GET}`});
+        method: `${ApiMethods.GET}`});
         
-      if (request.status === API_STATUS.REAL_SUCCESS) {        
+      if (request.status === ApiStatus.REAL_SUCCESS) {        
         return await request.json();
       } else throw new Error (`status ${request.status}`)
      
@@ -64,9 +64,9 @@ class HTTPClient {
   async getAllProductsCategories(): Promise<Categories | undefined> {
     try {
       const request = await fetch(`${API_URL.MAIN_URL}/products/categories`, {
-        method: `${API_METHODS.GET}`});
+        method: `${ApiMethods.GET}`});
 
-      if (request.status === API_STATUS.REAL_SUCCESS) {        
+      if (request.status === ApiStatus.REAL_SUCCESS) {        
         return await request.json();
       } else throw new Error (`status ${request.status}`)
 
@@ -78,9 +78,9 @@ class HTTPClient {
   async getProductsOfCategory(queryStr: string): Promise<IProducts | undefined> {
     try {
       const request = await fetch(`${API_URL.MAIN_URL}/products/category/${queryStr}`, {
-        method: `${API_METHODS.GET}`});
+        method: `${ApiMethods.GET}`});
         
-      if (request.status === API_STATUS.REAL_SUCCESS) {        
+      if (request.status === ApiStatus.REAL_SUCCESS) {        
         return await request.json();
       } else throw new Error (`status ${request.status}`)
 
