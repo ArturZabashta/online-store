@@ -3,7 +3,7 @@ export const CurtComponent = {
       return `
         <section>
           <h1>Home</h1>
-          <p>This is just a test</p>
+          <p>This is just a curt</p>
         </section>
       `;
     }

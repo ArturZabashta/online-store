@@ -1,0 +1,15 @@
+header{
+    box-shadow: 0 1px 2px rgb(0 0 0 / 25%), 0 5px 18px rgb(0 0 0 / 22%);
+    display: flex;
+    // flex: 0 0 auto;
+    height: 8rem;
+    padding: 1.5rem 2.5rem;
+
+    .header__wrapper{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: none;
+    }
+}

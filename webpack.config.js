@@ -17,6 +17,10 @@ const baseConfig = {
             { 
                 test: /\.ts$/i, use: 'ts-loader' 
             },
+            {
+                test: /\.(png|svg|jpg|jpeg|gif|ico|mp3)$/i,
+                type: 'asset/resource',
+            },
         ],
     },
     resolve: {
@@ -25,6 +29,7 @@ const baseConfig = {
     output: {
         filename: 'index.js',
         path: path.resolve(__dirname, './dist'),
+        assetModuleFilename: "assets/images/[name][ext]",
     },
     plugins: [
         new HtmlWebpackPlugin({

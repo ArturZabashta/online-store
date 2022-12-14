@@ -1,0 +1,47 @@
+.footer{
+  
+    flex: 0 0 auto;
+    background-color: $color-background;
+
+    &__wrapper{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: none;
+      padding: 1.5rem 2.5rem;
+    }
+
+    &__logo{
+      width: 10rem;
+    }
+    
+    &__text{
+      display: flex;
+      flex-direction: column-reverse;
+    }
+  
+    &__link{
+      list-style: none;
+      color: #444;
+      text-decoration: none;
+      &:hover{
+        @extend %transition;
+        cursor: pointer;
+        color: $color-brand;
+      }
+    }
+    .active{
+      // @include font(2.6rem, 140%, 700);
+      // color: $color-brand;
+    }
+  
+    .rs-link{
+      width: 90px;
+      height: 30px;
+      // background-color: $color-brand;
+      &:hover{
+        @extend %transition;
+        cursor: pointer;
+      }
+    }
+  }

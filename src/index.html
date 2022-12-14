@@ -4,16 +4,41 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <link rel="icon" href="./favicon.ico"/>
     <title>Online-store</title>
 </head>
 <body>
-    <div id="root">
-        <nav id="main-nav">
-            <a href="#/">Home</a>
-            <a href="#/curt">Curt</a>
-        </nav>
-        <div id="app"></div>
+    <div id="root" class="root">
+        <header class="header">
+            <div class="wrapper header__wrapper">
+                <div class="header__logo">
+                    <a href="#/"><img src="/assets/images/logo.png" alt="logo"></a>
+                </div>
+                <div class="header__total-curt">
+                    <p class="total-curt">Итого: <span class="total-sum">0 р.</span></p>
+                </div>
+                <div class="header__curt">
+                    <a href="#/curt"><img src="https://img.icons8.com/color/32/null/shopping-cart--v1.png" alt="curt"/></a>
+                </div>
+            </div>
+        </header>
+
+        <main class="main">
+            <div id="app" class="wrapper"></div>
+        </main>
+
+        <footer class="footer">
+            <div class="wrapper footer__wrapper">
+                <p class="footer__text githab-pages">
+                    <a class='footer__link active' href="https://github.com/sinevit"><i class='fab fa-github'>Sinevit</i></a>
+                    <a class='footer__link active' href="https://github.com/ArturZabashta"><i class='fab fa-github'>ArturZabashta</i></a></p>
+                <p class="footer__text">2022</p>
+                <p class="footer__text rs-link"><a href="https://rs.school/js/"><img class="footer__logo" src="./assets/images/rslogo.svg"
+                alt="rs-school"></a></p>
+            </div>
+        </footer>
+
     </div>
 </body>
 </html>
