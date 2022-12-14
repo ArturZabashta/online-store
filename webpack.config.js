@@ -3,6 +3,7 @@ const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const EslingPlugin = require('eslint-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const baseConfig = {
     entry: path.resolve(__dirname, './src/index'),
@@ -29,6 +30,12 @@ const baseConfig = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './src/index.html'),
             filename: 'index.html',
+        }),
+        new CopyWebpackPlugin({
+          patterns: [
+            {from: path.resolve(__dirname, './src/public/favicon.ico'),
+            to: path.resolve(__dirname, './dist')},            
+          ], 
         }),
         new CleanWebpackPlugin(),
         new EslingPlugin({ extensions: 'ts' })
