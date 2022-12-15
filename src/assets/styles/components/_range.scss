@@ -1,0 +1,51 @@
+.price{
+    padding: 0 0.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Jura', sans-serif;
+    @include font(1.2rem, 1.4rem, 400);
+  }
+    
+.multi-range{
+    position: relative;
+    height: 4rem;
+    padding: 0 .5rem;
+}
+
+input[type=range]:nth-child(2){
+    background: none;
+}
+  
+input[type=range]{
+    position: absolute;
+    width: 95%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    outline: none;
+    background: linear-gradient($color-light, $color-brand) no-repeat center;
+    background-size: 100% .2rem;
+    appearance: none;
+    pointer-events: none;
+}
+  
+input[type=range]::-webkit-slider-thumb{
+    position: relative;
+    height: 1.5rem;
+    width: 1.5rem;
+    margin: .5rem 0;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0 1px 4px 0.5px rgba(0, 0, 0, 0.3);
+    appearance: none;
+    pointer-events: all;
+}
+  
+input[type=range]::-webkit-slider-thumb:hover{
+    background-color: $color-brand;
+    cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-thumb:active{
+    background-color: $color-brand;
+}
