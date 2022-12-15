@@ -15,8 +15,8 @@ const findComponentByPath = (path: string, routes:IRoutes[]): IRoutes | undefine
 const router = () => {
     const path = parseLocation();
     const { component = ErrorComponent } = findComponentByPath(path, routes) || {};
-    const main: HTMLElement | null = document.getElementById('app');
-    (<HTMLElement>main).innerHTML  = component.render();
+    //const main: HTMLElement | null = document.getElementById('app');
+    /*(<HTMLElement>main).innerHTML  = */component();
   };
 
 window.addEventListener('hashchange', router);
