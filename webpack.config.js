@@ -17,6 +17,10 @@ const baseConfig = {
             { 
                 test: /\.ts$/i, use: 'ts-loader' 
             },
+            {
+                test: /\.(png|svg|jpg|jpeg|gif|ico|mp3)$/i,
+                type: 'asset/resource',
+            },
         ],
     },
     resolve: {
@@ -25,6 +29,7 @@ const baseConfig = {
     output: {
         filename: 'index.js',
         path: path.resolve(__dirname, './dist'),
+        assetModuleFilename: "assets/images/[name][ext]",
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -35,6 +40,10 @@ const baseConfig = {
           patterns: [
             {from: path.resolve(__dirname, './src/public/favicon.ico'),
             to: path.resolve(__dirname, './dist')},            
+            {from: path.resolve(__dirname, './src/public/rslogo.svg'),
+            to: path.resolve(__dirname, './dist/assets')},            
+            {from: path.resolve(__dirname, './src/public/store-logo.png'),
+            to: path.resolve(__dirname, './dist/assets')},            
           ], 
         }),
         new CleanWebpackPlugin(),

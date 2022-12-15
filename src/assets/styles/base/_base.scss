@@ -2,6 +2,7 @@
 html{
     font-size: 10px;
     scroll-behavior: smooth;
+    height: 100%;
 
 }
 
@@ -10,6 +11,8 @@ body{
     margin: 0;
     font-size: 1.6rem;
     font-style: normal;
-    background-color: $color-brand;
+    height: 100%;
+    color: $color-text;
+    // background-color: $color-brand;
 }
 

@@ -1,10 +1,31 @@
 export const HomeComponent = {
     render: () => {
       return `
-        <section>
-          <h1>Home</h1>
-          <p>This is just a test</p>
+      <div class="shop">
+        <aside class="shop__tools"></aside>
+        <section class="shop__items">
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
+        <div class = 'item'></div>
         </section>
+      </div>
       `;
     }
   } 
