@@ -1,6 +1,6 @@
 @import "./abstract/constant.scss";
 @import "./abstract/placeholder.scss";
-// @import "./abstract/mixin.scss";
+@import "./abstract/mixin.scss";
 
 @import "./base/base.scss";
 // @import "./base/btn";
@@ -10,6 +10,8 @@
 @import "./layouts/header.scss";
 @import "./layouts/main";
 @import "./layouts/footer.scss";
+
+@import "./components/filter-item";
 
 @import "./pages/home";
 

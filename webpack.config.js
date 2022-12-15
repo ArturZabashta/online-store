@@ -21,6 +21,10 @@ const baseConfig = {
                 test: /\.(png|svg|jpg|jpeg|gif|ico|mp3)$/i,
                 type: 'asset/resource',
             },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/resource',
+            },
         ],
     },
     resolve: {
@@ -40,7 +44,11 @@ const baseConfig = {
           patterns: [
             {from: path.resolve(__dirname, './src/public/favicon.ico'),
             to: path.resolve(__dirname, './dist')},            
+            {from: path.resolve(__dirname, './src/public/favicon2.ico'),
+            to: path.resolve(__dirname, './dist')},            
             {from: path.resolve(__dirname, './src/public/rslogo.svg'),
+            to: path.resolve(__dirname, './dist/assets')},            
+            {from: path.resolve(__dirname, './src/public/logo2.svg'),
             to: path.resolve(__dirname, './dist/assets')},            
             {from: path.resolve(__dirname, './src/public/store-logo.png'),
             to: path.resolve(__dirname, './dist/assets')},            

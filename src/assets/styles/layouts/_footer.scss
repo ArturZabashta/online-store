@@ -7,13 +7,18 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      /* align-items: end; */
       border: none;
       padding: 0 2.5rem;
     }
 
     &__logo{
       width: 10rem;
+      @extend %transition;
+    }
+
+    .footer__logo:hover{
+      @extend %transition;
+      cursor: pointer;
     }
     
     &__text{
@@ -30,19 +35,14 @@
         cursor: pointer;
         color: $color-brand;
       }
+
+      span{
+        font-family: 'Jura', sans-serif;
+        @include font(1.4rem, 2.4rem, 400);
+      }
     }
     .active{
-      // @include font(2.6rem, 140%, 700);
-      // color: $color-brand;
-    }
-  
-    .rs-link{
-      width: 90px;
-      height: 30px;
-      // background-color: $color-brand;
-      &:hover{
-        @extend %transition;
-        cursor: pointer;
-      }
+      @include font(2.6rem, 140%, 700);
+      color: $color-brand;
     }
   }

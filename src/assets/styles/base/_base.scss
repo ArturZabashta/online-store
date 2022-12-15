@@ -1,18 +1,42 @@
+@font-face {
+    font-family: 'Jura';
+    src: url('../../assets/fonts/Jura-Bold.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+  }
 
 html{
     font-size: 10px;
     scroll-behavior: smooth;
     height: 100%;
-
 }
 
 body{
     padding: 0;
     margin: 0;
-    font-size: 1.6rem;
-    font-style: normal;
     height: 100%;
     color: $color-text;
-    // background-color: $color-brand;
+    font-family: 'Jura', sans-serif;
+    @include font(1.6rem, 2.4rem, 400);
+}
+
+h1{
+    padding: 0;
+    margin: 0;
+    font-family: 'Jura', sans-serif;
+    @include font(2.4rem, 5.4rem, 600);
+    // background-color: #2AA5A0;
+    // background-image: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);
+    // -webkit-background-clip: text;
+    // -webkit-text-fill-color: transparent;
+    color: $color-brand;
+}
+
+h3{
+    padding: 0;
+    margin: 0 0 1rem;
+    font-family: 'Jura', sans-serif;
+    @include font(1.6rem, 2.4rem, 400);
+    color: $color-brand;
 }
 
