@@ -21,6 +21,10 @@ const baseConfig = {
                 test: /\.(png|svg|jpg|jpeg|gif|ico|mp3)$/i,
                 type: 'asset/resource',
             },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/resource',
+            },
         ],
     },
     resolve: {
