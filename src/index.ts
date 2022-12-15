@@ -1,4 +1,2 @@
 import './assets/styles/main.scss';
-import './assets/ts/route.ts'
-
-console.log('hi')
+import './assets/ts/add-base-html';

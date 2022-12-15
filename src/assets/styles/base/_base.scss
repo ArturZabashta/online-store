@@ -4,7 +4,9 @@
     font-weight: 400;
     font-style: normal;
   }
-
+* {
+  box-sizing: border-box;
+}
 html{
     font-size: 10px;
     scroll-behavior: smooth;
