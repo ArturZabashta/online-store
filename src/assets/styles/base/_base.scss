@@ -1,6 +1,6 @@
 @font-face {
-    font-family: 'KronaOne';
-    src: url('../../assets/fonts/KronaOne-Regular.ttf') format('truetype');
+    font-family: 'Jura';
+    src: url('../../assets/fonts/Jura-Bold.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
   }
@@ -16,19 +16,19 @@ body{
     margin: 0;
     height: 100%;
     color: $color-text;
-    font-family: 'KronaOne', sans-serif;
+    font-family: 'Jura', sans-serif;
     @include font(1.6rem, 2.4rem, 400);
 }
 
 h1{
     padding: 0;
     margin: 0;
-    font-family: 'KronaOne', sans-serif;
-    @include font(4.4rem, 5.4rem, 600);
-    background-color: #2AA5A0;
-    background-image: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    // color: $color-brand;
+    font-family: 'Jura', sans-serif;
+    @include font(2.4rem, 5.4rem, 600);
+    // background-color: #2AA5A0;
+    // background-image: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);
+    // -webkit-background-clip: text;
+    // -webkit-text-fill-color: transparent;
+    color: $color-brand;
 }
 
