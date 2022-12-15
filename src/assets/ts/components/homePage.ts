@@ -53,8 +53,7 @@ export const HomeComponent = async():Promise<void> => {
         </div>
       </div>
       </aside>
-      <section class="shop__items">
-              
+      <section class="shop__items">              
       </section>
     </div>
   `;
