@@ -1,29 +1,29 @@
 // import { IRangeAction } from "./interfaces/rangeInterfaces";
 import { returnMinMaxPrice, returnMinMaxStock} from "./utilities/utilities"
-let MIN_PRICE: number;
-let MAX_PRICE: number;
-let MIN_STOCK: number;
-let MAX_STOCK: number;
+let minPriceG: number;
+let maxPriceG: number;
+let minStockG: number;
+let maxStockG: number;
 
 async function getPriceAndstock():Promise<void> {
   const minmaxPrice = await returnMinMaxPrice();
   const minmaxStock = await returnMinMaxStock();
-  [MIN_PRICE,MAX_PRICE] = [...minmaxPrice];
-  [MIN_STOCK,MAX_STOCK] = [...minmaxStock];
+  [minPriceG,maxPriceG] = [...minmaxPrice];
+  [minStockG,maxStockG] = [...minmaxStock];
 }
 getPriceAndstock()
 
 function updatePrice(min: HTMLElement, max: HTMLElement, minSlider: HTMLInputElement, maxSlider: HTMLInputElement): void {
-    const minPrice = MIN_PRICE;
-    const maxPrice = MAX_PRICE;
-    console.log(MIN_PRICE,MAX_PRICE)
+    const minPrice = minPriceG;
+    const maxPrice = maxPriceG;
+    // console.log(minPriceG,maxPriceG)
     min.textContent = `€${Math.floor((maxPrice - minPrice) * (Number(minSlider.value)) / 100 + minPrice)}` ;
     max.textContent   = `€${Math.floor((maxPrice - minPrice) * (Number(maxSlider.value)) / 100 + minPrice)}`;
   }
 
   function updateStock(min: HTMLElement, max: HTMLElement, minSlider: HTMLInputElement, maxSlider: HTMLInputElement): void {
-    const minStock = MIN_STOCK;
-    const maxStock = MAX_STOCK;
+    const minStock = minStockG;
+    const maxStock = maxStockG;
     min.textContent= `${Math.floor((maxStock - minStock) * (Number(minSlider.value)) / 100 + minStock)}`;
     max.textContent   = `${Math.floor((maxStock - minStock) * (Number(maxSlider.value)) / 100 + minStock)}`;
   }
