@@ -5,6 +5,14 @@
     font-family: 'Jura', sans-serif;
     @include font(1.2rem, 1.4rem, 400);
   }
+
+.stock{
+    padding: 0 0.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Jura', sans-serif;
+    @include font(1.2rem, 1.4rem, 400);
+}  
     
 .multi-range{
     position: relative;

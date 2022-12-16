@@ -1,8 +1,9 @@
 import { IProducts, IProduct, AllBrands, AllCategories } from "../interfaces/api-interfaces";
 import httpClient from "../API/api"
 
-async function returnAllProducts(): Promise<IProducts | undefined> {
+export async function returnAllProducts(): Promise<IProducts | undefined> {
   const allProducts = await httpClient.getLimitPartProducts(100,0);
+  console.log(allProducts)
   return allProducts;
 }
 
@@ -28,6 +29,30 @@ export async function returnAllBrands(): Promise<AllBrands | undefined> {
   })
   
   return allBrands;
+}
+
+export async function returnMinMaxPrice(): Promise< number[] > {
+  const allPrice: number[] = [];
+  const allProducts = await httpClient.getLimitPartProducts(100,0)
+  allProducts?.products.forEach((item: IProduct) => {
+    allPrice.push(item.price)
+  })
+  const sortAllPrice: number[] | undefined = allPrice.sort((a,b) => a-b)
+  const minPrice = <number>sortAllPrice.shift() 
+  const maxPrice = <number>sortAllPrice.pop()
+  return [minPrice,maxPrice]
+}
+
+export async function returnMinMaxStock(): Promise< number[] > {
+  const allStock: number[] = [];
+  const allProducts = await httpClient.getLimitPartProducts(100,0)
+  allProducts?.products.forEach((item: IProduct) => {
+    allStock.push(item.stock)
+  })
+  const sortAllStock: number[] | undefined = allStock.sort((a,b) => a-b)
+  const minStock = <number>sortAllStock.shift() 
+  const maxstock = <number>sortAllStock.pop()
+  return [minStock,maxstock]
 }
 
 

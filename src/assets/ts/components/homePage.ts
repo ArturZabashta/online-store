@@ -1,6 +1,8 @@
 import httpClient from "../API/api";
 import { IProduct } from "../interfaces/api-interfaces";
 import { returnAllBrands, returnAllCategories } from "../utilities/utilities"
+import { controlToRange } from "../rangeAction"
+import { controlFromRange } from "../rangeAction"
 
 export const HomeComponent = async():Promise<void> => {
   const allProducts = await httpClient.getLimitPartProducts(100,0);
@@ -27,23 +29,23 @@ export const HomeComponent = async():Promise<void> => {
         <div class='filter-item'>
           <h3>Price</h3>
           <div class="multi-range">
-            <input id="min" type="range" min="0" max="100" value="0" step="0.0001">
-            <input id="max" type="range" min="0" max="100" value="100" step="0.0001">
+            <input id="minP" type="range" min="0" max="100" value="0" step="0.0001">
+            <input id="maxP" type="range" min="0" max="100" value="100" step="0.0001">
           </div>
           <div class='price'>
-            <span id='from'>€10.00</span>
-            <span id='to'>€1749.00</span>
+            <span id='fromPrice'>€10.00</span>
+            <span id='toPrice'>€1749.00</span>
           </div>
         </div>
         <div class='filter-item'>
         <h3>Stock</h3>
         <div class="multi-range">
-          <input id="min" type="range" min="0" max="100" value="0" step="0.0001">
-          <input id="max" type="range" min="0" max="100" value="100" step="0.0001">
+          <input id="minS" type="range" min="0" max="100" value="0" step="0.0001">
+          <input id="maxS" type="range" min="0" max="100" value="100" step="0.0001">
         </div>
-        <div class='price'>
-          <span id='from'>2</span>
-          <span id='to'>150</span>
+        <div class='stock'>
+          <span id='fromStock'>2</span>
+          <span id='toStock'>150</span>
         </div>
       </div>
       </aside>
@@ -118,6 +120,21 @@ export const HomeComponent = async():Promise<void> => {
     shopItems?.append(item)
     return
   });
+
+  const minPriceValue = <HTMLElement>document.querySelector('#fromPrice');
+  const maxPriceValue = <HTMLElement>document.querySelector('#toPrice');
+  const minRangePrice = <HTMLInputElement>document.querySelector('#minP');
+  const maxRangePrice = <HTMLInputElement>document.querySelector('#maxP');
+
+  const minStockValue = <HTMLElement>document.querySelector('#fromStock');
+  const maxStockValue = <HTMLElement>document.querySelector('#toStock');
+  const minRangeStock = <HTMLInputElement>document.querySelector('#minS');
+  const maxRangeStock = <HTMLInputElement>document.querySelector('#maxS');
+
+  minRangePrice.oninput = () => controlToRange(minPriceValue, maxPriceValue, minRangePrice, maxRangePrice, 'updatePrice');
+  maxRangePrice.oninput = () => controlFromRange(minPriceValue, maxPriceValue, minRangePrice,maxRangePrice, 'updatePrice');
+  minRangeStock.oninput = () => controlToRange(minStockValue,maxStockValue,minRangeStock, maxRangeStock, 'updateStock');
+  maxRangeStock.oninput = () => controlFromRange(minStockValue,maxStockValue,minRangeStock, maxRangeStock, 'updateStock');
 
   
       
