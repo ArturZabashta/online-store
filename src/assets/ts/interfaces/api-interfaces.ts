@@ -1,3 +1,10 @@
+export type AllBrands = {
+  [key: string]: number
+}
+
+export type AllCategories = {
+  [key: string]: number
+}
 
 export type Categories = Array<string>
 

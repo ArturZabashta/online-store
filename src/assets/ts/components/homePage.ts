@@ -1,9 +1,11 @@
 import httpClient from "../API/api";
 import { IProduct } from "../interfaces/api-interfaces";
+import { returnAllBrands, returnAllCategories } from "../utilities/utilities"
 
 export const HomeComponent = async():Promise<void> => {
   const allProducts = await httpClient.getLimitPartProducts(100,0);
-  const allCategories = await httpClient.getAllProductsCategories();  
+  const allCategories = await returnAllCategories(); 
+  const allBrands = await returnAllBrands();  
   const main: HTMLElement | null = document.getElementById('app');
   (<HTMLElement>main).innerHTML  =`
     <div class="shop">
@@ -19,15 +21,7 @@ export const HomeComponent = async():Promise<void> => {
             <label for="checkbox-1">
               <input value="1" id="checkbox-1" type="checkbox">
               Checkbox #1
-            </label>
-            <label for="checkbox-1">
-              <input value="1" id="checkbox-1" type="checkbox">
-              Checkbox #1
-            </label>
-            <label for="checkbox-1">
-              <input value="1" id="checkbox-1" type="checkbox">
-              Checkbox #1
-            </label>
+            </label>            
           </div>
         </div>
         <div class='filter-item'>
@@ -59,10 +53,19 @@ export const HomeComponent = async():Promise<void> => {
   `;
   
   // Render of products categories
-  console.log('allCategories', allCategories)
-  const categoryList: HTMLElement | null = document.querySelector('.select__category');
+   const categoryList: HTMLElement | null = document.querySelector('.select__category');
   if (categoryList) categoryList.innerHTML = '';
 
+  for (const category in allCategories) {    
+    const label = document.createElement('label');    
+    label.setAttribute('for', `link${category}`);
+    label.innerHTML = `    
+    <input value="${category}" id="${category}" type="checkbox">
+    ${category}        
+    `;
+    categoryList?.append(label)
+  }
+  /*
   if (allCategories) {
     allCategories.forEach((element: string) => {
     const label = document.createElement('label');    
@@ -73,8 +76,23 @@ export const HomeComponent = async():Promise<void> => {
     `;
     categoryList?.append(label)
     return 
-    });}
-  
+    });
+  }
+  */
+
+ // Render of products Brands
+  const brandsList: HTMLElement | null = document.querySelector('.select__brand');
+  if (brandsList) brandsList.innerHTML = '';
+
+  for (const brand in allBrands) {    
+    const label = document.createElement('label');    
+    label.setAttribute('for', `link${brand}`);
+    label.innerHTML = `    
+    <input value="${brand}" id="${brand}" type="checkbox">
+    ${brand}        
+    `;
+    brandsList?.append(label)
+  }
            
   // Render of products cards     
   const shopItems: HTMLElement | null = document.querySelector('.shop__items');
