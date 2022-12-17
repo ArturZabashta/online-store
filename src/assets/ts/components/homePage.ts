@@ -149,6 +149,7 @@ export const HomeComponent = async():Promise<void> => {
   const updateCategories = ():void =>{
     const categoriesArray: Array<string> = []
     Array.from(categoriesInput).map(el => {if(el.checked) categoriesArray.push(el.id) })
+    localStorage.setItem('categoriesArray', JSON.stringify(categoriesArray))
     console.log(categoriesArray)
   }
 
@@ -157,9 +158,27 @@ export const HomeComponent = async():Promise<void> => {
   const updateBrands = ():void =>{
     const brandsArray: Array<string> = []
     Array.from(brandsInput).map(el => {if(el.checked) brandsArray.push(el.id) })
+    localStorage.setItem('brandsArray', JSON.stringify(brandsArray))
     console.log(brandsArray)
   }
   
   if(brands) brands.onclick = () => updateBrands()
+
+  const checkLocalCheckboxArr = (arrName:string):void =>{
+    console.log(arrName)
+    const localArr: Array<string> | null =JSON.parse(localStorage.getItem(arrName) as string);
+    console.log(localArr)
+    if (localArr) localArr.map(el => {
+        const element: HTMLElement | null = document.getElementById(`${el}`)
+        if(element) element.setAttribute('checked', 'checked');
+    })
+  }
+
+  checkLocalCheckboxArr('categoriesArray');
+  checkLocalCheckboxArr('brandsArray');
+
+  // const l: string | null = localStorage.getItem('categoriesArray')
+  // const b: string | null  = localStorage.getItem('brandsArray')
+  // console.log(l,b)
 
 } 
