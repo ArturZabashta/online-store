@@ -1,7 +1,7 @@
 .footer{
   
     flex: 0 0 auto;
-    height: 8vh;
+    // height: 8vh;
     background-color: $color-background;
 
     &__wrapper{
@@ -23,6 +23,7 @@
     }
     
     &__text{
+      margin: 0;
       display: flex;
       flex-direction: column-reverse;
     }
