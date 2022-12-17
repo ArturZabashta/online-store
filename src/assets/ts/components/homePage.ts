@@ -174,6 +174,7 @@ export const HomeComponent = async():Promise<void> => {
     Array.from(categoriesInput).map(el => {if(el.checked) categoriesArray.push(el.id) })
     localStorage.setItem('categoriesArray', JSON.stringify(categoriesArray))
     console.log(categoriesArray)
+    getFilteredProductsList()
   }
 
   if(categories) categories.onclick = () => updateCategories()
@@ -183,6 +184,7 @@ export const HomeComponent = async():Promise<void> => {
     Array.from(brandsInput).map(el => {if(el.checked) brandsArray.push(el.id) })
     localStorage.setItem('brandsArray', JSON.stringify(brandsArray))
     console.log(brandsArray)
+    getFilteredProductsList()
   }
   
   if(brands) brands.onclick = () => updateBrands()
