@@ -150,8 +150,7 @@ export const HomeComponent = async():Promise<void> => {
   }
   renderProductList(copyAllProducts)
 
-
-  //
+  //range input handler
   const minPriceValue = <HTMLElement>document.querySelector('#fromPrice');
   const maxPriceValue = <HTMLElement>document.querySelector('#toPrice');
   const minRangePrice = <HTMLInputElement>document.querySelector('#minP');
@@ -167,36 +166,60 @@ export const HomeComponent = async():Promise<void> => {
   minRangeStock.oninput = () => controlToRange(minStockValue,maxStockValue,minRangeStock, maxRangeStock, 'updateStock');
   maxRangeStock.oninput = () => controlFromRange(minStockValue,maxStockValue,minRangeStock, maxRangeStock, 'updateStock');
 
+  //listens for changes in the range and writes to the local store
+  const ranges: NodeListOf<HTMLElement> = document.querySelectorAll('.multi-range');
+  if(ranges) Array.from(ranges).forEach(element => element.onchange = ():void => updateRange())
+  const updateRange = ():void =>{
+    const rangeArray: Array<string> = []
+    rangeArray.push(minPriceValue.innerHTML,maxPriceValue.innerHTML,minStockValue.innerHTML,maxStockValue.innerHTML)
+    localStorage.setItem('rangeArray', JSON.stringify(rangeArray))
+    console.log('rangeArray',rangeArray)
+  }
+
+  const checkLocalrangeArray = (arrName:string):void =>{
+    const localArr: Array<string>  =JSON.parse(localStorage.getItem(arrName) as string);
+    console.log(localArr);
+    if(localArr){
+      [minPriceValue.innerHTML,maxPriceValue.innerHTML,minStockValue.innerHTML,maxStockValue.innerHTML] = [...localArr];
+    }
+    
+    // if (localArr) localArr.map(el => {
+    //     const element: HTMLElement | null = document.getElementById(`${el}`)
+    //     if(element) element.setAttribute('checked', 'checked');
+    // }) 
+    
+  }
+
+  checkLocalrangeArray('rangeArray');
+
   // checkbox click handler
-  
   const categories: HTMLInputElement | null = document.querySelector('.select__category');
   const categoriesInput: NodeListOf<HTMLInputElement> = document.querySelectorAll('.select__category input');
   const brands: HTMLInputElement | null = document.querySelector('.select__brand');
   const brandsInput: NodeListOf<HTMLInputElement> = document.querySelectorAll('.select__brand input');
 
-
+ //listens for changes in the categories and writes to the local store
   const updateCategories = ():void =>{
     const categoriesArray: Array<string> = []
     Array.from(categoriesInput).map(el => {if(el.checked) categoriesArray.push(el.id) })
     localStorage.setItem('categoriesArray', JSON.stringify(categoriesArray))
-    console.log(categoriesArray)
+    console.log('categoriesArray',categoriesArray)
     getFilteredProductsList()
   }
-
   if(categories) categories.onclick = () => updateCategories()
 
+ //listens for changes in the brands and writes to the local store
   const updateBrands = ():void =>{
     const brandsArray: Array<string> = []
     Array.from(brandsInput).map(el => {if(el.checked) brandsArray.push(el.id) })
     localStorage.setItem('brandsArray', JSON.stringify(brandsArray))
-    console.log(brandsArray)
+    console.log('brandsArray',brandsArray)
     getFilteredProductsList()
   }
-  
   if(brands) brands.onclick = () => updateBrands()
 
+  //
   const checkLocalCheckboxArr = (arrName:string):void =>{
-    console.log(arrName)
     const localArr: Array<string> | null =JSON.parse(localStorage.getItem(arrName) as string);
     console.log(localArr)
     if (localArr) localArr.map(el => {
@@ -208,18 +231,14 @@ export const HomeComponent = async():Promise<void> => {
   checkLocalCheckboxArr('categoriesArray');
   checkLocalCheckboxArr('brandsArray');
 
+  //show settings in items
   const closeButtons: NodeListOf<HTMLElement> = document.querySelectorAll('.item__close');
   
-
   if(closeButtons) Array.from(closeButtons).forEach(element => element.onclick = (e:Event):void => showSettings(e))
-  // if(closeButton) closeButton.onclick = () => showSettings()
-
   const showSettings = (e:Event):void =>{
-    // console.log(e.target)
     const element: Element | null = e.target as Element;
     const parent = document.getElementById(element.getAttribute('name') as string)
     const settings: HTMLElement | null = (parent as HTMLElement).querySelector('.item__settings');
-    if(element)console.log(element,parent)
     if(settings) settings.classList.toggle("active-settings");
   }
 
