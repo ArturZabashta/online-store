@@ -122,25 +122,31 @@ export const HomeComponent = async():Promise<void> => {
     if (productsList) productsList.forEach((element: IProduct) => {
       const item = document.createElement('div');
       item.classList.add('item')
-      item.style.backgroundImage = `url('${element.images[0]}`
+      item.id = `${element.id}`;
+      // item.style.backgroundImage = `url('${element.images[0]}`
+       const backgroundImage = `url('${element.images[0]}')`
       item.innerHTML = `
-        <div class="item__wrapper" id="${element.id}">
-          <h3 class="item__title">${element.title}</h3>
-          <div class="item__settings">
-            <p class="item__settings_category">Category: <span class="item__settings_span">${element.category}</span></p>
-            <p class="item__settings_brand">Brand; <span class="item__settings_span">${element.brand}</span></p>
-            <p class="item__settings_price">Price: <span class="item__settings_span">${element.price}€</span></p>
-            <p class="item__settings_discount">Discount: <span class="item__settings_span">${element.discountPercentage}%</span></p>
-            <p class="item__settings_rating">Rating: <span class="item__settings_span">${element.rating}</span></p>
-            <p class="item__settings_stock">Stock: <span class="item__settings_span">${element.stock}</span></p>
-          </div>
+        <span class="item__close" name="${element.id}">?</span>
+        <h3 class="item__title">${element.title}</h3>
+        <div class="item__image" style="background-image:${backgroundImage}"></div>
+        <div class="item__settings">
+          <p class="item__settings_category">Category: <span class="item__settings_span">${element.category}</span></p>
+          <p class="item__settings_brand">Brand; <span class="item__settings_span">${element.brand}</span></p>
+          <p class="item__settings_price">Price: <span class="item__settings_span">${element.price}€</span></p>
+          <p class="item__settings_discount">Discount: <span class="item__settings_span">${element.discountPercentage}%</span></p>
+          <p class="item__settings_rating">Rating: <span class="item__settings_span">${element.rating}</span></p>
+          <p class="item__settings_stock">Stock: <span class="item__settings_span">${element.stock}</span></p>
         </div>
-        <button class="item__add">Add to Cart</button>
-        <button class="item__details">Details</button>        
+        <p class="item__price">Price : <span>${element.price}€</span></p>
+        <div class="item__buttons">
+          <button class="item__addcurt btn">Add to Cart</button>
+          <button class="item__details btn">Details</button>  
+        </div>      
       `;
       shopItems?.append(item)
       return
     });
+
   }
   renderProductList(copyAllProducts)
 
@@ -202,8 +208,20 @@ export const HomeComponent = async():Promise<void> => {
   checkLocalCheckboxArr('categoriesArray');
   checkLocalCheckboxArr('brandsArray');
 
-  // const l: string | null = localStorage.getItem('categoriesArray')
-  // const b: string | null  = localStorage.getItem('brandsArray')
-  // console.log(l,b)
+  const closeButtons: NodeListOf<HTMLElement> = document.querySelectorAll('.item__close');
+  
+
+  if(closeButtons) Array.from(closeButtons).forEach(element => element.onclick = (e:Event):void => showSettings(e))
+  // if(closeButton) closeButton.onclick = () => showSettings()
+
+  const showSettings = (e:Event):void =>{
+    // console.log(e.target)
+    const element: Element | null = e.target as Element;
+    const parent = document.getElementById(element.getAttribute('name') as string)
+    const settings: HTMLElement | null = (parent as HTMLElement).querySelector('.item__settings');
+    if(element)console.log(element,parent)
+    if(settings) settings.classList.toggle("active-settings");
+  }
+
 
 }
