@@ -32,6 +32,21 @@ class HTTPClient {
     }
   }
 
+  async getFilteredPartProducts(limit: number, skip: number): Promise<IProducts | undefined> {     
+    //limit - number products per page, skip - from which product to output 
+    try {             
+      const request = await fetch(`${API_URL.MAIN_URL}/products?limit=${limit}&skip=${skip}&select=title`, {
+        method: `${ApiMethods.GET}`});
+
+      if (request.status === ApiStatus.REAL_SUCCESS) {        
+        return await request.json();
+      } else throw new Error (`status ${request.status}`)
+     
+    } catch (err) {      
+      console.warn('Error checked: ', err);
+    }
+  }
+
   async getOneProduct(id: number): Promise<IProduct | undefined> {
     try {
       const request = await fetch(`${API_URL.MAIN_URL}/products/${id}`, {
@@ -49,9 +64,9 @@ class HTTPClient {
 
   async searchProducts(queryStr: string): Promise<IProducts | undefined> {
     try {
-      const request = await fetch(`${API_URL.MAIN_URL}/products/search?q=${queryStr}`, {
+      const request = await fetch(`${API_URL.MAIN_URL}/products/search?${queryStr}`, {
         method: `${ApiMethods.GET}`});
-        
+        console.warn('URL: ', `${API_URL.MAIN_URL}/products/search?${queryStr}`);  
       if (request.status === ApiStatus.REAL_SUCCESS) {        
         return await request.json();
       } else throw new Error (`status ${request.status}`)
