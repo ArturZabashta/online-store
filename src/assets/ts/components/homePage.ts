@@ -1,13 +1,39 @@
 import httpClient from "../API/api";
 import { IProduct } from "../interfaces/api-interfaces";
-import { returnAllBrands, returnAllCategories } from "../utilities/utilities"
+import { zeroProduct, returnAllProducts, returnAllBrands, returnAllCategories, getFilteredByBrand, getFilteredByCategory } from "../utilities/utilities"
 import { controlToRange } from "../rangeAction"
 import { controlFromRange } from "../rangeAction"
 
+
 export const HomeComponent = async():Promise<void> => {
-  const allProducts = await httpClient.getLimitPartProducts(100,0);
+  const allProducts = await returnAllProducts();
   const allCategories = await returnAllCategories(); 
-  const allBrands = await returnAllBrands();  
+  const allBrands = await returnAllBrands();
+  const copyAllProducts:IProduct[] = allProducts? Array.from(allProducts.products) : zeroProduct;
+ 
+  function getFilteredProductsList(){
+    let brandsArray: Array<string> = []
+    let categoriesArray: Array<string> = ['laptops']
+
+    if (localStorage.getItem('brandsArray')) {
+      brandsArray = JSON.parse(String(localStorage.getItem('brandsArray')))
+    }
+    if (localStorage.getItem('categoriesArray')) {
+      categoriesArray = JSON.parse(String(localStorage.getItem('categoriesArray')))
+    }
+
+    let arr = [...copyAllProducts]
+
+    if (brandsArray.length > 0) arr = getFilteredByBrand(arr, brandsArray)
+    if (categoriesArray.length > 0) arr = getFilteredByCategory(arr, categoriesArray)
+    
+    
+    console.log('allProducts!!!', allProducts)
+    console.log('filteredProducts!!!', arr)
+    renderProductList(arr)
+  }  
+  
+
   const main: HTMLElement | null = document.getElementById('app');
   (<HTMLElement>main).innerHTML  =`
     <div class="shop">
@@ -53,73 +79,70 @@ export const HomeComponent = async():Promise<void> => {
       </section>
     </div>
   `;
-  
-  // Render of products categories
-   const categoryList: HTMLElement | null = document.querySelector('.select__category');
-  if (categoryList) categoryList.innerHTML = '';
+  const categoryList: HTMLElement | null = document.querySelector('.select__category');
+  const brandsList: HTMLElement | null = document.querySelector('.select__brand');
+  const shopItems: HTMLElement | null = document.querySelector('.shop__items');
 
-  for (const category in allCategories) {    
-    const label = document.createElement('label');    
-    label.setAttribute('for', `link${category}`);
-    label.innerHTML = `    
-    <input value="${category}" id="${category}" type="checkbox">
-    ${category}        
-    `;
-    categoryList?.append(label)
+  // Render of products categories
+  async function renderCategoryList() {    
+    if (categoryList) categoryList.innerHTML = '';
+
+    for (const category in allCategories) {    
+      const label = document.createElement('label');    
+      label.setAttribute('for', `${category}`);
+      label.innerHTML = `    
+      <input value="${category}" id="${category}" type="checkbox">
+      ${category}        
+      `;
+      categoryList?.append(label)
+    }
   }
-  /*
-  if (allCategories) {
-    allCategories.forEach((element: string) => {
-    const label = document.createElement('label');    
-    label.setAttribute('for', `link${element}`);
-    label.innerHTML = `    
-    <input value="${element}" id="${element}" type="checkbox">
-    ${element}        
-    `;
-    categoryList?.append(label)
-    return 
-    });
-  }
-  */
+  renderCategoryList()
 
  // Render of products Brands
-  const brandsList: HTMLElement | null = document.querySelector('.select__brand');
-  if (brandsList) brandsList.innerHTML = '';
+ async function renderBrandList() {    
+    if (brandsList) brandsList.innerHTML = '';
 
-  for (const brand in allBrands) {    
-    const label = document.createElement('label');    
-    label.setAttribute('for', `link${brand}`);
-    label.innerHTML = `    
-    <input value="${brand}" id="${brand}" type="checkbox">
-    ${brand}        
-    `;
-    brandsList?.append(label)
+    for (const brand in allBrands) {    
+      const label = document.createElement('label');    
+      label.setAttribute('for', `${brand}`);
+      label.innerHTML = `    
+      <input value="${brand}" id="${brand}" type="checkbox">
+      ${brand}        
+      `;
+      brandsList?.append(label)
+    }
   }
+  renderBrandList()
            
   // Render of products cards     
-  const shopItems: HTMLElement | null = document.querySelector('.shop__items');
-  if (shopItems) shopItems.innerHTML = '';
+  async function renderProductList(productsList: IProduct[]) {
+    if (shopItems) shopItems.innerHTML = '';
 
-  if (allProducts) allProducts.products.forEach((element: IProduct) => {
-    const item = document.createElement('div');
-    item.classList.add('item')
-    item.style.backgroundImage = `url('${element.images[0]}`
-    item.innerHTML = `
-      <h3 class="item__title">${element.title}</h3>
-      <div class="item__settings">
-        <p class="item__settings_category">Category: <span class="item__settings_span">${element.category}</span></p>
-        <p class="item__settings_brand">Brand; <span class="item__settings_span">${element.brand}</span></p>
-        <p class="item__settings_price">Price: <span class="item__settings_span">${element.price}€</span></p>
-        <p class="item__settings_discount">Discount: <span class="item__settings_span">${element.discountPercentage}%</span></p>
-        <p class="item__settings_rating">Rating: <span class="item__settings_span">${element.rating}</span></p>
-        <p class="item__settings_stock">Stock: <span class="item__settings_span">${element.stock}</span></p>
-      </div>
-      <button class="item__title">Add to Cart</button>
-      <button class="item__details">Details</button>        
-    `;
-    shopItems?.append(item)
-    return
-  });
+    if (productsList) productsList.forEach((element: IProduct) => {
+      const item = document.createElement('div');
+      item.classList.add('item')
+      item.style.backgroundImage = `url('${element.images[0]}`
+      item.innerHTML = `
+        <div class="item__wrapper" id="${element.id}">
+          <h3 class="item__title">${element.title}</h3>
+          <div class="item__settings">
+            <p class="item__settings_category">Category: <span class="item__settings_span">${element.category}</span></p>
+            <p class="item__settings_brand">Brand; <span class="item__settings_span">${element.brand}</span></p>
+            <p class="item__settings_price">Price: <span class="item__settings_span">${element.price}€</span></p>
+            <p class="item__settings_discount">Discount: <span class="item__settings_span">${element.discountPercentage}%</span></p>
+            <p class="item__settings_rating">Rating: <span class="item__settings_span">${element.rating}</span></p>
+            <p class="item__settings_stock">Stock: <span class="item__settings_span">${element.stock}</span></p>
+          </div>
+        </div>
+        <button class="item__add">Add to Cart</button>
+        <button class="item__details">Details</button>        
+      `;
+      shopItems?.append(item)
+      return
+    });
+  }
+  renderProductList(copyAllProducts)
 
   const minPriceValue = <HTMLElement>document.querySelector('#fromPrice');
   const maxPriceValue = <HTMLElement>document.querySelector('#toPrice');
@@ -137,5 +160,12 @@ export const HomeComponent = async():Promise<void> => {
   maxRangeStock.oninput = () => controlFromRange(minStockValue,maxStockValue,minRangeStock, maxRangeStock, 'updateStock');
 
   
-      
-  } 
+  categoryList?.addEventListener('click', ()=> {
+    getFilteredProductsList()
+  })     
+} 
+
+  window.addEventListener('load', async ()=> {
+    console.log("window load")
+    
+  })

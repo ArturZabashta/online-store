@@ -1,9 +1,26 @@
 import { IProducts, IProduct, AllBrands, AllCategories } from "../interfaces/api-interfaces";
 import httpClient from "../API/api"
+import { ListSeparator } from "../../../../node_modules/sass/types/index";
+
+export const zeroProduct: Array<IProduct> = [
+  {
+    "id": 0,
+    "title": "",
+    "description": "",
+    "price": 0,
+    "discountPercentage": 0,
+    "rating": 0,
+    "stock": 0,
+    "brand": "",
+    "category": "",
+    "thumbnail": "...",
+    "images": ["...", "...", "..."]
+  },
+]
 
 export async function returnAllProducts(): Promise<IProducts | undefined> {
   const allProducts = await httpClient.getLimitPartProducts(100,0);
-  console.log(allProducts)
+  //console.log(allProducts)
   return allProducts;
 }
 
@@ -11,7 +28,7 @@ export async function returnAllCategories(): Promise<AllCategories | undefined> 
   const allCategories: AllCategories = {};
   const allProducts = await httpClient.getLimitPartProducts(100,0);
   allProducts?.products.forEach((item: IProduct) => {
-    if (!allCategories[item.category.toLowerCase()] ) allCategories[item.category.toLowerCase()] = 1
+    if (!allCategories[item.category.toLowerCase()]) allCategories[item.category.toLowerCase()] = 1
     else allCategories[item.category.toLowerCase()]++
     return
   })
@@ -56,4 +73,16 @@ export async function returnMinMaxStock(): Promise< number[] > {
 }
 
 
+export function getFilteredByBrand(productList: IProduct[], filterArray: Array<string>) {
+  const filteredProductList: IProduct[] = productList.filter((product) => {
+    return filterArray.indexOf((product.brand).toLowerCase()) !== -1
+  })  
+  return filteredProductList;
+}
 
+export function getFilteredByCategory(productList: IProduct[], filterArray: Array<string>) {
+  const filteredProductList: IProduct[] = productList.filter((product) => {
+    return filterArray.indexOf((product.category).toLowerCase()) !== -1
+  })  
+  return filteredProductList;
+}
