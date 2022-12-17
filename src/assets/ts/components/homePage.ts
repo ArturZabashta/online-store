@@ -121,6 +121,8 @@ export const HomeComponent = async():Promise<void> => {
     return
   });
 
+
+  //
   const minPriceValue = <HTMLElement>document.querySelector('#fromPrice');
   const maxPriceValue = <HTMLElement>document.querySelector('#toPrice');
   const minRangePrice = <HTMLInputElement>document.querySelector('#minP');
@@ -136,6 +138,47 @@ export const HomeComponent = async():Promise<void> => {
   minRangeStock.oninput = () => controlToRange(minStockValue,maxStockValue,minRangeStock, maxRangeStock, 'updateStock');
   maxRangeStock.oninput = () => controlFromRange(minStockValue,maxStockValue,minRangeStock, maxRangeStock, 'updateStock');
 
+  // checkbox click handler
   
-      
-  } 
+  const categories: HTMLInputElement | null = document.querySelector('.select__category');
+  const categoriesInput: NodeListOf<HTMLInputElement> = document.querySelectorAll('.select__category input');
+  const brands: HTMLInputElement | null = document.querySelector('.select__brand');
+  const brandsInput: NodeListOf<HTMLInputElement> = document.querySelectorAll('.select__brand input');
+
+
+  const updateCategories = ():void =>{
+    const categoriesArray: Array<string> = []
+    Array.from(categoriesInput).map(el => {if(el.checked) categoriesArray.push(el.id) })
+    localStorage.setItem('categoriesArray', JSON.stringify(categoriesArray))
+    console.log(categoriesArray)
+  }
+
+  if(categories) categories.onclick = () => updateCategories()
+
+  const updateBrands = ():void =>{
+    const brandsArray: Array<string> = []
+    Array.from(brandsInput).map(el => {if(el.checked) brandsArray.push(el.id) })
+    localStorage.setItem('brandsArray', JSON.stringify(brandsArray))
+    console.log(brandsArray)
+  }
+  
+  if(brands) brands.onclick = () => updateBrands()
+
+  const checkLocalCheckboxArr = (arrName:string):void =>{
+    console.log(arrName)
+    const localArr: Array<string> | null =JSON.parse(localStorage.getItem(arrName) as string);
+    console.log(localArr)
+    if (localArr) localArr.map(el => {
+        const element: HTMLElement | null = document.getElementById(`${el}`)
+        if(element) element.setAttribute('checked', 'checked');
+    })
+  }
+
+  checkLocalCheckboxArr('categoriesArray');
+  checkLocalCheckboxArr('brandsArray');
+
+  // const l: string | null = localStorage.getItem('categoriesArray')
+  // const b: string | null  = localStorage.getItem('brandsArray')
+  // console.log(l,b)
+
+} 
