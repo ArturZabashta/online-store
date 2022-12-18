@@ -1,16 +1,14 @@
-
 import { IProduct } from "../interfaces/api-interfaces";
 import { zeroProduct, returnAllProducts, returnAllBrands, returnAllCategories, getFilteredByBrand, getFilteredByCategory, getFilteredByRange } from "../utilities/utilities"
 import {controlFromRange, controlToRange, updateSlider } from "../rangeAction"
-
 
 export const HomeComponent = async():Promise<void> => {
   const allProducts = await returnAllProducts();
   const allCategories = await returnAllCategories(); 
   const allBrands = await returnAllBrands();
   const copyAllProducts:IProduct[] = allProducts? Array.from(allProducts.products) : zeroProduct;
- 
-    const main: HTMLElement | null = document.getElementById('app');
+    
+  const main: HTMLElement | null = document.getElementById('app');
   (<HTMLElement>main).innerHTML  =`
     <div class="shop">
       <aside class="shop__filters">
@@ -124,32 +122,70 @@ export const HomeComponent = async():Promise<void> => {
     });
 
   }
-  //renderProductList(copyAllProducts)
+  
+
+  function setQueryStringToURL(brandsArray: string[], categoriesArray:string[], rangeArray:string[]){
+    const queryArray: string[] = [];
+    let queryStr = '';
+    let brandsStr = '';
+    let categoriesStr = '';
+    let rangesStr  = '';
+
+    if (localStorage.getItem('queryStr')) queryStr = JSON.parse(String(localStorage.getItem('queryStr')));
+    
+    if (brandsArray && brandsArray.length > 0) {
+      brandsStr = 'brand=' + brandsArray.join('↕');
+      queryArray.push(brandsStr);
+    }
+    if (categoriesArray && categoriesArray.length > 0) {
+      categoriesStr = 'category=' + categoriesArray.join('↕');
+      queryArray.push(categoriesStr);
+    }
+    if (rangeArray && rangeArray.length > 0) {
+      rangesStr = `price=${rangeArray[0].substr(1)}↕${rangeArray[1].substr(1)}&stock=${rangeArray[2]}↕${rangeArray[3]}`
+      queryArray.push(rangesStr);
+    }
+
+    if (queryArray.length > 0 ) {
+      queryStr = '?' + queryArray.join('&');
+      localStorage.setItem('queryStr', JSON.stringify(queryStr))
+      console.log('queryStr!!!', queryStr)
+    }
+    //Add query parameters to URL  
+    const refresh = window.location.protocol + "//" + window.location.host + window.location.pathname + queryStr;    
+    window.history.pushState({ path: refresh }, '', refresh);
+
+    //console.log('window.location.protocol=', window.location.protocol)
+    //console.log('window.location.host=', window.location.host)
+    //console.log('window.location.pathname=', window.location.pathname)
+    //console.log('window.location.hash=', window.location.href)
+        
+  }
 
   function getFilteredProductsList(){
     let brandsArray: Array<string> = []
     let categoriesArray: Array<string> = []
-    let rangeArray: Array<string> = []
+    let rangeArray: Array<string> = []    
 
     if (localStorage.getItem('brandsArray') && String(localStorage.getItem('brandsArray')).length > 2) {
-      brandsArray = JSON.parse(String(localStorage.getItem('brandsArray')))
+      brandsArray = JSON.parse(String(localStorage.getItem('brandsArray')));
     }
     if (localStorage.getItem('categoriesArray') && String(localStorage.getItem('categoriesArray')).length > 2) {
-      categoriesArray = JSON.parse(String(localStorage.getItem('categoriesArray')))
+      categoriesArray = JSON.parse(String(localStorage.getItem('categoriesArray')));
     }
     if (localStorage.getItem('rangeArray') && String(localStorage.getItem('rangeArray')).length > 2) {
       rangeArray = JSON.parse(String(localStorage.getItem('rangeArray')))
     }
 
+    // Make copy of all products data to do a filtration
     let filteredArray = [...copyAllProducts]
 
     if (brandsArray.length > 0) filteredArray = getFilteredByBrand(filteredArray, brandsArray)
     if (categoriesArray.length > 0) filteredArray = getFilteredByCategory(filteredArray, categoriesArray)
     if (rangeArray.length > 0) filteredArray = getFilteredByRange(filteredArray, rangeArray)
-      
     
-    //console.log('allProducts!!!', allProducts)
-    //console.log('filteredProducts!!!', filteredArray)
+    
+    setQueryStringToURL(brandsArray, categoriesArray, rangeArray)
     renderProductList(filteredArray)
   }
   getFilteredProductsList()
