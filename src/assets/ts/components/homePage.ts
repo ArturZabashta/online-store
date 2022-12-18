@@ -1,8 +1,7 @@
-import httpClient from "../API/api";
+// import httpClient from "../API/api";
 import { IProduct } from "../interfaces/api-interfaces";
 import { zeroProduct, returnAllProducts, returnAllBrands, returnAllCategories, getFilteredByBrand, getFilteredByCategory } from "../utilities/utilities"
-import { controlToRange } from "../rangeAction"
-import { controlFromRange } from "../rangeAction"
+import {controlFromRange, controlToRange, updateSlider } from "../rangeAction"
 
 
 export const HomeComponent = async():Promise<void> => {
@@ -181,13 +180,9 @@ export const HomeComponent = async():Promise<void> => {
     console.log(localArr);
     if(localArr){
       [minPriceValue.innerHTML,maxPriceValue.innerHTML,minStockValue.innerHTML,maxStockValue.innerHTML] = [...localArr];
+      updateSlider(minPriceValue.innerHTML, maxPriceValue.innerHTML, minRangePrice, maxRangePrice)
+      updateSlider(minStockValue.innerHTML, maxStockValue.innerHTML, minRangeStock, maxRangeStock)
     }
-    
-    // if (localArr) localArr.map(el => {
-    //     const element: HTMLElement | null = document.getElementById(`${el}`)
-    //     if(element) element.setAttribute('checked', 'checked');
-    // }) 
-    
   }
 
   checkLocalrangeArray('rangeArray');
