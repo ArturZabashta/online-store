@@ -1,6 +1,6 @@
-// import httpClient from "../API/api";
+
 import { IProduct } from "../interfaces/api-interfaces";
-import { zeroProduct, returnAllProducts, returnAllBrands, returnAllCategories, getFilteredByBrand, getFilteredByCategory } from "../utilities/utilities"
+import { zeroProduct, returnAllProducts, returnAllBrands, returnAllCategories, getFilteredByBrand, getFilteredByCategory, getFilteredByRange } from "../utilities/utilities"
 import {controlFromRange, controlToRange, updateSlider } from "../rangeAction"
 
 
@@ -10,30 +10,7 @@ export const HomeComponent = async():Promise<void> => {
   const allBrands = await returnAllBrands();
   const copyAllProducts:IProduct[] = allProducts? Array.from(allProducts.products) : zeroProduct;
  
-  function getFilteredProductsList(){
-    let brandsArray: Array<string> = []
-    let categoriesArray: Array<string> = ['laptops']
-
-    if (localStorage.getItem('brandsArray')) {
-      brandsArray = JSON.parse(String(localStorage.getItem('brandsArray')))
-    }
-    if (localStorage.getItem('categoriesArray')) {
-      categoriesArray = JSON.parse(String(localStorage.getItem('categoriesArray')))
-    }
-
-    let arr = [...copyAllProducts]
-
-    if (brandsArray.length > 0) arr = getFilteredByBrand(arr, brandsArray)
-    if (categoriesArray.length > 0) arr = getFilteredByCategory(arr, categoriesArray)
-    
-    
-    console.log('allProducts!!!', allProducts)
-    console.log('filteredProducts!!!', arr)
-    renderProductList(arr)
-  }  
-  
-
-  const main: HTMLElement | null = document.getElementById('app');
+    const main: HTMLElement | null = document.getElementById('app');
   (<HTMLElement>main).innerHTML  =`
     <div class="shop">
       <aside class="shop__filters">
@@ -147,7 +124,35 @@ export const HomeComponent = async():Promise<void> => {
     });
 
   }
-  renderProductList(copyAllProducts)
+  //renderProductList(copyAllProducts)
+
+  function getFilteredProductsList(){
+    let brandsArray: Array<string> = []
+    let categoriesArray: Array<string> = []
+    let rangeArray: Array<string> = []
+
+    if (localStorage.getItem('brandsArray') && String(localStorage.getItem('brandsArray')).length > 2) {
+      brandsArray = JSON.parse(String(localStorage.getItem('brandsArray')))
+    }
+    if (localStorage.getItem('categoriesArray') && String(localStorage.getItem('categoriesArray')).length > 2) {
+      categoriesArray = JSON.parse(String(localStorage.getItem('categoriesArray')))
+    }
+    if (localStorage.getItem('rangeArray') && String(localStorage.getItem('rangeArray')).length > 2) {
+      rangeArray = JSON.parse(String(localStorage.getItem('rangeArray')))
+    }
+
+    let filteredArray = [...copyAllProducts]
+
+    if (brandsArray.length > 0) filteredArray = getFilteredByBrand(filteredArray, brandsArray)
+    if (categoriesArray.length > 0) filteredArray = getFilteredByCategory(filteredArray, categoriesArray)
+    if (rangeArray.length > 0) filteredArray = getFilteredByRange(filteredArray, rangeArray)
+      
+    
+    //console.log('allProducts!!!', allProducts)
+    //console.log('filteredProducts!!!', filteredArray)
+    renderProductList(filteredArray)
+  }
+  getFilteredProductsList()
 
   //range input handler
   const minPriceValue = <HTMLElement>document.querySelector('#fromPrice');
@@ -173,6 +178,7 @@ export const HomeComponent = async():Promise<void> => {
     rangeArray.push(minPriceValue.innerHTML,maxPriceValue.innerHTML,minStockValue.innerHTML,maxStockValue.innerHTML)
     localStorage.setItem('rangeArray', JSON.stringify(rangeArray))
     console.log('rangeArray',rangeArray)
+    getFilteredProductsList()
   }
 
   const checkLocalrangeArray = (arrName:string):void =>{
