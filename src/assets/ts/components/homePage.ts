@@ -309,7 +309,7 @@ export const HomeComponent = async():Promise<void> => {
     const itemsArray: NodeListOf<HTMLElement> = document.querySelectorAll('.item');
 
     if(size && size==='short')showShortItem(itemsArray);
-    if(size && size==='full')showFullItem(itemsArray);;
+    if(size && size==='full')showFullItem(itemsArray);
     if(itemFull)itemFull.onclick = () => showFullItem(itemsArray);
     if(itemShort)itemShort.onclick = () => showShortItem(itemsArray);
   }
