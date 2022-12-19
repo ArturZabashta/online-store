@@ -1,5 +1,12 @@
 import { IProduct } from "../interfaces/api-interfaces";
-import { zeroProduct, returnAllProducts, returnAllBrands, returnAllCategories, getFilteredByBrand, getFilteredByCategory, getFilteredByRange } from "../utilities/utilities"
+import { zeroProduct,
+   returnAllProducts, 
+   returnAllBrands, 
+   returnAllCategories, 
+   getFilteredByBrand, 
+   getFilteredByCategory, 
+   getFilteredByRange, 
+   getSortedProducts } from "../utilities/utilities"
 import {controlFromRange, controlToRange, updateSlider } from "../rangeAction"
 
 export const HomeComponent = async():Promise<void> => {
@@ -49,13 +56,32 @@ export const HomeComponent = async():Promise<void> => {
         </div>
       </div>
       </aside>
-      <section class="shop__items">              
+      <section class="shop__wrapper">
+        <article class="shop__head">
+          <select class="shop__head_sorter">
+            <option class="shop__head_option" value="start" disabled selected>Sort products:</option>
+            <option class="shop__head_option" value="priceUp">Price Up</option>
+            <option class="shop__head_option" value="priceDown">Price Down</option>
+            <option class="shop__head_option" value="ratingUp">Rating Up</option>
+            <option class="shop__head_option" value="ratingDown">Rating Down</option>
+          </select>
+          <div class="shop__head_found">Found: <span class="shop__head_count">100</span></div>
+          <input class="shop__head_search" type="text" placeholder="Search product">
+          <div class="shop__view">
+            <button class="shop__view_short">SHORT</button>
+            <button class="shop__view_full">FULL</button>
+          </button>
+        </article>
+        <article class="shop__list"></article>
       </section>
     </div>
   `;
   const categoryList: HTMLElement | null = document.querySelector('.select__category');
   const brandsList: HTMLElement | null = document.querySelector('.select__brand');
-  const shopItems: HTMLElement | null = document.querySelector('.shop__items');
+  const shopItems: HTMLElement | null = document.querySelector('.shop__list');
+  const productsCount: HTMLElement | null = document.querySelector('.shop__head_count');
+  const sortSelected = <HTMLSelectElement>document.querySelector('.shop__head_sorter');
+  const optionsList: NodeListOf<HTMLElement> = document.querySelectorAll('.shop__head_option')
 
   // Render of products categories
   async function renderCategoryList() {    
@@ -117,14 +143,14 @@ export const HomeComponent = async():Promise<void> => {
           <button class="item__details btn">Details</button>  
         </div>      
       `;
-      shopItems?.append(item)
+      shopItems?.append(item)      
       return
     });
-
+    if (productsCount) productsCount.innerHTML = `${productsList.length}`;
   }
   
 
-  function setQueryStringToURL(brandsArray: string[], categoriesArray:string[], rangeArray:string[]){
+  function setQueryStringToURL(brandsArray: string[], categoriesArray:string[], rangeArray:string[], sortName:string){
     const queryArray: string[] = [];
     let queryStr = '';
     let brandsStr = '';
@@ -145,9 +171,10 @@ export const HomeComponent = async():Promise<void> => {
       rangesStr = `price=${rangeArray[0].substr(1)}↕${rangeArray[1].substr(1)}&stock=${rangeArray[2]}↕${rangeArray[3]}`
       queryArray.push(rangesStr);
     }
-
+    console.log('sortName from render = ', sortName)
     if (queryArray.length > 0 ) {
-      queryStr = '?' + queryArray.join('&');
+      
+      (sortName.length > 2) ? queryStr = '?' + queryArray.join('&') + `&sort=${sortName}`: queryStr = '?' + queryArray.join('&');
       localStorage.setItem('queryStr', JSON.stringify(queryStr))
       console.log('queryStr!!!', queryStr)
     }
@@ -165,7 +192,8 @@ export const HomeComponent = async():Promise<void> => {
   function getFilteredProductsList(){
     let brandsArray: Array<string> = []
     let categoriesArray: Array<string> = []
-    let rangeArray: Array<string> = []    
+    let rangeArray: Array<string> = []
+    let sortName = '';   
 
     if (localStorage.getItem('brandsArray') && String(localStorage.getItem('brandsArray')).length > 2) {
       brandsArray = JSON.parse(String(localStorage.getItem('brandsArray')));
@@ -176,16 +204,21 @@ export const HomeComponent = async():Promise<void> => {
     if (localStorage.getItem('rangeArray') && String(localStorage.getItem('rangeArray')).length > 2) {
       rangeArray = JSON.parse(String(localStorage.getItem('rangeArray')))
     }
+    if (localStorage.getItem('sortName') && String(localStorage.getItem('rangeArray')).length > 1) {
+      sortName = JSON.parse(String(localStorage.getItem('sortName')))
+      setSelectValue(sortName)
+    }
 
     // Make copy of all products data to do a filtration
     let filteredArray = [...copyAllProducts]
 
+    if (sortName.length > 0) filteredArray = getSortedProducts(filteredArray, sortName)
     if (brandsArray.length > 0) filteredArray = getFilteredByBrand(filteredArray, brandsArray)
     if (categoriesArray.length > 0) filteredArray = getFilteredByCategory(filteredArray, categoriesArray)
     if (rangeArray.length > 0) filteredArray = getFilteredByRange(filteredArray, rangeArray)
     
     
-    setQueryStringToURL(brandsArray, categoriesArray, rangeArray)
+    setQueryStringToURL(brandsArray, categoriesArray, rangeArray, sortName)
     renderProductList(filteredArray)
   }
   getFilteredProductsList()
@@ -279,5 +312,14 @@ export const HomeComponent = async():Promise<void> => {
     if(settings) settings.classList.toggle("active-settings");
   }
 
+  sortSelected.addEventListener('change', ()=> {
+    const sortValue = sortSelected.value    
+    localStorage.setItem('sortName', JSON.stringify(sortValue))    
+    getFilteredProductsList()
+  })
 
+  function setSelectValue(value: string) {
+    sortSelected.value = value;
+  }
+  
 }

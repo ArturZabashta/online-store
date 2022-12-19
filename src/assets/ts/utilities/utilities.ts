@@ -94,3 +94,23 @@ export function getFilteredByRange(productList: IProduct[], filterArray: Array<s
   .filter((product) => (product.stock >= Number(minStock) && product.stock <= Number(maxStock)))  
   return filteredProductList;
 }
+
+export function getSortedProducts(productList: IProduct[], filterMethod: string) {
+  const sortedProductList: IProduct[] = [...productList];
+  switch (filterMethod) {
+    case 'priceUp': {
+      return sortedProductList.sort((a:IProduct, b:IProduct)=> a.price-b.price)
+    }
+    case 'priceDown': {
+      return sortedProductList.sort((a:IProduct, b:IProduct)=> b.price-a.price)
+    }
+    case 'ratingUp': {
+      return sortedProductList.sort((a:IProduct, b:IProduct)=> a.rating-b.rating)
+    }
+    case 'ratingDown': {
+      return sortedProductList.sort((a:IProduct, b:IProduct)=> b.rating-a.rating)
+    }  
+    default: return sortedProductList
+  }
+  //return sortedProductList;
+}
