@@ -303,15 +303,20 @@ export const HomeComponent = async():Promise<void> => {
 
   //lisener size items
   function listenSizeItem(){
+    const size:string | null = localStorage.getItem('sizeItem');
     const itemShort: HTMLElement | null = document.querySelector('.shop__view_short');
     const itemFull: HTMLElement | null = document.querySelector('.shop__view_full');
     const itemsArray: NodeListOf<HTMLElement> = document.querySelectorAll('.item');
+
+    if(size && size==='short')showShortItem(itemsArray);
+    if(size && size==='full')showFullItem(itemsArray);;
     if(itemFull)itemFull.onclick = () => showFullItem(itemsArray);
     if(itemShort)itemShort.onclick = () => showShortItem(itemsArray);
   }
   listenSizeItem()
 
   function showFullItem(itemsArray : NodeListOf<HTMLElement>){
+    localStorage.setItem('sizeItem', 'full');
     [...itemsArray].map((item:HTMLElement) =>{
       item.classList.remove('item-short');
       (<HTMLElement>item.querySelector('.item__settings')).classList.remove('settings-short');
@@ -323,6 +328,7 @@ export const HomeComponent = async():Promise<void> => {
   }
 
   function showShortItem(itemsArray:NodeListOf<HTMLElement>){
+    localStorage.setItem('sizeItem', 'short');
     [...itemsArray].map((item:HTMLElement) =>{
       item.classList.add('item-short');
       (<HTMLElement>item.querySelector('.item__settings')).classList.add('settings-short');
