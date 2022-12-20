@@ -10,6 +10,7 @@ import { zeroProduct,
    getSearchByInput,
    getAllFilters } from "../utilities/utilities"
 import {controlFromRange, controlToRange, updateSlider } from "../rangeAction"
+let filteredArray: IProduct[];
 
 export const HomeComponent = async():Promise<void> => {
   const allProducts = await returnAllProducts();
@@ -105,20 +106,31 @@ export const HomeComponent = async():Promise<void> => {
   renderCategoryList()
 
  // Render of products Brands
- async function renderBrandList() {    
-    if (brandsList) brandsList.innerHTML = '';
+//  async function renderBrandList() {    
+//     if (brandsList) brandsList.innerHTML = '';
 
-    for (const brand in allBrands) {    
-      const label = document.createElement('label');    
-      label.setAttribute('for', `${brand}`);
-      label.innerHTML = `    
-      <input value="${brand}" id="${brand}" type="checkbox">
-      ${brand}        
-      `;
-      brandsList?.append(label)
-    }
-  }
-  renderBrandList()
+//     for (const brand in allBrands) {    
+//       const count: number = getBrendCount(brand);  
+//       const label = document.createElement('label');    
+//       label.setAttribute('for', `${brand}`);
+//       label.innerHTML = `    
+//       <input value="${brand}" id="${brand}" type="checkbox">
+//       ${brand}
+//       <span>(${count}/${allBrands[brand]})</span>                   
+//       `;
+//       brandsList?.append(label)
+//     }
+//   }
+//   renderBrandList()
+
+//   function getBrendCount(brand: string): number{
+//     const filtered = filteredArray? filteredArray : zeroProduct;
+//     console.log(filtered)
+//     const result = filtered.filter(item => (item.brand).toLowerCase() === brand);
+//     console.log(result.length)
+//     return result.length
+//   }
+
            
   // Render of products cards     
   async function renderProductList(productsList: IProduct[]) {
@@ -208,7 +220,7 @@ export const HomeComponent = async():Promise<void> => {
   function getFilteredProductsList(){
     const [brandsArray, categoriesArray, rangeArray, sortName, searchValue, sizeItem] = [...getAllFilters()]
     // Make copy of all products data to do a filtration
-    let filteredArray = [...copyAllProducts]
+    filteredArray = [...copyAllProducts]
     //Apply filters to array with all products
     if (sortName.length > 0) {
       filteredArray = getSortedProducts(filteredArray, sortName)
@@ -225,6 +237,32 @@ export const HomeComponent = async():Promise<void> => {
     renderProductList(filteredArray);
   }
   getFilteredProductsList();
+
+  async function renderBrandList() {    
+    if (brandsList) brandsList.innerHTML = '';
+
+    for (const brand in allBrands) {    
+      const count: number = getBrendCount(brand);  
+      const label = document.createElement('label');    
+      label.setAttribute('for', `${brand}`);
+      label.innerHTML = `    
+      <input value="${brand}" id="${brand}" type="checkbox">
+      ${brand}
+      <span>(${count}/${allBrands[brand]})</span>                   
+      `;
+      brandsList?.append(label)
+    }
+  }
+  renderBrandList()
+
+  function getBrendCount(brand: string): number{
+    const filtered = filteredArray? filteredArray : zeroProduct;
+
+    const result = filtered.filter(item => (item.brand).toLowerCase() === brand);
+    console.log(result.length)
+    return result.length
+  }
+
 
   //range input handler
   const minPriceValue = <HTMLElement>document.querySelector('#fromPrice');
