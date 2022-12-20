@@ -6,7 +6,8 @@ import { zeroProduct,
    getFilteredByBrand, 
    getFilteredByCategory, 
    getFilteredByRange, 
-   getSortedProducts } from "../utilities/utilities"
+   getSortedProducts,
+   getSearchByInput } from "../utilities/utilities"
 import {controlFromRange, controlToRange, updateSlider } from "../rangeAction"
 
 export const HomeComponent = async():Promise<void> => {
@@ -81,7 +82,8 @@ export const HomeComponent = async():Promise<void> => {
   const shopItems: HTMLElement | null = document.querySelector('.shop__list');
   const productsCount: HTMLElement | null = document.querySelector('.shop__head_count');
   const sortSelected = <HTMLSelectElement>document.querySelector('.shop__head_sorter');
-  const optionsList: NodeListOf<HTMLElement> = document.querySelectorAll('.shop__head_option')
+  const searchInput = <HTMLInputElement>document.querySelector('.shop__head_search');
+  //const optionsList: NodeListOf<HTMLElement> = document.querySelectorAll('.shop__head_option')
 
   // Render of products categories
   async function renderCategoryList() {    
@@ -150,7 +152,7 @@ export const HomeComponent = async():Promise<void> => {
   }
   
 
-  function setQueryStringToURL(brandsArray: string[], categoriesArray:string[], rangeArray:string[], sortName:string){
+  function setQueryStringToURL(brandsArray: string[], categoriesArray:string[], rangeArray:string[], sortName:string, searchValue: string){
     const queryArray: string[] = [];
     let queryStr = '';
     let brandsStr = '';
@@ -171,29 +173,27 @@ export const HomeComponent = async():Promise<void> => {
       rangesStr = `price=${rangeArray[0].substr(1)}↕${rangeArray[1].substr(1)}&stock=${rangeArray[2]}↕${rangeArray[3]}`
       queryArray.push(rangesStr);
     }
-    console.log('sortName from render = ', sortName)
-    if (queryArray.length > 0 ) {
-      
-      (sortName.length > 2) ? queryStr = '?' + queryArray.join('&') + `&sort=${sortName}`: queryStr = '?' + queryArray.join('&');
+    if (sortName && sortName.length > 0) queryArray.push('sort=' + sortName)
+    if (searchValue && searchValue.length > 0) queryArray.push('search=' + searchValue)
+
+    //console.log('sortName from render = ', sortName)
+    if (queryArray.length > 0 ) {      
+      queryStr = '?' + queryArray.join('&');      
       localStorage.setItem('queryStr', JSON.stringify(queryStr))
-      console.log('queryStr!!!', queryStr)
-    }
+      //console.log('queryStr!!!', queryStr)    
+    } 
+         
     //Add query parameters to URL  
     const refresh = window.location.protocol + "//" + window.location.host + window.location.pathname + queryStr;    
-    window.history.pushState({ path: refresh }, '', refresh);
-
-    //console.log('window.location.protocol=', window.location.protocol)
-    //console.log('window.location.host=', window.location.host)
-    //console.log('window.location.pathname=', window.location.pathname)
-    //console.log('window.location.hash=', window.location.href)
-        
+    window.history.pushState({ path: refresh }, '', refresh); 
   }
 
   function getFilteredProductsList(){
     let brandsArray: Array<string> = []
     let categoriesArray: Array<string> = []
     let rangeArray: Array<string> = []
-    let sortName = '';   
+    let sortName = '';
+    let searchValue = '';  
 
     if (localStorage.getItem('brandsArray') && String(localStorage.getItem('brandsArray')).length > 2) {
       brandsArray = JSON.parse(String(localStorage.getItem('brandsArray')));
@@ -204,9 +204,13 @@ export const HomeComponent = async():Promise<void> => {
     if (localStorage.getItem('rangeArray') && String(localStorage.getItem('rangeArray')).length > 2) {
       rangeArray = JSON.parse(String(localStorage.getItem('rangeArray')))
     }
-    if (localStorage.getItem('sortName') && String(localStorage.getItem('rangeArray')).length > 1) {
+    if (localStorage.getItem('sortName') && String(localStorage.getItem('sortName')).length > 1) {
       sortName = JSON.parse(String(localStorage.getItem('sortName')))
       setSelectValue(sortName)
+    }
+    if (localStorage.getItem('searchValue') && String(localStorage.getItem('searchValue')).length > 0) {
+      searchValue = JSON.parse(String(localStorage.getItem('searchValue')))
+      setSearchValue(searchValue)
     }
 
     // Make copy of all products data to do a filtration
@@ -216,9 +220,9 @@ export const HomeComponent = async():Promise<void> => {
     if (brandsArray.length > 0) filteredArray = getFilteredByBrand(filteredArray, brandsArray)
     if (categoriesArray.length > 0) filteredArray = getFilteredByCategory(filteredArray, categoriesArray)
     if (rangeArray.length > 0) filteredArray = getFilteredByRange(filteredArray, rangeArray)
-    
-    
-    setQueryStringToURL(brandsArray, categoriesArray, rangeArray, sortName)
+    if (searchValue.length > 0) filteredArray = getSearchByInput(filteredArray, searchValue)
+
+    setQueryStringToURL(brandsArray, categoriesArray, rangeArray, sortName, searchValue)
     renderProductList(filteredArray)
   }
   getFilteredProductsList()
@@ -322,4 +326,14 @@ export const HomeComponent = async():Promise<void> => {
     sortSelected.value = value;
   }
   
+  searchInput.addEventListener('input', () => {
+    const searchValue = searchInput.value    
+    localStorage.setItem('searchValue', JSON.stringify(searchValue))
+    getFilteredProductsList()
+  })
+
+  function setSearchValue(value: string) {
+    searchInput.value = value;
+  }
 }
+
