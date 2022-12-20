@@ -111,6 +111,18 @@ export function getSortedProducts(productList: IProduct[], filterMethod: string)
       return sortedProductList.sort((a:IProduct, b:IProduct)=> b.rating-a.rating)
     }  
     default: return sortedProductList
-  }
-  //return sortedProductList;
+  }  
+}
+
+export function getSearchByInput(productList: IProduct[], searcValue: string) {
+  const search = searcValue.toLowerCase();
+  return productList.filter((product)=> (product.title.toLowerCase().indexOf(search) !== -1
+  || product.description.toLowerCase().indexOf(search) !== -1
+  || String(product.price).indexOf(search) !== -1
+  || String(product.rating).indexOf(search) !== -1
+  || String(product.stock).indexOf(search) !== -1
+  || String(product.discountPercentage).indexOf(search) !== -1
+  || product.brand.toLowerCase().indexOf(search) !== -1
+  || product.category.toLowerCase().indexOf(search) !== -1
+  ));
 }
