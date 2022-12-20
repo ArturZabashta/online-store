@@ -7,7 +7,8 @@ import { zeroProduct,
    getFilteredByCategory, 
    getFilteredByRange, 
    getSortedProducts,
-   getSearchByInput } from "../utilities/utilities"
+   getSearchByInput,
+   getAllFilters } from "../utilities/utilities"
 import {controlFromRange, controlToRange, updateSlider } from "../rangeAction"
 
 export const HomeComponent = async():Promise<void> => {
@@ -15,7 +16,8 @@ export const HomeComponent = async():Promise<void> => {
   const allCategories = await returnAllCategories(); 
   const allBrands = await returnAllBrands();
   const copyAllProducts:IProduct[] = allProducts? Array.from(allProducts.products) : zeroProduct;
-    
+    console.log('allCategories', allCategories)
+    console.log('allBrands', allBrands)
   const main: HTMLElement | null = document.getElementById('app');
   (<HTMLElement>main).innerHTML  =`
     <div class="shop">
@@ -83,7 +85,8 @@ export const HomeComponent = async():Promise<void> => {
   const productsCount: HTMLElement | null = document.querySelector('.shop__head_count');
   const sortSelected = <HTMLSelectElement>document.querySelector('.shop__head_sorter');
   const searchInput = <HTMLInputElement>document.querySelector('.shop__head_search');
-  //const optionsList: NodeListOf<HTMLElement> = document.querySelectorAll('.shop__head_option')
+  const buttonShortView = <HTMLButtonElement>document.querySelector('.shop__view_short');
+  const buttonFullView = <HTMLButtonElement>document.querySelector('.shop__view_full');
 
   // Render of products categories
   async function renderCategoryList() {    
@@ -152,13 +155,14 @@ export const HomeComponent = async():Promise<void> => {
   }
   
 
-  function setQueryStringToURL(brandsArray: string[], categoriesArray:string[], rangeArray:string[], sortName:string, searchValue: string){
+  function setQueryStringToURL(/*brandsArray: string[], categoriesArray:string[], rangeArray:string[], sortName:string, searchValue: string*/){
+    const [brandsArray, categoriesArray, rangeArray, sortName, searchValue, sizeItem] = [...getAllFilters()]
+        
     const queryArray: string[] = [];
     let queryStr = '';
     let brandsStr = '';
     let categoriesStr = '';
-    let rangesStr  = '';
-    let sizeItem = '';
+    let rangesStr  = '';    
 
     if (localStorage.getItem('queryStr')) queryStr = JSON.parse(String(localStorage.getItem('queryStr')));
     
@@ -176,62 +180,51 @@ export const HomeComponent = async():Promise<void> => {
     }
     if (sortName && sortName.length > 0) queryArray.push('sort=' + sortName)
     if (searchValue && searchValue.length > 0) queryArray.push('search=' + searchValue)
-    if (localStorage.getItem('sizeItem')) {
-      sizeItem = String(localStorage.getItem('sizeItem'))
+    if (sizeItem) {
       queryArray.push('view=' + sizeItem)
-      //setSearchValue(searchValue)
-    }
-
-    //console.log('sortName from render = ', sortName)
+      switch (sizeItem) {
+        case 'full': {
+          buttonFullView.classList.add('btn__activated');
+          buttonShortView.classList.remove('btn__activated');
+          return;
+        }
+        case 'short': {
+          buttonShortView.classList.add('btn__activated')
+          buttonFullView.classList.remove('btn__activated')
+          return;
+        }
+      }
+    }    
+    //Form query string with parameters
     if (queryArray.length > 0 ) {      
       queryStr = '?' + queryArray.join('&');      
-      localStorage.setItem('queryStr', JSON.stringify(queryStr))
-      //console.log('queryStr!!!', queryStr)    
-    } 
-         
+      localStorage.setItem('queryStr', JSON.stringify(queryStr))          
+    }         
     //Add query parameters to URL  
     const refresh = window.location.protocol + "//" + window.location.host + window.location.pathname + queryStr;    
     window.history.pushState({ path: refresh }, '', refresh); 
   }
 
   function getFilteredProductsList(){
-    let brandsArray: Array<string> = []
-    let categoriesArray: Array<string> = []
-    let rangeArray: Array<string> = []
-    let sortName = '';
-    let searchValue = '';    
-
-    if (localStorage.getItem('brandsArray') && String(localStorage.getItem('brandsArray')).length > 2) {
-      brandsArray = JSON.parse(String(localStorage.getItem('brandsArray')));
-    }
-    if (localStorage.getItem('categoriesArray') && String(localStorage.getItem('categoriesArray')).length > 2) {
-      categoriesArray = JSON.parse(String(localStorage.getItem('categoriesArray')));
-    }
-    if (localStorage.getItem('rangeArray') && String(localStorage.getItem('rangeArray')).length > 2) {
-      rangeArray = JSON.parse(String(localStorage.getItem('rangeArray')))
-    }
-    if (localStorage.getItem('sortName') && String(localStorage.getItem('sortName')).length > 1) {
-      sortName = JSON.parse(String(localStorage.getItem('sortName')))
-      setSelectValue(sortName)
-    }
-    if (localStorage.getItem('searchValue') && String(localStorage.getItem('searchValue')).length > 0) {
-      searchValue = JSON.parse(String(localStorage.getItem('searchValue')))
-      setSearchValue(searchValue)
-    }    
-
+    const [brandsArray, categoriesArray, rangeArray, sortName, searchValue, sizeItem] = [...getAllFilters()]
     // Make copy of all products data to do a filtration
     let filteredArray = [...copyAllProducts]
-
-    if (sortName.length > 0) filteredArray = getSortedProducts(filteredArray, sortName)
+    //Apply filters to array with all products
+    if (sortName.length > 0) {
+      filteredArray = getSortedProducts(filteredArray, sortName)
+      setSelectValue(sortName);
+    }
     if (brandsArray.length > 0) filteredArray = getFilteredByBrand(filteredArray, brandsArray)
     if (categoriesArray.length > 0) filteredArray = getFilteredByCategory(filteredArray, categoriesArray)
     if (rangeArray.length > 0) filteredArray = getFilteredByRange(filteredArray, rangeArray)
-    if (searchValue.length > 0) filteredArray = getSearchByInput(filteredArray, searchValue)
-
-    setQueryStringToURL(brandsArray, categoriesArray, rangeArray, sortName, searchValue, )
-    renderProductList(filteredArray)
+    if (searchValue.length > 0) {
+      filteredArray = getSearchByInput(filteredArray, searchValue)
+      setSearchValue(searchValue);
+    }
+    setQueryStringToURL();
+    renderProductList(filteredArray);
   }
-  getFilteredProductsList()
+  getFilteredProductsList();
 
   //range input handler
   const minPriceValue = <HTMLElement>document.querySelector('#fromPrice');
@@ -327,6 +320,7 @@ export const HomeComponent = async():Promise<void> => {
 
   function showFullItem(itemsArray : NodeListOf<HTMLElement>){
     localStorage.setItem('sizeItem', 'full');
+    setQueryStringToURL();
     [...itemsArray].map((item:HTMLElement) =>{
       item.classList.remove('item-short');
       (<HTMLElement>item.querySelector('.item__settings')).classList.remove('settings-short');
@@ -339,6 +333,7 @@ export const HomeComponent = async():Promise<void> => {
 
   function showShortItem(itemsArray:NodeListOf<HTMLElement>){
     localStorage.setItem('sizeItem', 'short');
+    setQueryStringToURL();
     [...itemsArray].map((item:HTMLElement) =>{
       item.classList.add('item-short');
       (<HTMLElement>item.querySelector('.item__settings')).classList.add('settings-short');
