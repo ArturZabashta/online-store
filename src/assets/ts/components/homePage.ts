@@ -69,8 +69,8 @@ export const HomeComponent = async():Promise<void> => {
           <div class="shop__head_found">Found: <span class="shop__head_count">100</span></div>
           <input class="shop__head_search" type="text" placeholder="Search product">
           <div class="shop__view">
-            <button class="shop__view_short btn" onclick ="showFullItem()">SHORT</button>
-            <button class="shop__view_full btn" onclick ="showShortItem()">FULL</button>
+            <button class="shop__view_short btn" >SHORT</button>
+            <button class="shop__view_full btn" >FULL</button>
           </button>
         </article>
         <article class="shop__list"></article>
@@ -158,6 +158,7 @@ export const HomeComponent = async():Promise<void> => {
     let brandsStr = '';
     let categoriesStr = '';
     let rangesStr  = '';
+    let sizeItem = '';
 
     if (localStorage.getItem('queryStr')) queryStr = JSON.parse(String(localStorage.getItem('queryStr')));
     
@@ -175,6 +176,11 @@ export const HomeComponent = async():Promise<void> => {
     }
     if (sortName && sortName.length > 0) queryArray.push('sort=' + sortName)
     if (searchValue && searchValue.length > 0) queryArray.push('search=' + searchValue)
+    if (localStorage.getItem('sizeItem')) {
+      sizeItem = String(localStorage.getItem('sizeItem'))
+      queryArray.push('view=' + sizeItem)
+      //setSearchValue(searchValue)
+    }
 
     //console.log('sortName from render = ', sortName)
     if (queryArray.length > 0 ) {      
@@ -193,7 +199,7 @@ export const HomeComponent = async():Promise<void> => {
     let categoriesArray: Array<string> = []
     let rangeArray: Array<string> = []
     let sortName = '';
-    let searchValue = '';  
+    let searchValue = '';    
 
     if (localStorage.getItem('brandsArray') && String(localStorage.getItem('brandsArray')).length > 2) {
       brandsArray = JSON.parse(String(localStorage.getItem('brandsArray')));
@@ -211,7 +217,7 @@ export const HomeComponent = async():Promise<void> => {
     if (localStorage.getItem('searchValue') && String(localStorage.getItem('searchValue')).length > 0) {
       searchValue = JSON.parse(String(localStorage.getItem('searchValue')))
       setSearchValue(searchValue)
-    }
+    }    
 
     // Make copy of all products data to do a filtration
     let filteredArray = [...copyAllProducts]
@@ -222,7 +228,7 @@ export const HomeComponent = async():Promise<void> => {
     if (rangeArray.length > 0) filteredArray = getFilteredByRange(filteredArray, rangeArray)
     if (searchValue.length > 0) filteredArray = getSearchByInput(filteredArray, searchValue)
 
-    setQueryStringToURL(brandsArray, categoriesArray, rangeArray, sortName, searchValue)
+    setQueryStringToURL(brandsArray, categoriesArray, rangeArray, sortName, searchValue, )
     renderProductList(filteredArray)
   }
   getFilteredProductsList()
