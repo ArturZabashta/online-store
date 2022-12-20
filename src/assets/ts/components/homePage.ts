@@ -157,7 +157,7 @@ export const HomeComponent = async():Promise<void> => {
 
   function setQueryStringToURL(/*brandsArray: string[], categoriesArray:string[], rangeArray:string[], sortName:string, searchValue: string*/){
     const [brandsArray, categoriesArray, rangeArray, sortName, searchValue, sizeItem] = [...getAllFilters()]
-        
+    console.log('setQueryStringToURL starts!!')    
     const queryArray: string[] = [];
     let queryStr = '';
     let brandsStr = '';
@@ -186,12 +186,12 @@ export const HomeComponent = async():Promise<void> => {
         case 'full': {
           buttonFullView.classList.add('btn__activated');
           buttonShortView.classList.remove('btn__activated');
-          return;
+          break;
         }
         case 'short': {
           buttonShortView.classList.add('btn__activated')
           buttonFullView.classList.remove('btn__activated')
-          return;
+          break;
         }
       }
     }    
