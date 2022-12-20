@@ -10,15 +10,16 @@ import { zeroProduct,
    getSearchByInput,
    getAllFilters } from "../utilities/utilities"
 import {controlFromRange, controlToRange, updateSlider } from "../rangeAction"
-let filteredArray: IProduct[];
+
+let filteredArray: IProduct[] = zeroProduct;
 
 export const HomeComponent = async():Promise<void> => {
   const allProducts = await returnAllProducts();
   const allCategories = await returnAllCategories(); 
   const allBrands = await returnAllBrands();
   const copyAllProducts:IProduct[] = allProducts? Array.from(allProducts.products) : zeroProduct;
-    console.log('allCategories', allCategories)
-    console.log('allBrands', allBrands)
+    //console.log('allCategories', allCategories)
+    //console.log('allBrands', allBrands)
   const main: HTMLElement | null = document.getElementById('app');
   (<HTMLElement>main).innerHTML  =`
     <div class="shop">
@@ -89,51 +90,9 @@ export const HomeComponent = async():Promise<void> => {
   const buttonShortView = <HTMLButtonElement>document.querySelector('.shop__view_short');
   const buttonFullView = <HTMLButtonElement>document.querySelector('.shop__view_full');
 
-  // Render of products categories
-  async function renderCategoryList() {    
-    if (categoryList) categoryList.innerHTML = '';
-
-    for (const category in allCategories) {    
-      const label = document.createElement('label');    
-      label.setAttribute('for', `${category}`);
-      label.innerHTML = `    
-      <input value="${category}" id="${category}" type="checkbox">
-      ${category}        
-      `;
-      categoryList?.append(label)
-    }
-  }
-  renderCategoryList()
-
- // Render of products Brands
-//  async function renderBrandList() {    
-//     if (brandsList) brandsList.innerHTML = '';
-
-//     for (const brand in allBrands) {    
-//       const count: number = getBrendCount(brand);  
-//       const label = document.createElement('label');    
-//       label.setAttribute('for', `${brand}`);
-//       label.innerHTML = `    
-//       <input value="${brand}" id="${brand}" type="checkbox">
-//       ${brand}
-//       <span>(${count}/${allBrands[brand]})</span>                   
-//       `;
-//       brandsList?.append(label)
-//     }
-//   }
-//   renderBrandList()
-
-//   function getBrendCount(brand: string): number{
-//     const filtered = filteredArray? filteredArray : zeroProduct;
-//     console.log(filtered)
-//     const result = filtered.filter(item => (item.brand).toLowerCase() === brand);
-//     console.log(result.length)
-//     return result.length
-//   }
-
-           
+             
   // Render of products cards     
-  async function renderProductList(productsList: IProduct[]) {
+  function renderProductList(productsList: IProduct[]) {
     if (shopItems) shopItems.innerHTML = '';
 
     if (productsList) productsList.forEach((element: IProduct) => {
@@ -169,7 +128,7 @@ export const HomeComponent = async():Promise<void> => {
 
   function setQueryStringToURL(/*brandsArray: string[], categoriesArray:string[], rangeArray:string[], sortName:string, searchValue: string*/){
     const [brandsArray, categoriesArray, rangeArray, sortName, searchValue, sizeItem] = [...getAllFilters()]
-    console.log('setQueryStringToURL starts!!')    
+      
     const queryArray: string[] = [];
     let queryStr = '';
     let brandsStr = '';
@@ -217,7 +176,7 @@ export const HomeComponent = async():Promise<void> => {
     window.history.pushState({ path: refresh }, '', refresh); 
   }
 
-  function getFilteredProductsList(){
+  async function getFilteredProductsList(){
     const [brandsArray, categoriesArray, rangeArray, sortName, searchValue, sizeItem] = [...getAllFilters()]
     // Make copy of all products data to do a filtration
     filteredArray = [...copyAllProducts]
@@ -238,31 +197,57 @@ export const HomeComponent = async():Promise<void> => {
   }
   getFilteredProductsList();
 
-  async function renderBrandList() {    
-    if (brandsList) brandsList.innerHTML = '';
 
+
+  function getCategoryCount(category: string): number{
+    const filtered = filteredArray;
+    const result = filtered.filter(item => (item.category).toLowerCase() === category);
+    console.log(result.length)
+    return result.length
+  }
+
+  function getBrandCount(brand: string): number{
+    const filtered = filteredArray;
+    const result = filtered.filter(item => (item.brand).toLowerCase() === brand);
+    return result.length
+  }
+
+
+  // Render of products categories
+  async function renderCategoryList() {    
+    if (categoryList) categoryList.innerHTML = '';
+    for (const category in allCategories) {
+      const count: number = getCategoryCount(category);
+      const label = document.createElement('label');    
+      label.setAttribute('for', `${category}`);
+      label.innerHTML = `    
+      <input value="${category}" id="${category}" type="checkbox">
+      ${category}
+      <span>(<span class="category__count_current" id="span-${category}">${count}</span>/${allCategories[category]})</span>        
+      `;
+      categoryList?.append(label)
+    }
+  }
+  renderCategoryList()
+
+
+ // Render of products Brands 
+  async function renderBrandList() { 
+    console.log('filteredArray', filteredArray) 
+    if (brandsList) brandsList.innerHTML = '';
     for (const brand in allBrands) {    
-      const count: number = getBrendCount(brand);  
+      const count: number = getBrandCount(brand);  
       const label = document.createElement('label');    
       label.setAttribute('for', `${brand}`);
       label.innerHTML = `    
       <input value="${brand}" id="${brand}" type="checkbox">
       ${brand}
-      <span>(${count}/${allBrands[brand]})</span>                   
+      <span>(<span class="brand__count_current" id="span-${brand}">${count}</span>/${allBrands[brand]})</span>                   
       `;
       brandsList?.append(label)
     }
   }
   renderBrandList()
-
-  function getBrendCount(brand: string): number{
-    const filtered = filteredArray? filteredArray : zeroProduct;
-
-    const result = filtered.filter(item => (item.brand).toLowerCase() === brand);
-    console.log(result.length)
-    return result.length
-  }
-
 
   //range input handler
   const minPriceValue = <HTMLElement>document.querySelector('#fromPrice');
@@ -280,6 +265,7 @@ export const HomeComponent = async():Promise<void> => {
   minRangeStock.oninput = () => controlToRange(minStockValue,maxStockValue,minRangeStock, maxRangeStock, 'updateStock');
   maxRangeStock.oninput = () => controlFromRange(minStockValue,maxStockValue,minRangeStock, maxRangeStock, 'updateStock');
 
+
   //listens for changes in the range and writes to the local store
   const ranges: NodeListOf<HTMLElement> = document.querySelectorAll('.multi-range');
   if(ranges) Array.from(ranges).forEach(element => element.onchange = ():void => updateRange())
@@ -288,10 +274,13 @@ export const HomeComponent = async():Promise<void> => {
     rangeArray.push(minPriceValue.innerHTML,maxPriceValue.innerHTML,minStockValue.innerHTML,maxStockValue.innerHTML)
     localStorage.setItem('rangeArray', JSON.stringify(rangeArray))
     console.log('rangeArray',rangeArray)
-    getFilteredProductsList()
+    getFilteredProductsList().then(()=> {
+      updateBrandCountSpan()
+      updateCategoryCountSpan()
+    })
   }
 
-  const checkLocalrangeArray = (arrName:string):void =>{
+  const checkLocalRangeArray = (arrName:string):void =>{
     const localArr: Array<string>  =JSON.parse(localStorage.getItem(arrName) as string);
     console.log(localArr);
     if(localArr){
@@ -300,14 +289,32 @@ export const HomeComponent = async():Promise<void> => {
       updateSlider(minStockValue.innerHTML, maxStockValue.innerHTML, minRangeStock, maxRangeStock)
     }
   }
+  checkLocalRangeArray('rangeArray');
 
-  checkLocalrangeArray('rangeArray');
 
   // checkbox click handler
   const categories: HTMLInputElement | null = document.querySelector('.select__category');
   const categoriesInput: NodeListOf<HTMLInputElement> = document.querySelectorAll('.select__category input');
   const brands: HTMLInputElement | null = document.querySelector('.select__brand');
   const brandsInput: NodeListOf<HTMLInputElement> = document.querySelectorAll('.select__brand input');
+  const brandSpanList: NodeListOf<HTMLElement> = document.querySelectorAll('.brand__count_current');
+  const categorySpanList: NodeListOf<HTMLElement> = document.querySelectorAll('.category__count_current');
+
+  function updateBrandCountSpan():void {
+    Array.from(brandSpanList).map(el => {      
+      const count: number = getBrandCount(el.id.slice(5));      
+      count? el.innerHTML = `${count}`: el.innerHTML = '0';
+    })
+  }
+
+
+  function updateCategoryCountSpan():void {
+    Array.from(categorySpanList).map(el => {      
+      const count: number = getCategoryCount(el.id.slice(5));      
+      count? el.innerHTML = `${count}`: el.innerHTML = '0';
+    })
+  }
+
 
  //listens for changes in the categories and writes to the local store
   const updateCategories = ():void =>{
@@ -315,24 +322,31 @@ export const HomeComponent = async():Promise<void> => {
     Array.from(categoriesInput).map(el => {if(el.checked) categoriesArray.push(el.id) })
     localStorage.setItem('categoriesArray', JSON.stringify(categoriesArray))
     console.log('categoriesArray',categoriesArray)
-    getFilteredProductsList()
+    getFilteredProductsList().then(()=> {
+      updateBrandCountSpan()
+      updateCategoryCountSpan()
+    })
   }
   if(categories) categories.onclick = () => updateCategories()
 
- //listens for changes in the brands and writes to the local store
+
+  //listens for changes in the brands and writes to the local store
   const updateBrands = ():void =>{
     const brandsArray: Array<string> = []
-    Array.from(brandsInput).map(el => {if(el.checked) brandsArray.push(el.id) })
+    Array.from(brandsInput).map(el => {if(el.checked) brandsArray.push(el.id)})
     localStorage.setItem('brandsArray', JSON.stringify(brandsArray))
     console.log('brandsArray',brandsArray)
-    getFilteredProductsList()
-  }
+    getFilteredProductsList().then(()=> {
+      updateBrandCountSpan()
+      updateCategoryCountSpan()
+    })
+  }  
   if(brands) brands.onclick = () => updateBrands()
 
   //
   const checkLocalCheckboxArr = (arrName:string):void =>{
     const localArr: Array<string> | null =JSON.parse(localStorage.getItem(arrName) as string);
-    console.log(localArr)
+    //console.log(localArr)
     if (localArr) localArr.map(el => {
         const element: HTMLElement | null = document.getElementById(`${el}`)
         if(element) element.setAttribute('checked', 'checked');
@@ -395,7 +409,10 @@ export const HomeComponent = async():Promise<void> => {
   searchInput.addEventListener('input', () => {
     const searchValue = searchInput.value    
     localStorage.setItem('searchValue', JSON.stringify(searchValue))
-    getFilteredProductsList()
+    getFilteredProductsList().then(()=> {
+      updateBrandCountSpan()
+      updateCategoryCountSpan()
+    })
   })
 
   function setSearchValue(value: string) {
