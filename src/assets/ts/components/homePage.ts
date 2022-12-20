@@ -69,8 +69,8 @@ export const HomeComponent = async():Promise<void> => {
           <div class="shop__head_found">Found: <span class="shop__head_count">100</span></div>
           <input class="shop__head_search" type="text" placeholder="Search product">
           <div class="shop__view">
-            <button class="shop__view_short">SHORT</button>
-            <button class="shop__view_full">FULL</button>
+            <button class="shop__view_short btn" onclick ="showFullItem()">SHORT</button>
+            <button class="shop__view_full btn" onclick ="showShortItem()">FULL</button>
           </button>
         </article>
         <article class="shop__list"></article>
@@ -128,7 +128,6 @@ export const HomeComponent = async():Promise<void> => {
       // item.style.backgroundImage = `url('${element.images[0]}`
        const backgroundImage = `url('${element.images[0]}')`
       item.innerHTML = `
-        <span class="item__close" name="${element.id}">?</span>
         <h3 class="item__title">${element.title}</h3>
         <div class="item__image" style="background-image:${backgroundImage}"></div>
         <div class="item__settings">
@@ -146,6 +145,7 @@ export const HomeComponent = async():Promise<void> => {
         </div>      
       `;
       shopItems?.append(item)      
+      listenSizeItem()
       return
     });
     if (productsCount) productsCount.innerHTML = `${productsList.length}`;
@@ -305,15 +305,42 @@ export const HomeComponent = async():Promise<void> => {
   checkLocalCheckboxArr('categoriesArray');
   checkLocalCheckboxArr('brandsArray');
 
-  //show settings in items
-  const closeButtons: NodeListOf<HTMLElement> = document.querySelectorAll('.item__close');
-  
-  if(closeButtons) Array.from(closeButtons).forEach(element => element.onclick = (e:Event):void => showSettings(e))
-  const showSettings = (e:Event):void =>{
-    const element: Element | null = e.target as Element;
-    const parent = document.getElementById(element.getAttribute('name') as string)
-    const settings: HTMLElement | null = (parent as HTMLElement).querySelector('.item__settings');
-    if(settings) settings.classList.toggle("active-settings");
+  //lisener size items
+  function listenSizeItem(){
+    const size:string | null = localStorage.getItem('sizeItem');
+    const itemShort: HTMLElement | null = document.querySelector('.shop__view_short');
+    const itemFull: HTMLElement | null = document.querySelector('.shop__view_full');
+    const itemsArray: NodeListOf<HTMLElement> = document.querySelectorAll('.item');
+
+    if(size && size==='short')showShortItem(itemsArray);
+    if(size && size==='full')showFullItem(itemsArray);
+    if(itemFull)itemFull.onclick = () => showFullItem(itemsArray);
+    if(itemShort)itemShort.onclick = () => showShortItem(itemsArray);
+  }
+  listenSizeItem()
+
+  function showFullItem(itemsArray : NodeListOf<HTMLElement>){
+    localStorage.setItem('sizeItem', 'full');
+    [...itemsArray].map((item:HTMLElement) =>{
+      item.classList.remove('item-short');
+      (<HTMLElement>item.querySelector('.item__settings')).classList.remove('settings-short');
+      (<HTMLElement>item.querySelector('.item__buttons')).classList.remove('buttons-short');
+      (<HTMLElement>item.querySelector('.item__price')).classList.remove('price-short');
+      (<HTMLElement>item.querySelector('.item__title')).classList.remove('title-short');
+      (<HTMLElement>item.querySelector('.item__image')).classList.remove('image-short');
+    })
+  }
+
+  function showShortItem(itemsArray:NodeListOf<HTMLElement>){
+    localStorage.setItem('sizeItem', 'short');
+    [...itemsArray].map((item:HTMLElement) =>{
+      item.classList.add('item-short');
+      (<HTMLElement>item.querySelector('.item__settings')).classList.add('settings-short');
+      (<HTMLElement>item.querySelector('.item__buttons')).classList.add('buttons-short');
+      (<HTMLElement>item.querySelector('.item__price')).classList.add('price-short');
+      (<HTMLElement>item.querySelector('.item__title')).classList.add('title-short');
+      (<HTMLElement>item.querySelector('.item__image')).classList.add('image-short');
+    })
   }
 
   sortSelected.addEventListener('change', ()=> {
