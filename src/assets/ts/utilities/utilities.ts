@@ -71,7 +71,7 @@ export async function returnMinMaxStock(): Promise< number[] > {
 
 
 export function getFilteredByBrand(productList: IProduct[], filterArray: Array<string>) {
-  console.warn('filter = Brand')
+  //console.warn('filter = Brand')
   const filteredProductList: IProduct[] = productList.filter((product) => {
     return filterArray.indexOf((product.brand).toLowerCase()) !== -1
   })  
@@ -79,7 +79,7 @@ export function getFilteredByBrand(productList: IProduct[], filterArray: Array<s
 }
 
 export function getFilteredByCategory(productList: IProduct[], filterArray: Array<string>) {
-  console.warn('filter = Category')
+  //console.warn('filter = Category')
   const filteredProductList: IProduct[] = productList.filter((product) => {
     return filterArray.indexOf((product.category).toLowerCase()) !== -1
   })  
@@ -87,7 +87,7 @@ export function getFilteredByCategory(productList: IProduct[], filterArray: Arra
 }
 
 export function getFilteredByRange(productList: IProduct[], filterArray: Array<string>) {
-  console.warn('filter = Range')
+  //console.warn('filter = Range')
   const [minPrice, maxPrice, minStock, maxStock] = filterArray;  
   const filteredProductList: IProduct[] = productList
   .filter((product) => (product.price >= Number(minPrice.substr(1)) && product.price <= Number(maxPrice.substr(1))))
@@ -114,8 +114,8 @@ export function getSortedProducts(productList: IProduct[], filterMethod: string)
   }  
 }
 
-export function getSearchByInput(productList: IProduct[], searcValue: string) {
-  const search = searcValue.toLowerCase();
+export function getSearchByInput(productList: IProduct[], searchValue: string) {
+  const search = searchValue.toLowerCase();
   return productList.filter((product)=> (product.title.toLowerCase().indexOf(search) !== -1
   || product.description.toLowerCase().indexOf(search) !== -1
   || String(product.price).indexOf(search) !== -1
