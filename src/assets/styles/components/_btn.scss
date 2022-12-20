@@ -10,6 +10,9 @@
     text-transform: uppercase;
     @extend %transition;
     cursor: pointer;
+    &__activated{
+      box-shadow: 0 0 10px $color-brand;
+    }
     &:hover{
         background: $color-brand;
         color: $color-light;

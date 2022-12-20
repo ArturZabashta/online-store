@@ -126,3 +126,37 @@ export function getSearchByInput(productList: IProduct[], searcValue: string) {
   || product.category.toLowerCase().indexOf(search) !== -1
   ));
 }
+
+export function getAllFilters() {  
+  let brandsArray: Array<string> = []
+  let categoriesArray: Array<string> = []
+  let rangeArray: Array<string> = []
+  let sortName = '';
+  let searchValue = '';
+  let sizeItem = '';   
+
+  if (localStorage.getItem('brandsArray') && String(localStorage.getItem('brandsArray')).length > 2) {
+    brandsArray = JSON.parse(String(localStorage.getItem('brandsArray')));
+  }
+  if (localStorage.getItem('categoriesArray') && String(localStorage.getItem('categoriesArray')).length > 2) {
+    categoriesArray = JSON.parse(String(localStorage.getItem('categoriesArray')));
+  }
+  if (localStorage.getItem('rangeArray') && String(localStorage.getItem('rangeArray')).length > 2) {
+    rangeArray = JSON.parse(String(localStorage.getItem('rangeArray')))
+  }
+  if (localStorage.getItem('sortName') && String(localStorage.getItem('sortName')).length > 1) {
+    sortName = JSON.parse(String(localStorage.getItem('sortName')))    
+  }
+  if (localStorage.getItem('searchValue') && String(localStorage.getItem('searchValue')).length > 0) {
+    searchValue = JSON.parse(String(localStorage.getItem('searchValue')))    
+  }
+  if (localStorage.getItem('sizeItem')) {
+    sizeItem = String(localStorage.getItem('sizeItem'))
+  }
+
+  const allFiltersArray: [Array<string>, Array<string>, Array<string>, string, string, string] = [
+    brandsArray, categoriesArray, rangeArray, sortName, searchValue, sizeItem
+  ]
+   
+  return allFiltersArray;
+}
