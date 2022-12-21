@@ -1,4 +1,4 @@
-import { IProduct } from "../interfaces/api-interfaces";
+import { AllBrands, IProduct, AllCategories } from "../interfaces/api-interfaces";
 import { zeroProduct,
    returnAllProducts, 
    returnAllBrands, 
@@ -24,6 +24,10 @@ export const HomeComponent = async():Promise<void> => {
   (<HTMLElement>main).innerHTML  =`
     <div class="shop">
       <aside class="shop__filters">
+        <div class="filter-head">
+          <button class="reset-btn btn">Reset filters</button>
+          <button class="copy-btn btn">Copy link</button>
+        </div>
         <div class='filter-item'>
           <h3>Category</h3>
           <div class="select select__category">            
@@ -50,16 +54,16 @@ export const HomeComponent = async():Promise<void> => {
           </div>
         </div>
         <div class='filter-item'>
-        <h3>Stock</h3>
-        <div class="multi-range">
-          <input id="minS" type="range" min="0" max="100" value="0" step="0.0001">
-          <input id="maxS" type="range" min="0" max="100" value="100" step="0.0001">
+          <h3>Stock</h3>
+          <div class="multi-range">
+            <input id="minS" type="range" min="0" max="100" value="0" step="0.0001">
+            <input id="maxS" type="range" min="0" max="100" value="100" step="0.0001">
+          </div>
+          <div class='stock'>
+            <span id='fromStock'>2</span>
+            <span id='toStock'>150</span>
+          </div>
         </div>
-        <div class='stock'>
-          <span id='fromStock'>2</span>
-          <span id='toStock'>150</span>
-        </div>
-      </div>
       </aside>
       <section class="shop__wrapper">
         <article class="shop__head">
@@ -75,7 +79,7 @@ export const HomeComponent = async():Promise<void> => {
           <div class="shop__view">
             <button class="shop__view_short btn" >SHORT</button>
             <button class="shop__view_full btn" >FULL</button>
-          </button>
+          </div>
         </article>
         <article class="shop__list"></article>
       </section>
@@ -89,8 +93,9 @@ export const HomeComponent = async():Promise<void> => {
   const searchInput = <HTMLInputElement>document.querySelector('.shop__head_search');
   const buttonShortView = <HTMLButtonElement>document.querySelector('.shop__view_short');
   const buttonFullView = <HTMLButtonElement>document.querySelector('.shop__view_full');
+  const resetButton = <HTMLButtonElement>document.querySelector('.reset-btn');
+  const copyButton = <HTMLButtonElement>document.querySelector('.copy-btn');
 
-             
   // Render of products cards     
   function renderProductList(productsList: IProduct[]) {
     if (shopItems) shopItems.innerHTML = '';
@@ -126,7 +131,7 @@ export const HomeComponent = async():Promise<void> => {
   }
   
 
-  function setQueryStringToURL(/*brandsArray: string[], categoriesArray:string[], rangeArray:string[], sortName:string, searchValue: string*/){
+  function setQueryStringToURL(): string {
     const [brandsArray, categoriesArray, rangeArray, sortName, searchValue, sizeItem] = [...getAllFilters()]
       
     const queryArray: string[] = [];
@@ -169,11 +174,12 @@ export const HomeComponent = async():Promise<void> => {
     //Form query string with parameters
     if (queryArray.length > 0 ) {      
       queryStr = '?' + queryArray.join('&');      
-      localStorage.setItem('queryStr', JSON.stringify(queryStr))          
+      //localStorage.setItem('queryStr', JSON.stringify(queryStr))          
     }         
     //Add query parameters to URL  
     const refresh = window.location.protocol + "//" + window.location.host + window.location.pathname + queryStr;    
-    window.history.pushState({ path: refresh }, '', refresh); 
+    window.history.pushState({ path: refresh }, '', refresh);
+    return queryStr;
   }
 
   async function getFilteredProductsList(){
@@ -418,5 +424,37 @@ export const HomeComponent = async():Promise<void> => {
   function setSearchValue(value: string) {
     searchInput.value = value;
   }
+
+
+  const setCheckboxUnchecked = (arrName: AllCategories | AllBrands):void =>{   
+    for (const checkbox in arrName) {    
+      const label = <HTMLInputElement>document.getElementById(`${checkbox}`);    
+      if (label) label.checked = false;
+    }    
+  }
+
+
+  if (resetButton) {
+    resetButton.addEventListener('click', () => {
+      localStorage.clear();
+
+      getFilteredProductsList().then(()=> {
+        updateBrandCountSpan()
+        updateCategoryCountSpan()
+        if (allCategories) setCheckboxUnchecked(allCategories);
+        if (allBrands) setCheckboxUnchecked(allBrands);
+      })    
+    });
+  }
+
+  
+  if (copyButton) {
+    copyButton.addEventListener('click', ()=> {
+      const queryStr = setQueryStringToURL();
+      localStorage.setItem('queryStr', JSON.stringify(queryStr))
+      console.log('save queryStr', queryStr)
+    });    
+  }
+
 }
 
