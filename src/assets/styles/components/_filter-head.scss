@@ -2,5 +2,23 @@
   display: flex;  
   flex-wrap: wrap;
   width: 100%;
-  justify-content: space-around;  
+  justify-content: space-around;
+  
+  .copy-btn {
+    width: 10rem;    
+  } 
+  
+  .copy-btn.__copying{
+    position: relative;    
+  }
+
+  .copy-btn.__copying::before{
+    content: '';
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 0, 0, 0.273);        
+    animation: copying 1.1s linear;
+  }
 }

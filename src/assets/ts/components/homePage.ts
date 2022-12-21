@@ -447,13 +447,20 @@ export const HomeComponent = async():Promise<void> => {
     });
   }
 
-  
+
   if (copyButton) {
     copyButton.addEventListener('click', ()=> {
+      copyButton.innerHTML = 'Copying';
+      copyButton.classList.add('__copying');
       const queryStr = setQueryStringToURL();
       localStorage.setItem('queryStr', JSON.stringify(queryStr))
-      console.log('save queryStr', queryStr)
-    });    
+      console.log('save queryStr', queryStr);
+      setTimeout(()=>{
+        copyButton.innerHTML = 'Copy Lynk'
+        copyButton.classList.remove('__copying');
+      },1200)
+    });
+
   }
 
 }
