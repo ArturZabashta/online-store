@@ -160,3 +160,9 @@ export function getAllFilters() {
    
   return allFiltersArray;
 }
+
+export async function returnOneProduct():  Promise<IProduct | undefined> {
+  const currentItem: number = Number(localStorage.getItem('currentId')) as number;
+  const productDetails = await httpClient.getOneProduct(currentItem);
+  return productDetails;
+}

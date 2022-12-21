@@ -99,6 +99,8 @@ export const HomeComponent = async():Promise<void> => {
       const item = document.createElement('div');
       item.classList.add('item')
       item.id = `${element.id}`;
+      // item.onclick = () => showItemdetails()
+      // item.href ="";
       // item.style.backgroundImage = `url('${element.images[0]}`
        const backgroundImage = `url('${element.images[0]}')`
       item.innerHTML = `
@@ -194,6 +196,7 @@ export const HomeComponent = async():Promise<void> => {
     }
     setQueryStringToURL();
     renderProductList(filteredArray);
+    itemClickHandler()
   }
   getFilteredProductsList();
 
@@ -202,7 +205,6 @@ export const HomeComponent = async():Promise<void> => {
   function getCategoryCount(category: string): number{
     const filtered = filteredArray;
     const result = filtered.filter(item => (item.category).toLowerCase() === category);
-    console.log(result.length)
     return result.length
   }
 
@@ -282,7 +284,7 @@ export const HomeComponent = async():Promise<void> => {
 
   const checkLocalRangeArray = (arrName:string):void =>{
     const localArr: Array<string>  =JSON.parse(localStorage.getItem(arrName) as string);
-    console.log(localArr);
+    // console.log(localArr);
     if(localArr){
       [minPriceValue.innerHTML,maxPriceValue.innerHTML,minStockValue.innerHTML,maxStockValue.innerHTML] = [...localArr];
       updateSlider(minPriceValue.innerHTML, maxPriceValue.innerHTML, minRangePrice, maxRangePrice)
@@ -321,7 +323,7 @@ export const HomeComponent = async():Promise<void> => {
     const categoriesArray: Array<string> = []
     Array.from(categoriesInput).map(el => {if(el.checked) categoriesArray.push(el.id) })
     localStorage.setItem('categoriesArray', JSON.stringify(categoriesArray))
-    console.log('categoriesArray',categoriesArray)
+    // console.log('categoriesArray',categoriesArray)
     getFilteredProductsList().then(()=> {
       updateBrandCountSpan()
       updateCategoryCountSpan()
@@ -335,7 +337,7 @@ export const HomeComponent = async():Promise<void> => {
     const brandsArray: Array<string> = []
     Array.from(brandsInput).map(el => {if(el.checked) brandsArray.push(el.id)})
     localStorage.setItem('brandsArray', JSON.stringify(brandsArray))
-    console.log('brandsArray',brandsArray)
+    // console.log('brandsArray',brandsArray)
     getFilteredProductsList().then(()=> {
       updateBrandCountSpan()
       updateCategoryCountSpan()
@@ -418,5 +420,25 @@ export const HomeComponent = async():Promise<void> => {
   function setSearchValue(value: string) {
     searchInput.value = value;
   }
+
+  function itemClickHandler(){
+    const itemList: NodeListOf<HTMLElement> = document.querySelectorAll(".item");
+  
+    itemList.forEach(el => {
+      const btnDetails: HTMLElement = el.querySelector(".item__details") as HTMLElement;
+      btnDetails.addEventListener("click", function(e){
+        const element = e.target as HTMLElement;
+        const current = element.parentNode?.parentNode as HTMLElement;
+        // console.log(current.id )
+        localStorage.setItem('currentId',current.id )
+        // location.href=`#/item-details/${el.id}`;
+        location.href=`#/product-details`;
+      })
+  
+    })
+  }
+  itemClickHandler()
+
+
 }
 
