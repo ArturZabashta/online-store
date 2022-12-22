@@ -1,0 +1,19 @@
+.features{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+ .feature{
+    list-style-type: none;
+    font-family: 'Jura', sans-serif;
+    @include font(1.8rem, 2.4rem, 600);
+    color: $color-brand;
+
+    span{
+        color: $color-text;
+        margin-left: 2rem;
+        @include font(1.6rem, 2.4rem, 400);
+    }
+
+ }
+}
