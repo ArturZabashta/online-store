@@ -7,3 +7,9 @@ $content-width: 1640px;
 $laptop-width: 1000px;
 $tablet-width: 768px;
 $mobile-width: 640px;
+
+@keyframes copying {
+  from {width: 0% }
+  50% {width: 50% }
+  to {width: 100% }
+}

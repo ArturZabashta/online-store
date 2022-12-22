@@ -1,11 +1,11 @@
 .btn{
     padding: .5rem;
-    margin-right: 1rem;
+    margin: 0.2rem;
     background: $color-light;
     border: 1px solid $color-brand;
     border-radius: .5rem;
     color: $color-brand;
-    @include font(1.6rem, 140%, 500);
+    @include font(1.4rem, 140%, 500);
     text-align: center;
     text-transform: uppercase;
     @extend %transition;
