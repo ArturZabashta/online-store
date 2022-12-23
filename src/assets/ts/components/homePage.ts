@@ -1,3 +1,4 @@
+import { totalCount, totalSum } from "../add-base-html";
 import { AllBrands, IProduct, AllCategories } from "../interfaces/api-interfaces";
 import { zeroProduct,
    returnAllProducts, 
@@ -8,7 +9,8 @@ import { zeroProduct,
    getFilteredByRange, 
    getSortedProducts,
    getSearchByInput,
-   getAllFilters } from "../utilities/utilities"
+   getAllFilters,
+   returnCurtSum } from "../utilities/utilities"
 import {controlFromRange, controlToRange, updateSlider } from "../rangeAction"
 import { ICart } from "../interfaces/cart-interfaces";
 
@@ -19,8 +21,7 @@ export const HomeComponent = async():Promise<void> => {
   const allCategories = await returnAllCategories(); 
   const allBrands = await returnAllBrands();
   const copyAllProducts:IProduct[] = allProducts? Array.from(allProducts.products) : zeroProduct;
-    //console.log('allCategories', allCategories)
-    //console.log('allBrands', allBrands)
+  
   const main: HTMLElement | null = document.getElementById('app');
   (<HTMLElement>main).innerHTML  =`
     <div class="shop">
@@ -100,7 +101,7 @@ export const HomeComponent = async():Promise<void> => {
   // Render of products cards     
   function renderProductList(productsList: IProduct[]) {
     const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];    
-    if (shopItems) shopItems.innerHTML = '';
+    if (shopItems) shopItems.innerHTML = '';    
 
     if (productsList && productsList.length > 0) {
       productsList.forEach((element: IProduct) => {
@@ -156,7 +157,7 @@ export const HomeComponent = async():Promise<void> => {
           const cartItem = {
           'id': id,
           'count': 1,
-          'price': copyAllProducts[id].price
+          'price': copyAllProducts[id-1].price
         }
           //console.log(this.innerHTML)
           if (this.innerHTML == 'Add to Cart') {
@@ -166,6 +167,7 @@ export const HomeComponent = async():Promise<void> => {
               cartList.push(cartItem);
               
               localStorage.setItem('cartList', JSON.stringify(cartList))
+              returnCurtSum();
             }
             return;
           }
@@ -177,15 +179,16 @@ export const HomeComponent = async():Promise<void> => {
               
               const reNewCartLis = cartList.filter((item)=> item.id !== id)
               localStorage.setItem('cartList', JSON.stringify(reNewCartLis))
+              returnCurtSum();
             }
             return;
           }
           console.log(this.id.slice(8))
-          cartList.splice(0);
+          cartList.splice(0); 
         }
       })
     }
-   
+    returnCurtSum();
   }
   
 
@@ -566,7 +569,9 @@ export const HomeComponent = async():Promise<void> => {
 
   if (resetButton) {
     resetButton.addEventListener('click', () => {
+      const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
       localStorage.clear();
+      localStorage.setItem('cartList', JSON.stringify(cartList))
 
       getFilteredProductsList().then(()=> {
         updateBrandCountSpan()
@@ -613,9 +618,8 @@ export const HomeComponent = async():Promise<void> => {
   }
   itemClickHandler()
 
-
   
   
-
+  
 }
 

@@ -1,6 +1,8 @@
 import { IProducts, IProduct, AllBrands, AllCategories } from "../interfaces/api-interfaces";
 import httpClient from "../API/api"
 import { filteredArray } from "../components/homePage";
+import { ICart } from "../interfaces/cart-interfaces";
+import { totalCount, totalSum } from "../add-base-html";
 
 export const zeroProduct: Array<IProduct> = [
   {
@@ -165,4 +167,20 @@ export async function returnOneProduct():  Promise<IProduct | undefined> {
   const currentItem: number = Number(localStorage.getItem('currentId')) as number;
   const productDetails = await httpClient.getOneProduct(currentItem);
   return productDetails;
+}
+
+export function returnCurtSum(): void {
+  const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList')));
+  let summa = 0;
+  let count = 0;
+  if (cartList && cartList.length > 0) {
+    cartList.forEach(element => {
+      summa += element.price;
+      count += element.count;
+    });
+  }
+  console.log('returnCurtSum()')         
+  if (totalSum) totalSum.innerHTML = `${summa}`;
+  if (totalCount) totalCount.innerHTML = `${count}`;
+  
 }
