@@ -1,6 +1,6 @@
 import { IProducts, IProduct, AllBrands, AllCategories } from "../interfaces/api-interfaces";
 import httpClient from "../API/api"
-import { ListSeparator } from "../../../../node_modules/sass/types/index";
+import { filteredArray } from "../components/homePage";
 
 export const zeroProduct: Array<IProduct> = [
   {
