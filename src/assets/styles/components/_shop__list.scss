@@ -8,4 +8,9 @@
   flex-wrap: wrap;
   overflow: overlay;
   gap: 1rem;
+
+  .undefined-item {
+    @include font(2rem, 140%, 500);
+    color: $color-error;
+  }
 }

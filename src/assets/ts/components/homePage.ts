@@ -100,14 +100,15 @@ export const HomeComponent = async():Promise<void> => {
   function renderProductList(productsList: IProduct[]) {
     if (shopItems) shopItems.innerHTML = '';
 
-    if (productsList) productsList.forEach((element: IProduct) => {
+    if (productsList && productsList.length > 0) {
+      productsList.forEach((element: IProduct) => {
       const item = document.createElement('div');
       item.classList.add('item')
       item.id = `${element.id}`;
       // item.onclick = () => showItemdetails()
       // item.href ="";
       // item.style.backgroundImage = `url('${element.images[0]}`
-       const backgroundImage = `url('${element.images[0]}')`
+      const backgroundImage = `url('${element.images[0]}')`
       item.innerHTML = `
         <h3 class="item__title">${element.title}</h3>
         <div class="item__image" style="background-image:${backgroundImage}"></div>
@@ -128,7 +129,13 @@ export const HomeComponent = async():Promise<void> => {
       shopItems?.append(item)      
       listenSizeItem()
       return
-    });
+      });
+    } else {
+      const modalInfo = document.createElement('div');
+      modalInfo.classList.add('undefined-item');
+      modalInfo.innerHTML = 'Such products was not found. Try to change the search criteria...';
+      shopItems?.append(modalInfo)
+      }
     if (productsCount) productsCount.innerHTML = `${productsList.length}`;
    
   }
@@ -279,10 +286,23 @@ export const HomeComponent = async():Promise<void> => {
   function updateRangesAfterFiltration() {
     const allPrice: number[] = [];
     const allStock: number[] = [];
-    filteredArray.forEach((item: IProduct) => {
+
+    if (filteredArray.length > 2) {
+      filteredArray.forEach((item: IProduct) => {
       allPrice.push(item.price)
       allStock.push(item.stock)
-    })
+      })
+    } else if (filteredArray.length == 1) {
+      allPrice.push(filteredArray[0].price);
+      allPrice.push(filteredArray[0].price);
+      allStock.push(filteredArray[0].stock);
+      allStock.push(filteredArray[0].stock);
+      } else {
+        allPrice.push(0);
+        allPrice.push(0);
+        allStock.push(0);
+        allStock.push(0);        
+        }
     const sortAllPrice: number[] | undefined = allPrice.sort((a,b) => a-b)
     const minPrice = <number>sortAllPrice.shift() 
     const maxPrice = <number>sortAllPrice.pop()
