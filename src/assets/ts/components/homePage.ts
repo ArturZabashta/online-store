@@ -187,7 +187,7 @@ export const HomeComponent = async():Promise<void> => {
       //localStorage.setItem('queryStr', JSON.stringify(queryStr))          
     }         
     //Add query parameters to URL  
-    const refresh = window.location.protocol + "//" + window.location.host + window.location.pathname + queryStr;    
+    const refresh = window.location.protocol + "//" + window.location.host + '#' +window.location.pathname + queryStr;    
     window.history.pushState({ path: refresh }, '', refresh);
     return queryStr;
   }
@@ -567,9 +567,7 @@ export const HomeComponent = async():Promise<void> => {
       btnDetails.addEventListener("click", function(e){
         const element = e.target as HTMLElement;
         const current = element.parentNode?.parentNode as HTMLElement;
-        // console.log(current.id )
         localStorage.setItem('currentId',current.id )
-        // location.href=`#/item-details/${el.id}`;
         location.href=`#/product-details`;
       })
   

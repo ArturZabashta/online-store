@@ -50,18 +50,21 @@ export const ItemComponent = async():Promise<void> => {
         </div>
     </div>
     `;
-    addAllImages(product?.images)
+    checkImage(product?.images)
+    // addAllImages(product?.images)
     setQueryToURL()
     
 }
 
 //add and listen images
-async function addAllImages(images:string[] | undefined){
+function addAllImages(images:string[] | undefined){
+    // console.log(images)
     const smallImages = document.querySelector('.small-images')
     const bigImage = document.querySelector('.big-image')
     if(images){
-        // console.log(images)
         images.map((image) =>{
+
+            // console.log(checkImage(image))
             const div = document.createElement('div');
             div.classList.add('image');
             div.style.backgroundImage = `url(${image})`;
@@ -78,11 +81,43 @@ async function addAllImages(images:string[] | undefined){
     }
 }
 
+
+
+// let imgSize: number[]
+
+function checkImage(images:string[] | undefined){
+    const imgSize: Array<number> =[]
+    // const imgArray:  Array<string> = []
+
+    if(images){
+        // console.log(images)
+        images.map((image,i) =>{
+            const img = new Image();
+            img.src = image;
+
+            // img.onload = function() {
+
+                if(imgSize.includes(img.height)){
+                    // console.log(false)
+                    images.splice(i, 1);
+                    // console.log(images) 
+
+                }else{
+                    // console.log(true)
+                    imgSize.push(img.height)
+                    // imgArray.push(image)
+                }
+            // }
+        })
+        addAllImages(images)
+    }
+     
+
+}
+
 function setQueryToURL(){
         const currentItem: number = Number(localStorage.getItem('currentId')) as number;
-        // location.href=window.location.protocol + "//" + window.location.host+`#/product-details`;
-        const refresh = window.location.protocol + "//" + window.location.host + window.location.pathname + '?'+ currentItem; 
-        console.log(refresh)   
+        const refresh = window.location.protocol + "//" + window.location.host + `#/product-details`+ `?${currentItem}`  ;  
         window.history.pushState({ path: refresh }, '', refresh); 
 
 }
