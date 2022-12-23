@@ -122,7 +122,7 @@ export const HomeComponent = async():Promise<void> => {
         </div>
         <p class="item__price">Price : <span>${element.price}€</span></p>
         <div class="item__buttons">
-          <button class="item__addcurt btn">Add to Cart</button>
+          <button class="item__addcurt btn" id="addcurt-${element.id}">Add to Cart</button>
           <button class="item__details btn">Details</button>  
         </div>      
       `;
@@ -137,6 +137,34 @@ export const HomeComponent = async():Promise<void> => {
       shopItems?.append(modalInfo)
       }
     if (productsCount) productsCount.innerHTML = `${productsList.length}`;
+
+    const addCartList: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.item__addcurt')
+    if (addCartList) {
+      [...addCartList].map((el)=>{
+        el?.addEventListener('click', listenerFunction);
+        
+        function listenerFunction(this: HTMLElement) {
+          const catrList = JSON.parse(String(localStorage.getItem('catrList')));
+          // handler of addToCart button
+          const id = Number(this.id.slice(8));
+          const curtItem = {
+          'id': id,
+          'count': 1,
+          'price': copyAllProducts[id].price
+        }
+          console.log(this.innerHTML)
+          if (this.innerHTML == 'Add to Cart') {
+            this.innerHTML = 'Drop from cart'; console.log(1); 
+            return
+          }
+          if (this.innerHTML == 'Drop from cart') {
+            this.innerHTML = 'Add to Cart'; console.log(2); 
+            return
+          }
+          console.log(this.id.slice(8))
+        }
+      })
+    }
    
   }
   
@@ -306,23 +334,17 @@ export const HomeComponent = async():Promise<void> => {
     const sortAllPrice: number[] | undefined = allPrice.sort((a,b) => a-b)
     const minPrice = <number>sortAllPrice.shift() 
     const maxPrice = <number>sortAllPrice.pop()
+
     const sortAllStock: number[] | undefined = allStock.sort((a,b) => a-b)
     const minStock = <number>sortAllStock.shift() 
-    const maxStock = <number>sortAllStock.pop()
-
-    //console.log('min and max from filteredArray',minRangePrice, maxRangePrice,minRangeStock, maxRangeStock)
-    console.log('min and max from updateRanges',minPrice, maxPrice, minStock, maxStock)      
+    const maxStock = <number>sortAllStock.pop()         
 
     minPriceValue.innerHTML = `€${Math.floor(minPrice)}`; //span
     maxPriceValue.innerHTML = `€${Math.floor(maxPrice)}`;   //span
-    // minRangePrice.value = `${Math.floor(minPrice)}`;    //input-range
-    // maxRangePrice.value = `${Math.floor(maxPrice)}`;    //input-range
-
+    
     minStockValue.innerHTML = `${minStock}`;  //span
     maxStockValue.innerHTML = `${maxStock}`;    //span
-    // minRangeStock.value = `${minStock}`;    //input-range
-    // maxRangeStock.value = `${maxStock}`;    //input-range
-
+    
     updateRange();
   }
   function resetRangesAfterFiltration() {
@@ -336,21 +358,17 @@ export const HomeComponent = async():Promise<void> => {
     const sortAllPrice: number[] | undefined = allPrice.sort((a,b) => a-b)
     const minPrice = <number>sortAllPrice.shift() 
     const maxPrice = <number>sortAllPrice.pop()
+
     const sortAllStock: number[] | undefined = allStock.sort((a,b) => a-b)
     const minStock = <number>sortAllStock.shift() 
-    const maxStock = <number>sortAllStock.pop()
-
-    console.log('min and max from resetRanges',minPrice, maxPrice, minStock, maxStock)
+    const maxStock = <number>sortAllStock.pop()    
 
     minPriceValue.innerHTML = `€${Math.floor(minPrice)}`; //span
-    maxPriceValue.innerHTML = `€${Math.floor(maxPrice)}`;   //span
-    // minRangePrice.value = `${Math.floor(minPrice)}`;    //input-range
-    // maxRangePrice.value = `${Math.floor(maxPrice)}`;    //input-range
+    maxPriceValue.innerHTML = `€${Math.floor(maxPrice)}`;   //span    
 
     minStockValue.innerHTML = `${minStock}`;  //span
     maxStockValue.innerHTML = `${maxStock}`;    //span
-    // minRangeStock.value = `${minStock}`;    //input-range
-    // maxRangeStock.value = `${maxStock}`;    //input-range
+    
     updateRange();
   }
 
@@ -538,6 +556,7 @@ export const HomeComponent = async():Promise<void> => {
         updateCategoryCountSpan()
         if (allCategories) setCheckboxUnchecked(allCategories);
         if (allBrands) setCheckboxUnchecked(allBrands);
+        resetRangesAfterFiltration()
       })    
     });
   }
@@ -576,6 +595,10 @@ export const HomeComponent = async():Promise<void> => {
     })
   }
   itemClickHandler()
+
+
+  
+  
 
 }
 
