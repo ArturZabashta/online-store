@@ -9,9 +9,9 @@ import { zeroProduct,
    getSortedProducts,
    getSearchByInput,
    getAllFilters } from "../utilities/utilities"
-import {controlFromRange, controlToRange, updateSlider } from "../rangeAction"
+import {controlFromRange, controlToRange, updateSlider, getPriceAndStock } from "../rangeAction"
 
-let filteredArray: IProduct[] = zeroProduct;
+export let filteredArray: IProduct[] = zeroProduct;
 
 export const HomeComponent = async():Promise<void> => {
   const allProducts = await returnAllProducts();
@@ -49,14 +49,14 @@ export const HomeComponent = async():Promise<void> => {
             <input id="maxP" type="range" min="0" max="100" value="100" step="0.0001">
           </div>
           <div class='price'>
-            <span id='fromPrice'>€10.00</span>
-            <span id='toPrice'>€1749.00</span>
+            <span id='fromPrice'>€10</span>
+            <span id='toPrice'>€1749</span>
           </div>
         </div>
         <div class='filter-item'>
           <h3>Stock</h3>
           <div class="multi-range">
-            <input id="minS" type="range" min="0" max="100" value="0" step="0.0001">
+            <input id="minS" type="range" min="0" max="100" value="0"  step="0.0001">
             <input id="maxS" type="range" min="0" max="100" value="100" step="0.0001">
           </div>
           <div class='stock'>
@@ -130,6 +130,7 @@ export const HomeComponent = async():Promise<void> => {
       return
     });
     if (productsCount) productsCount.innerHTML = `${productsList.length}`;
+   
   }
   
 
@@ -203,6 +204,7 @@ export const HomeComponent = async():Promise<void> => {
     setQueryStringToURL();
     renderProductList(filteredArray);
     itemClickHandler()
+    
   }
   getFilteredProductsList();
 
@@ -258,21 +260,79 @@ export const HomeComponent = async():Promise<void> => {
   renderBrandList()
 
   //range input handler
-  const minPriceValue = <HTMLElement>document.querySelector('#fromPrice');
-  const maxPriceValue = <HTMLElement>document.querySelector('#toPrice');
-  const minRangePrice = <HTMLInputElement>document.querySelector('#minP');
-  const maxRangePrice = <HTMLInputElement>document.querySelector('#maxP');
+  const minPriceValue = <HTMLElement>document.querySelector('#fromPrice'); //span
+  const maxPriceValue = <HTMLElement>document.querySelector('#toPrice');   //span
+  const minRangePrice = <HTMLInputElement>document.querySelector('#minP');    //input-range
+  const maxRangePrice = <HTMLInputElement>document.querySelector('#maxP');    //input-range
 
-  const minStockValue = <HTMLElement>document.querySelector('#fromStock');
-  const maxStockValue = <HTMLElement>document.querySelector('#toStock');
-  const minRangeStock = <HTMLInputElement>document.querySelector('#minS');
-  const maxRangeStock = <HTMLInputElement>document.querySelector('#maxS');
+  const minStockValue = <HTMLElement>document.querySelector('#fromStock');  //span
+  const maxStockValue = <HTMLElement>document.querySelector('#toStock');    //span
+  const minRangeStock = <HTMLInputElement>document.querySelector('#minS');    //input-range
+  const maxRangeStock = <HTMLInputElement>document.querySelector('#maxS');    //input-range
 
   minRangePrice.oninput = () => controlToRange(minPriceValue, maxPriceValue, minRangePrice, maxRangePrice, 'updatePrice');
   maxRangePrice.oninput = () => controlFromRange(minPriceValue, maxPriceValue, minRangePrice,maxRangePrice, 'updatePrice');
   minRangeStock.oninput = () => controlToRange(minStockValue,maxStockValue,minRangeStock, maxRangeStock, 'updateStock');
   maxRangeStock.oninput = () => controlFromRange(minStockValue,maxStockValue,minRangeStock, maxRangeStock, 'updateStock');
+  
+  
+  function updateRangesAfterFiltration() {
+    const allPrice: number[] = [];
+    const allStock: number[] = [];
+    filteredArray.forEach((item: IProduct) => {
+      allPrice.push(item.price)
+      allStock.push(item.stock)
+    })
+    const sortAllPrice: number[] | undefined = allPrice.sort((a,b) => a-b)
+    const minPrice = <number>sortAllPrice.shift() 
+    const maxPrice = <number>sortAllPrice.pop()
+    const sortAllStock: number[] | undefined = allStock.sort((a,b) => a-b)
+    const minStock = <number>sortAllStock.shift() 
+    const maxStock = <number>sortAllStock.pop()
 
+    //console.log('min and max from filteredArray',minRangePrice, maxRangePrice,minRangeStock, maxRangeStock)
+    console.log('min and max from updateRanges',minPrice, maxPrice, minStock, maxStock)      
+
+    minPriceValue.innerHTML = `€${Math.floor(minPrice)}`; //span
+    maxPriceValue.innerHTML = `€${Math.floor(maxPrice)}`;   //span
+    // minRangePrice.value = `${Math.floor(minPrice)}`;    //input-range
+    // maxRangePrice.value = `${Math.floor(maxPrice)}`;    //input-range
+
+    minStockValue.innerHTML = `${minStock}`;  //span
+    maxStockValue.innerHTML = `${maxStock}`;    //span
+    // minRangeStock.value = `${minStock}`;    //input-range
+    // maxRangeStock.value = `${maxStock}`;    //input-range
+
+    updateRange();
+  }
+  function resetRangesAfterFiltration() {
+    localStorage.removeItem('rangeArray');
+    const allPrice: number[] = [];
+    const allStock: number[] = [];
+    copyAllProducts.forEach((item: IProduct) => {
+      allPrice.push(item.price)
+      allStock.push(item.stock)
+    })
+    const sortAllPrice: number[] | undefined = allPrice.sort((a,b) => a-b)
+    const minPrice = <number>sortAllPrice.shift() 
+    const maxPrice = <number>sortAllPrice.pop()
+    const sortAllStock: number[] | undefined = allStock.sort((a,b) => a-b)
+    const minStock = <number>sortAllStock.shift() 
+    const maxStock = <number>sortAllStock.pop()
+
+    console.log('min and max from resetRanges',minPrice, maxPrice, minStock, maxStock)
+
+    minPriceValue.innerHTML = `€${Math.floor(minPrice)}`; //span
+    maxPriceValue.innerHTML = `€${Math.floor(maxPrice)}`;   //span
+    // minRangePrice.value = `${Math.floor(minPrice)}`;    //input-range
+    // maxRangePrice.value = `${Math.floor(maxPrice)}`;    //input-range
+
+    minStockValue.innerHTML = `${minStock}`;  //span
+    maxStockValue.innerHTML = `${maxStock}`;    //span
+    // minRangeStock.value = `${minStock}`;    //input-range
+    // maxRangeStock.value = `${maxStock}`;    //input-range
+    updateRange();
+  }
 
   //listens for changes in the range and writes to the local store
   const ranges: NodeListOf<HTMLElement> = document.querySelectorAll('.multi-range');
@@ -281,15 +341,17 @@ export const HomeComponent = async():Promise<void> => {
     const rangeArray: Array<string> = []
     rangeArray.push(minPriceValue.innerHTML,maxPriceValue.innerHTML,minStockValue.innerHTML,maxStockValue.innerHTML)
     localStorage.setItem('rangeArray', JSON.stringify(rangeArray))
-    console.log('rangeArray',rangeArray)
+    console.log('rangeArray from updateRange()',rangeArray)
     getFilteredProductsList().then(()=> {
       updateBrandCountSpan()
       updateCategoryCountSpan()
+      
     })
+    checkLocalRangeArray('rangeArray');
   }
 
   const checkLocalRangeArray = (arrName:string):void =>{
-    const localArr: Array<string>  =JSON.parse(localStorage.getItem(arrName) as string);
+    const localArr: Array<string> = JSON.parse(String(localStorage.getItem(arrName)));
     // console.log(localArr);
     if(localArr){
       [minPriceValue.innerHTML,maxPriceValue.innerHTML,minStockValue.innerHTML,maxStockValue.innerHTML] = [...localArr];
@@ -300,6 +362,9 @@ export const HomeComponent = async():Promise<void> => {
   checkLocalRangeArray('rangeArray');
 
 
+  
+
+
   // checkbox click handler
   const categories: HTMLInputElement | null = document.querySelector('.select__category');
   const categoriesInput: NodeListOf<HTMLInputElement> = document.querySelectorAll('.select__category input');
@@ -308,6 +373,7 @@ export const HomeComponent = async():Promise<void> => {
   const brandSpanList: NodeListOf<HTMLElement> = document.querySelectorAll('.brand__count_current');
   const categorySpanList: NodeListOf<HTMLElement> = document.querySelectorAll('.category__count_current');
 
+  
   function updateBrandCountSpan():void {
     Array.from(brandSpanList).map(el => {      
       const count: number = getBrandCount(el.id.slice(5));      
@@ -333,6 +399,9 @@ export const HomeComponent = async():Promise<void> => {
     getFilteredProductsList().then(()=> {
       updateBrandCountSpan()
       updateCategoryCountSpan()
+      resetRangesAfterFiltration()
+      updateRangesAfterFiltration()
+      
     })
   }
   if(categories) categories.onclick = () => updateCategories()
@@ -347,6 +416,8 @@ export const HomeComponent = async():Promise<void> => {
     getFilteredProductsList().then(()=> {
       updateBrandCountSpan()
       updateCategoryCountSpan()
+      resetRangesAfterFiltration()
+      updateRangesAfterFiltration()
     })
   }  
   if(brands) brands.onclick = () => updateBrands()
@@ -360,9 +431,9 @@ export const HomeComponent = async():Promise<void> => {
         if(element) element.setAttribute('checked', 'checked');
     })
   }
-
   checkLocalCheckboxArr('categoriesArray');
   checkLocalCheckboxArr('brandsArray');
+
 
   //lisener size items
   function listenSizeItem(){
@@ -415,11 +486,13 @@ export const HomeComponent = async():Promise<void> => {
   }
   
   searchInput.addEventListener('input', () => {
-    const searchValue = searchInput.value    
-    localStorage.setItem('searchValue', JSON.stringify(searchValue))
+    const searchValue = searchInput.value   
+    if (searchValue !== "") localStorage.setItem('searchValue', JSON.stringify(searchValue))
+    else localStorage.removeItem('searchValue');
     getFilteredProductsList().then(()=> {
-      updateBrandCountSpan()
-      updateCategoryCountSpan()
+      updateBrandCountSpan();
+      updateCategoryCountSpan();
+      (searchValue !== "")? updateRangesAfterFiltration(): resetRangesAfterFiltration();
     })
   })
 

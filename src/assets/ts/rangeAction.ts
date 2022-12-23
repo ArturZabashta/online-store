@@ -5,13 +5,13 @@ let maxPriceG: number;
 let minStockG: number;
 let maxStockG: number;
 
-async function getPriceAndstock():Promise<void> {
+export async function getPriceAndStock():Promise<void> {
   const minmaxPrice = await returnMinMaxPrice();
   const minmaxStock = await returnMinMaxStock();
   [minPriceG,maxPriceG] = [...minmaxPrice];
   [minStockG,maxStockG] = [...minmaxStock];
 }
-getPriceAndstock()
+getPriceAndStock()
 
 export function updateSlider(min: string, max: string, minSlider: HTMLInputElement, maxSlider: HTMLInputElement): void {
   const minPrice = minPriceG;
