@@ -1,5 +1,6 @@
 .wrapper{
-    max-width: $content-width;
-    overflow: hidden;
-    margin: 0 auto;
+  display: flex;
+  max-width: $content-width;
+  overflow: hidden;
+  margin: 0 auto;
 }

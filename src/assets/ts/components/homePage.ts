@@ -1,4 +1,3 @@
-import { totalCount, totalSum } from "../add-base-html";
 import { AllBrands, IProduct, AllCategories } from "../interfaces/api-interfaces";
 import { zeroProduct,
    returnAllProducts, 

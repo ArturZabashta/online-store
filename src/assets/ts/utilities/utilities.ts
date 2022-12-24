@@ -169,7 +169,7 @@ export async function returnOneProduct():  Promise<IProduct | undefined> {
   return productDetails;
 }
 
-export function returnCurtSum(): void {
+export function returnCurtSum(): Array<number> {
   const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList')));
   let summa = 0;
   let count = 0;
@@ -179,8 +179,9 @@ export function returnCurtSum(): void {
       count += element.count;
     });
   }
-  console.log('returnCurtSum()')         
+  console.log('returnCurtSum()', )         
   if (totalSum) totalSum.innerHTML = `${summa}`;
   if (totalCount) totalCount.innerHTML = `${count}`;
   
+  return [summa, count]
 }
