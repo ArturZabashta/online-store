@@ -53,16 +53,17 @@
 
   .item__manager{
     display: flex;
-    flex: 0 0 13%;
+    flex: 0 0 11rem;
     flex-direction: column;
     align-items: center;
     
     .item__stock {
+      margin: 0.5rem;
       color: $color-error;
     }
 
     .item__management{
-      color: $color-error;
+      color: $color-brand;
       @include font(2rem, 2rem, 700);
 
 
@@ -81,6 +82,11 @@
       }
     }
 
+    .item__summa {
+      margin: 0.5rem;
+      color: $color-brand;
+    }
+
   }
 
 }
@@ -94,4 +100,15 @@
   bottom: -0.25rem;
   border-radius: 0.5px;
   left: calc(50% - 42.5%);
+  @extend %transition;
 }
+
+.cart__item:hover::before {  
+  height: 2px;
+  width: 94%;
+  
+  left: calc( 50% - 47%);
+  background-color: $color-brand-opacity;
+  border-radius: 1px;
+  @extend %transition;
+} 
