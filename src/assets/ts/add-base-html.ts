@@ -11,9 +11,11 @@ const baseHtml=  `
               <div class="header__total-curt">
                   <p class="total-curt">Total: <span class="total-sum">0</span></p>
               </div>
-              <div class="header__curt">
-                  <span class="total-count"></span>
-                  <a href="#/curt"><img src="https://img.icons8.com/color/32/null/shopping-cart--v1.png" alt="curt"/></a>
+              <div class="header__curt">                  
+                  <a href="#/curt">
+                    <span class="total-count"></span>
+                    <img class="cart-logo" src="https://img.icons8.com/color/32/null/shopping-cart--v1.png" alt="curt"/>
+                  </a>
               </div>
           </div>
       </header>

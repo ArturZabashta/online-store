@@ -21,7 +21,25 @@
     }
 
     &__curt{
-        img:hover{
+      position: relative;
+
+        .total-count{
+          position: absolute;
+          top: 0.4rem;
+          left: 1rem;
+          z-index: 7;
+          color: $color-light;
+          width: 2rem;
+          text-align: center;
+          @include font(1.5rem, 2.4rem, 400);
+        }
+
+        .cart-logo{
+          width: 4rem;
+          height: 4rem;
+        }
+        .total-count:hover + .cart-logo,
+        .cart-logo:hover{
             @extend %transition;
             transform: scale(1.2);
             cursor: pointer;

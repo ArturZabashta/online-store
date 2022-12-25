@@ -11,6 +11,8 @@
     &__title{
         margin: 0 0 1rem;
         text-align: center;
+        max-height: 2.5rem;
+        overflow: hidden;
     }
 
     .title-short{
