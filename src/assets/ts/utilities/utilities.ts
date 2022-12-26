@@ -1,6 +1,8 @@
 import { IProducts, IProduct, AllBrands, AllCategories } from "../interfaces/api-interfaces";
 import httpClient from "../API/api"
 import { filteredArray } from "../components/homePage";
+import { ICart } from "../interfaces/cart-interfaces";
+import { totalCount, totalSum } from "../add-base-html";
 
 export const zeroProduct: Array<IProduct> = [
   {
