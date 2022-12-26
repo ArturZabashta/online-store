@@ -54,7 +54,7 @@ export const CurtComponent = async () => {
     if (!localStorage.getItem('cartSettings')) {
       const startSettings: ICartSettings = {
         perPage: 3,
-        currPage: 2,
+        currPage: 1,
         promo: []
       }
       localStorage.setItem('cartSettings', JSON.stringify(startSettings))
