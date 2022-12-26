@@ -31,7 +31,7 @@ export const ItemComponent = async():Promise<void> => {
                 <div class="product-details__price">Price: <span>${product?.price}€</span></div>
                 <div class="product-details__buttons">
                     <button class="item__addcurt btn">Drop from Cart</button>
-                    <button class="item__details btn">Buy now</button>  
+                    <button class="item__details btn" id="btnbuy">Buy now</button>  
                 </div>
                 <div class="product-details__features">
                     <ul class="features">
@@ -53,6 +53,7 @@ export const ItemComponent = async():Promise<void> => {
     checkImage(product?.images)
     // addAllImages(product?.images)
     setQueryToURL()
+    btnBuyHandler()
     
 }
 
@@ -122,3 +123,10 @@ function setQueryToURL(){
 
 }
 
+function btnBuyHandler(){
+    const btnBuy: HTMLInputElement | null = document.querySelector('#btnbuy');
+    if(btnBuy)btnBuy.onclick = function(){
+        const modal: HTMLElement = document.querySelector('.modal') as HTMLElement;
+        modal.style.display = "flex";
+    }
+}
