@@ -68,13 +68,13 @@ export const CurtComponent = async () => {
     const startElement = cartSettings.perPage*(cartSettings.currPage-1);
     const partOfCartList = cartList.splice(startElement, cartSettings.perPage)
 
-    renderCartProducts(partOfCartList)
+    renderCartProducts(partOfCartList, startElement )
   }
   renderPagination();
 
 
   
-  function renderCartProducts(cartList: Array<ICart>):void {
+  function renderCartProducts(cartList: Array<ICart>, startIndex: number):void {
     if (cartItemsList) cartItemsList.innerHTML=''
     //const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
     console.log('cartList renderCartProducts()=', cartList)    
@@ -82,7 +82,7 @@ export const CurtComponent = async () => {
       const product = document.createElement('div');
       product.classList.add('cart__item');
       product.innerHTML=`
-      <p class="cart__item_position">${index+1}</p>
+      <p class="cart__item_position">${index+1+startIndex}</p>
       <div class="cart__item_picture" style="background-image: url(${copyAllProducts[item.id-1].images[0]})" ></div>
       <div class="item__info">
         <h3 class="item__info_title">${copyAllProducts[item.id-1].title}</h3>
