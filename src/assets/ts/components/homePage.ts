@@ -8,8 +8,9 @@ import { zeroProduct,
    getFilteredByRange, 
    getSortedProducts,
    getSearchByInput,
-   getAllFilters,
-   returnCurtSum } from "../utilities/utilities"
+   getAllFilters
+    } from "../utilities/utilities"
+import { returnCurtSum } from "../utilities/cart-utilities";
 import {controlFromRange, controlToRange, updateSlider } from "../rangeAction"
 import { ICart } from "../interfaces/cart-interfaces";
 
@@ -246,7 +247,7 @@ export const HomeComponent = async():Promise<void> => {
     const [brandsArray, categoriesArray, rangeArray, sortName, searchValue, sizeItem] = [...getAllFilters()]
     // Make copy of all products data to do a filtration
     filteredArray = [...copyAllProducts]
-    //Apply filters to array with all products
+    // Apply filters to array with all products
     if (sortName.length > 0) {
       filteredArray = getSortedProducts(filteredArray, sortName)
       setSelectValue(sortName);

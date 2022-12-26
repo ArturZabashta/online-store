@@ -3,3 +3,9 @@ export interface ICart {
   count: number,
   price: number
 }
+
+export interface ICartSettings {
+  perPage: number,
+  currPage: number,
+  promo: Array<string>
+}

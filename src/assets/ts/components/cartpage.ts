@@ -1,7 +1,7 @@
-import { zeroProduct,  returnAllProducts, changeCarpProductCount } from "../utilities/utilities";
+import { zeroProduct,  returnAllProducts } from "../utilities/utilities";
 import { IProduct } from "../interfaces/api-interfaces";
-import { ICart } from "../interfaces/cart-interfaces";
-import { returnCurtSum } from "../utilities/utilities";
+import { ICart, ICartSettings } from "../interfaces/cart-interfaces";
+import { returnCurtSum, changeCartProductCount } from "../utilities/cart-utilities";
 
 export const CurtComponent = async () => {
   const allProducts = await returnAllProducts();
@@ -17,11 +17,11 @@ export const CurtComponent = async () => {
           <h2 class="cart__head_title"> Products In Cart </h2>
           <div class="cart__pagination">
             <p class="cart__pagination_title">Items:</p>
-            <input class="cart__pagination_onpage btn" id="onpage" type="text" value="0">
+            <input class="cart__pagination_per-page btn" id="onpage" type="number">
             <div class="cart__pages">Page:
-              <button class="cart__pages_prev btn">Prev</button>
+              <button class="cart__pages_prev btn"><</button>
               <p class="cart__pages_current"></p>
-              <button class="cart__pages_prev btn">Next</button>
+              <button class="cart__pages_next btn">></button>
             </div>
           </div>
         </article>
@@ -42,17 +42,41 @@ export const CurtComponent = async () => {
   `;
 
   const cartItemsList: HTMLElement | null = document.querySelector('.cart__list');
-  const itemsPerPage: HTMLElement | null = document.querySelector('.cart__pageitems_count');
+  const itemsPerPageInput = <HTMLInputElement>document.querySelector('.cart__pagination_per-page');
+  const currPageSpan =  <HTMLElement>document.querySelector('.cart__pages_current');
   const summaryCount: HTMLElement | null = document.querySelector('.summary__products_count');
   const summarySumma: HTMLElement | null = document.querySelector('.summary__products_summa');
+  const prevPageBtn = <HTMLElement>document.querySelector('.cart__pages_prev');
+  const nextPageBtn = <HTMLElement>document.querySelector('.cart__pages_next');
 
 
+  function renderPagination() {
+    if (!localStorage.getItem('cartSettings')) {
+      const startSettings: ICartSettings = {
+        perPage: 3,
+        currPage: 2,
+        promo: []
+      }
+      localStorage.setItem('cartSettings', JSON.stringify(startSettings))
+    }
+    
+    const cartSettings: ICartSettings = JSON.parse(String(localStorage.getItem('cartSettings')));
+    itemsPerPageInput.value = `${cartSettings.perPage}`;
+    currPageSpan.innerHTML = `${cartSettings.currPage}`;    
+
+    const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
+    const startElement = cartSettings.perPage*(cartSettings.currPage-1);
+    const partOfCartList = cartList.splice(startElement, cartSettings.perPage)
+
+    renderCartProducts(partOfCartList)
+  }
+  renderPagination();
 
 
   
-  function renderCartProducts():void {
+  function renderCartProducts(cartList: Array<ICart>):void {
     if (cartItemsList) cartItemsList.innerHTML=''
-    const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
+    //const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
     console.log('cartList renderCartProducts()=', cartList)    
     cartList.map((item: ICart, index:number)=> {
       const product = document.createElement('div');
@@ -105,10 +129,10 @@ export const CurtComponent = async () => {
         if (this.innerHTML == '+') step = 1;
         if (this.innerHTML == '-') step = -1;
         
-        const isDelete = changeCarpProductCount(id, currentPrice, step, currentStock, currentCountSpan, currentSummaSpan);
+        const isDelete = changeCartProductCount(id, currentPrice, step, currentStock, currentCountSpan, currentSummaSpan);
         
-        if (isDelete) {                  
-          renderCartProducts()
+        if (isDelete) {
+          renderPagination()
         }
 
         const updatedSumCount = returnCurtSum();
@@ -116,9 +140,51 @@ export const CurtComponent = async () => {
         if (summaryCount) summaryCount.innerHTML = `${updatedSumCount[1]}`        
 
       }
-  }
-  renderCartProducts()
+  }  
+  renderPagination()
 
   
-  returnCurtSum()
+  
+  itemsPerPageInput.addEventListener('input', setNewCartPage)
+  // Set new count of  products per page
+  function setNewCartPage(this: HTMLInputElement) {    
+    const newPerPage = this.value;
+        
+    const newCartSettings: ICartSettings = JSON.parse(localStorage.cartSettings);
+    localStorage.removeItem('cartSettings');    
+
+    newCartSettings.perPage = Number(newPerPage);
+    
+    localStorage.setItem('cartSettings', JSON.stringify(newCartSettings));
+    
+    renderPagination();
+  }
+
+  prevPageBtn.addEventListener('click', setSaveCartPage)
+  nextPageBtn.addEventListener('click', setSaveCartPage)
+  // Switch prev/next page with products
+  function setSaveCartPage(this: HTMLButtonElement) {    
+    let step = 0;
+    if (this.innerHTML == '&lt;') step = -1;
+    if (this.innerHTML == '&gt;') step = 1;
+        
+    const newCartSettings: ICartSettings = JSON.parse(localStorage.cartSettings);
+    localStorage.removeItem('cartSettings');    
+    
+    const perPage = newCartSettings.perPage;
+    const oldPage = newCartSettings.currPage;
+    let newPage = oldPage + step;
+    
+    if (newPage < 1 ) newPage = 1;
+    if (newPage > Math.ceil(cartList.length/perPage)) newPage = Math.ceil(cartList.length/perPage);
+
+    newCartSettings.currPage = newPage;
+    
+    localStorage.setItem('cartSettings', JSON.stringify(newCartSettings));
+    
+    renderPagination();
+  }
+
+  
+  returnCurtSum();
   } 

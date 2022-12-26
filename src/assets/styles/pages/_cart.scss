@@ -29,7 +29,8 @@
         .cart__pagination {
           display: flex;
           flex: 0 1 45%;
-          justify-content: space-between;
+          justify-content: center;
+          align-items: center;
 
           &_title {
             display: flex;
@@ -37,17 +38,31 @@
             margin: 0;
           }
 
-          &_onpage {
+          &_per-page {
            width: 3rem;
-           @include font(1.7rem, 2.4rem, 400);
-
+           height: 3.1rem;
+           padding: 0;
+           @include font(2rem, 2.4rem, 400);
+           text-align: center;
+          }
+          &_per-page::-webkit-outer-spin-button,
+          &_per-page::-webkit-inner-spin-button {
+            /* display: none; <- Crashes Chrome on hover */
+            -webkit-appearance: none;
+            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
           }
 
           .cart__pages {
             display: flex;
             flex: 0 1 60%;
-            justify-content: space-around;
+            justify-content: center;
             align-items: center;
+            @include font(2rem, 2.4rem, 400);
+
+            &_current{
+              width: 3rem;
+              text-align: center;
+            }
           }
         }        
       }
