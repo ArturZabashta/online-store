@@ -10,7 +10,7 @@ const routes: IRoutes[] = [
     { path: '#/', component: HomeComponent, },
 ];
 
-const parseLocation  = ():string => location.hash.toLowerCase();
+const parseLocation  = ():string => location.hash.toLowerCase() || '#/';
 
 const findComponentByPath = (path: string, routes:IRoutes[]): IRoutes | undefined=> routes.find(r => path.match(new RegExp(`\\${r.path}`, 'gm'))) || undefined;
 

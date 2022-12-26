@@ -1,0 +1,129 @@
+.bank-card{
+    width: 50rem;
+    height: 35rem;
+    position: relative;
+    margin: 0 auto;
+
+    .card-back, .card-front{
+        width: 40rem;
+        height: 25rem;
+        border: 1px solid $color-brand;
+        border-radius: 1.5rem;
+        position: absolute;
+    }
+
+    .card-error{
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        color: #cf2828;
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+    }
+    .card-back{
+        right: 0;
+        bottom: 5rem;
+        background-color: #ececec;
+
+        &__line{
+            width: 100%;
+            height: 6rem;
+            background-color: #c0c0c0;
+            position: absolute;
+            top: 3rem;
+        }
+
+        #card-cvv{
+            position: absolute;
+            right: 2rem;
+            bottom: 10rem;
+            padding: .5rem;
+            width: 6rem;
+            font-family: 'Jura', sans-serif;
+            @include font(1.6rem, 140%, 500);
+            text-align: center;
+            outline: none;
+        }
+        #card-cvv:valid {
+            border: 1px solid #009789;
+        }
+    }
+
+    .card-front{
+        background: $color-brand;
+
+        #card-number{
+            position: absolute;
+            width:90%;
+            margin: 0 5%;
+            background: #f1f1f1;
+            padding: .5rem;
+            border: none;
+            top: 9rem;
+            outline: none;
+            font-family: 'Jura', sans-serif;
+            @include font(1.6rem, 140%, 500);
+        }
+
+        .card-valid{
+            position: absolute;
+            color: #f1f1f1;
+            width: 9rem;
+            padding: .5rem;
+            outline: none;
+            border: none;
+            text-align: center;
+            bottom: 4.5rem;
+            left: 2%;
+            font-family: 'Jura', sans-serif;
+            @include font(1.6rem, 140%, 500);
+        }
+
+        #card-date{
+            position: absolute;
+            background: #f1f1f1;
+            width: 9rem;
+            font-family: 'Jura', sans-serif;
+            @include font(1.6rem, 140%, 500);
+            padding: .5rem;
+            outline: none;
+            border: none;
+            text-align: center;
+            bottom: 4.5rem;
+            left: 25%;
+
+        }
+        #card-date:valid {
+            border: 1px solid #009789;
+        }
+    
+        // #card-date:invalid {
+        //     border: 1px solid #cf2828;
+        //     color: #cf2828;
+        // }
+
+        .card-logo{
+            height: 5rem;
+            width: 9rem;
+            position: absolute;
+            bottom: 4rem;
+            right: 3rem;
+        }
+    }
+
+
+     
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+  
+  
+
+  

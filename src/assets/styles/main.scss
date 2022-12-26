@@ -10,6 +10,7 @@
 @import "./layouts/header.scss";
 @import "./layouts/main";
 @import "./layouts/footer.scss";
+@import "./layouts/modal";
 
 @import "./components/shop__head";
 @import "./components/shop__list";
@@ -20,6 +21,7 @@
 @import "./components/btn";
 @import "./components/bread__crumb";
 @import "./components/feature";
+@import "./components/card";
 
 @import "./pages/home";
 @import "./pages/product";
