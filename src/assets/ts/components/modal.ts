@@ -78,124 +78,130 @@ const myform = <HTMLFormElement>document.querySelector('#myform'); //form
 const imgForm = <HTMLFormElement>document.querySelector('.card-logo'); //image
 const modal: HTMLElement = document.querySelector('.modal') as HTMLElement;
 
-myform.onsubmit = function (e:Event){
-    e.preventDefault();
-    modal.innerHTML=`
-    <div class="modal__wrapper">
-        <h3 class="modal__subtitle">Заказ оформлен</h3>
-    </div>`
-    setTimeout(() => {
-        location.href=`#/`;
-        modal.style.display = "none";
-        return true
-      }, 5000)
-}
 
-//проверка формы на валидность
-if(btnConfirm) btnConfirm.onclick = (): void => btnFormHandler(); 
-function btnFormHandler() {
-    const inputs: NodeListOf<HTMLInputElement> = myform.querySelectorAll('input');
-    [...inputs].map(element => {
-        const id = element.id;
-        const err: HTMLElement | null = document.querySelector(`.${id}`);
-        checkValidate(element,err)
-    });
-    
-}
-
-cardName.oninput = () => checkCardName();  
-function checkCardName(){
-    const err: HTMLElement | null = document.querySelector('.card-name');
-    checkValidate(cardName,err)
-}
-
-cardPhone.oninput = () => checkPhone(); 
-function checkPhone(){
-    const err: HTMLElement | null = document.querySelector('.card-phone');
-    checkValidate(cardPhone,err)
-}
-
-cardAddress.oninput = () => checkAddress(); 
-function checkAddress(){
-    const err: HTMLElement | null = document.querySelector('.card-address');
-    checkValidate(cardAddress,err)
-}
-
-cardEmail.oninput = () => checkEmail(); 
-function checkEmail(){
-    const err: HTMLElement | null = document.querySelector('.card-email');
-    checkValidate(cardEmail,err)
-}
-
-cvv.oninput = () => checkCVV(); 
-function checkCVV(){
-    const err: HTMLElement | null = document.querySelector('.card-cvv');
-    checkValidate(cvv,err)
-}
-
-cardNumber.oninput = () => checkCardNumber(); 
-function checkCardNumber(){
-    const err: HTMLElement | null = document.querySelector('.card-number');
-    checkValidate(cardNumber,err)
-}
-cardDate.oninput = () => checkCardDate(); 
-function checkCardDate(){
-    const err: HTMLElement | null = document.querySelector('.card-date');
-    checkValidate(cardDate,err)
-}
-
-function checkValidate(elem: HTMLInputElement,span: HTMLElement | null){
-    if(!elem.validity.valid){
-        if(span)span.style.display = 'flex';
-    }else{
-        if(span)span.style.display = 'none';
+//close modal and redirect on main page
+    myform.onsubmit = function (e:Event){
+        e.preventDefault();
+        modal.innerHTML=`
+        <div class="modal__wrapper">
+            <h3 class="modal__subtitle">Заказ оформлен</h3>
+        </div>`
+        setTimeout(() => {
+            modal.style.display = "none";
+            cleanCurt()
+            location.href=`#/`;
+            return true
+        }, 5000)
     }
-}
 
-cardNumber.addEventListener('input', function() {
-    const val:string = `${this.value}` as string
-    // console.log(val, val[0])
-    if(val[0]) checkImageCart(val[0]);
-    // this.value = (val.substring(0,16).match(/.{1,4}/g) as Array<string>).join(' ')
-    this.value = val.substring(0,16)
-})
-
-//change bank logo
-function checkImageCart(symb: string): void{
-    switch (symb) {
-        case '4':
-            imgForm.src = "./assets/visa.svg"
-            break;
-        case '5':
-            imgForm.src ="./assets/MSlogo.svg"
-            break;
-        case '2':
-            imgForm.src ="./assets/MIrlogo.svg"
-            break;
-        case '6':
-            imgForm.src ="./assets/UnionPaylogo.svg"
-            break;
-        default:
-            imgForm.src ="./assets/cardlogo.png"
-      }
-}
-
-//change date form
-cardDate.addEventListener('input', function() {
-    const val:string = (`${this.value}`).replace('/', '') as string
-   if(val.length>2) {
-    this.value= '';
-    this.value = val.slice(0,2)+ '/'+ val.slice(2,val.length);
-}
-})
-
-//close modal
-modal.addEventListener('click', (e) =>{
-    const tearget:HTMLElement = e.target as HTMLElement;
-    if (tearget.classList[0] === 'modal'){
-        modal.style.display = "none";
+    function cleanCurt(){
+        localStorage.removeItem('cartList');
     }
-})
 
+    //проверка формы на валидность
+    if(btnConfirm) btnConfirm.onclick = (): void => btnFormHandler(); 
+    function btnFormHandler() {
+        const inputs: NodeListOf<HTMLInputElement> = myform.querySelectorAll('input');
+        [...inputs].map(element => {
+            const id = element.id;
+            const err: HTMLElement | null = document.querySelector(`.${id}`);
+            checkValidate(element,err)
+        });
+        
+    }
+
+    cardName.oninput = () => checkCardName();  
+    function checkCardName(){
+        const err: HTMLElement | null = document.querySelector('.card-name');
+        checkValidate(cardName,err)
+    }
+
+    cardPhone.oninput = () => checkPhone(); 
+    function checkPhone(){
+        const err: HTMLElement | null = document.querySelector('.card-phone');
+        checkValidate(cardPhone,err)
+    }
+
+    cardAddress.oninput = () => checkAddress(); 
+    function checkAddress(){
+        const err: HTMLElement | null = document.querySelector('.card-address');
+        checkValidate(cardAddress,err)
+    }
+
+    cardEmail.oninput = () => checkEmail(); 
+    function checkEmail(){
+        const err: HTMLElement | null = document.querySelector('.card-email');
+        checkValidate(cardEmail,err)
+    }
+
+    cvv.oninput = () => checkCVV(); 
+    function checkCVV(){
+        const err: HTMLElement | null = document.querySelector('.card-cvv');
+        checkValidate(cvv,err)
+    }
+
+    cardNumber.oninput = () => checkCardNumber(); 
+    function checkCardNumber(){
+        const err: HTMLElement | null = document.querySelector('.card-number');
+        checkValidate(cardNumber,err)
+    }
+    cardDate.oninput = () => checkCardDate(); 
+    function checkCardDate(){
+        const err: HTMLElement | null = document.querySelector('.card-date');
+        checkValidate(cardDate,err)
+    }
+
+    function checkValidate(elem: HTMLInputElement,span: HTMLElement | null){
+        if(!elem.validity.valid){
+            if(span)span.style.display = 'flex';
+        }else{
+            if(span)span.style.display = 'none';
+        }
+    }
+
+    cardNumber.addEventListener('input', function() {
+        const val:string = `${this.value}` as string
+        // console.log(val, val[0])
+        if(val[0]) checkImageCart(val[0]);
+        // this.value = (val.substring(0,16).match(/.{1,4}/g) as Array<string>).join(' ')
+        this.value = val.substring(0,16)
+    })
+
+    //change bank logo
+    function checkImageCart(symb: string): void{
+        switch (symb) {
+            case '4':
+                imgForm.src = "./assets/visa.svg"
+                break;
+            case '5':
+                imgForm.src ="./assets/MSlogo.svg"
+                break;
+            case '2':
+                imgForm.src ="./assets/MIrlogo.svg"
+                break;
+            case '6':
+                imgForm.src ="./assets/UnionPaylogo.svg"
+                break;
+            default:
+                imgForm.src ="./assets/cardlogo.png"
+        }
+    }
+
+    //change date form
+    cardDate.addEventListener('input', function() {
+        const val:string = (`${this.value}`).replace('/', '') as string
+    if(val.length>2) {
+        this.value= '';
+        this.value = val.slice(0,2)+ '/'+ val.slice(2,val.length);
+    }
+    })
+
+    //close modal(click overlay)
+    modal.addEventListener('click', (e) =>{
+        const tearget:HTMLElement = e.target as HTMLElement;
+        if (tearget.classList[0] === 'modal'){
+            modal.style.display = "none";
+        }
+    })
 
 }
