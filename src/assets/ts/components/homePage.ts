@@ -608,18 +608,13 @@ export const HomeComponent = async():Promise<void> => {
       btnDetails.addEventListener("click", function(e){
         const element = e.target as HTMLElement;
         const current = element.parentNode?.parentNode as HTMLElement;
-        // console.log(current.id )
         localStorage.setItem('currentId',current.id )
-        // location.href=`#/item-details/${el.id}`;
         location.href=`#/product-details`;
       })
   
     })
   }
   itemClickHandler()
-
-  
-  
-  
+ 
 }
 

@@ -38,8 +38,8 @@ export const renderModal = () =>{
                             title="cvv should only contain 3 numbers e.g  777" required>
                         </div>
                         <div class="card-front">
-                            <input type="number" id="card-number" placeholder="Card number" 
-                                title="should only contain numbers. e.g. 7777 7777 7777 7777" required>
+                            <input type="text" id="card-number" placeholder="Card number" pattern="^([0-9]{4}\\s[0-9]{4}\\s[0-9]{4}\\s[0-9]{4})$"
+                                title="should only contain numbers. e.g. 7777 7777 7777 7777" required >
                             <label for="card-monthYear" class="card-valid" >VALID</label>
                             <input type="text" id="card-date" placeholder="MM/YY" pattern="^(0?[1-9]|1[12])\\/(22|23|24)$" maxlength="5"
                                 title="Date should only contain 4 numbers. e.g. 12/23" required>
@@ -159,13 +159,19 @@ const modal: HTMLElement = document.querySelector('.modal') as HTMLElement;
         }
     }
 
-    cardNumber.addEventListener('input', function() {
-        const val:string = `${this.value}` as string
-        // console.log(val, val[0])
+    cardNumber.addEventListener("keypress",function(e){
+        const m = this.value.length+1;
+        const val:string = `${this.value}` as string;
         if(val[0]) checkImageCart(val[0]);
-        // this.value = (val.substring(0,16).match(/.{1,4}/g) as Array<string>).join(' ')
-        this.value = val.substring(0,16)
-    })
+
+        if (m > 19 || (e.key).charCodeAt(0) < 48 || (e.key).charCodeAt(0) > 57)
+        e.returnValue= false;
+        
+        else if (m == 5 || m == 10 || m == 15)
+        this.value += ' ';
+    });
+
+
 
     //change bank logo
     function checkImageCart(symb: string): void{
