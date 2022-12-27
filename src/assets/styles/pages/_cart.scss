@@ -144,8 +144,18 @@
         }
 
         .summary__products_discount{
+          visibility: hidden;
+          opacity: 0;
           color: $color-error;
+          @extend %transition;
         }
+        .summary__products_discount._is-discount{
+          visibility: visible;
+          opacity: 1;
+          color: $color-error;
+          @extend %transition;
+        }
+
 
         .summary__promo{
           
@@ -159,7 +169,8 @@
 
           &_find{
             opacity: 0;
-            visibility: hidden;            
+            visibility: hidden;
+            @include font(1.4rem, 1.2rem, 400);           
           }
 
           .summary__applied{

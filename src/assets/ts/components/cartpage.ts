@@ -1,7 +1,7 @@
 import { zeroProduct,  returnAllProducts } from "../utilities/utilities";
 import { IProduct } from "../interfaces/api-interfaces";
 import { ICart, ICartSettings } from "../interfaces/cart-interfaces";
-import { returnCurtSum, changeCartProductCount } from "../utilities/cart-utilities";
+import { returnCurtSum, changeCartProductCount, returnDiscountSumma } from "../utilities/cart-utilities";
 import { PROMO_LIST } from "../constants/constants";
 
 export const CurtComponent = async () => {
@@ -71,9 +71,11 @@ export const CurtComponent = async () => {
 
   const promoAppliedWrapper = <HTMLElement>document.querySelector('.summary__applied');
   const promoAppliedDiv = <HTMLElement>document.querySelector('.summary__applied_list');
-  const promoRemoveBtnList: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.discount__item_drop');
+  
+  const discountPrice = <HTMLElement>document.querySelector('.summary__products_discount');
 
-  function renderPagination() {
+  
+  async function renderPagination() {
     if (!localStorage.getItem('cartSettings')) {
       const startSettings: ICartSettings = {
         perPage: 3,
@@ -99,8 +101,7 @@ export const CurtComponent = async () => {
   
   function renderCartProducts(cartList: Array<ICart>, startIndex: number):void {
     if (cartItemsList) cartItemsList.innerHTML=''
-    //const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
-    console.log('cartList renderCartProducts()=', cartList)    
+       
     cartList.map((item: ICart, index:number)=> {
       const product = document.createElement('div');
       product.classList.add('cart__item');
@@ -156,9 +157,10 @@ export const CurtComponent = async () => {
         }
 
         const updatedSumCount = returnCurtSum();
-        if (summarySumma) summarySumma.innerHTML = `${updatedSumCount[0]}`
-        if (summaryCount) summaryCount.innerHTML = `${updatedSumCount[1]}`        
-
+        if (summarySumma) summarySumma.innerHTML = `€${updatedSumCount[0]}`;
+        if (summaryCount) summaryCount.innerHTML = `${updatedSumCount[1]}`;        
+        //getPromoCodesFromLS();
+        renderDiscountSumma(returnDiscountSumma());
       }
   }  
   renderPagination()
@@ -202,16 +204,14 @@ export const CurtComponent = async () => {
   }
 
   promoInput.addEventListener('input', setPromoSearch);
-  function setPromoSearch(this: HTMLInputElement) {
-    //console.log(PROMO_LIST);
+  function setPromoSearch(this: HTMLInputElement) {    
     const cartSettings: ICartSettings = JSON.parse(localStorage.cartSettings);
-    const testCode = this.value;
-    console.log('testCode=', testCode);
+    const testCode = this.value;    
     let isVisible = false;
+
     for (const key in PROMO_LIST) {
       if (key == testCode.toLowerCase() && cartSettings.promo.indexOf(key) == -1) {
-        isVisible = true;
-        console.log('have a match=', PROMO_LIST[key][0]);       
+        isVisible = true;             
         promoNameSpan.innerHTML = `${PROMO_LIST[key][0]}`;
         promoNameSpan.id = `${key}`;
         promoValueSpan.innerHTML = `${PROMO_LIST[key][1]}`;
@@ -230,8 +230,7 @@ export const CurtComponent = async () => {
   }
 
 
-  promoAddBtn.addEventListener('click', ()=> {
-    
+  promoAddBtn.addEventListener('click', ()=> {    
     const promoItem = document.createElement('div');    
     promoItem.classList.add('discount__item');
     promoItem.id = `discount-${promoNameSpan.id}`
@@ -243,7 +242,7 @@ export const CurtComponent = async () => {
       <button class="discount__item_drop btn">Drop</button>
     `
     promoAppliedDiv.append(promoItem);
-
+    //Add info about promo code in LS
     const newCartSettings: ICartSettings = JSON.parse(localStorage.cartSettings);
     localStorage.removeItem('cartSettings');
     newCartSettings.promo.push(promoNameSpan.id);
@@ -251,12 +250,14 @@ export const CurtComponent = async () => {
     promoFindDiv.style.visibility = 'hidden';
     promoFindDiv.style.opacity = '0';
     promoAddBtn.disabled = true;
+    discountPrice.classList.add('_is-discount');
+    if (summarySumma) summarySumma.style.textDecoration = 'line-through';
 
     promoInput.value = '';
     promoInput.placeholder = 'Promo code applied';
     setTimeout(()=>{
       promoInput.placeholder = 'Insert your promo code';
-    },1000);
+    },1100);
     getPromoCodesFromLS();
   })
 
@@ -282,15 +283,14 @@ export const CurtComponent = async () => {
       promoAppliedWrapper.style.display = 'block';
 
       // Handler of promo code drop buttons
-      const dropPromoFromApplied = function (this: HTMLButtonElement) {
-        console.warn("Удаляем скидку из getPromoCodesFromLS()");
+      const dropPromoFromApplied = function (this: HTMLButtonElement) {        
         
         const newCartSettings: ICartSettings = JSON.parse(localStorage.cartSettings);
         localStorage.removeItem('cartSettings');
         const id = this.id.slice(5);
         newCartSettings.promo = newCartSettings.promo.filter(item => item !== id)
         localStorage.setItem('cartSettings', JSON.stringify(newCartSettings));
-        //CurtComponent()
+        // Switch reRender of Summary block
         getPromoCodesFromLS()
       }
 
@@ -298,15 +298,25 @@ export const CurtComponent = async () => {
       [...promoRemoveBtnList].map((btn: HTMLButtonElement) => {
         btn.addEventListener('click', dropPromoFromApplied)
       });
+      discountPrice.classList.add('_is-discount');
+      renderDiscountSumma(returnDiscountSumma());
       
     } else {
       promoAppliedWrapper.style.display = 'none';
-      //CurtComponent()
+      discountPrice.classList.remove('_is-discount');
+      if (summarySumma) summarySumma.style.textDecoration = 'none';
+      renderDiscountSumma(returnDiscountSumma());
     }
   }
   getPromoCodesFromLS()
 
-  
+
+  function renderDiscountSumma(sum: number) {
+    const cartSumCount = returnCurtSum();
+    const discountSumma = cartSumCount[0]*(100-sum)/100;
+    discountPrice.innerHTML = `Total: €${discountSumma}`;    
+  }
 
   returnCurtSum();
+  renderDiscountSumma(returnDiscountSumma());
   } 
