@@ -1,7 +1,8 @@
 import { zeroProduct,  returnAllProducts } from "../utilities/utilities";
 import { IProduct } from "../interfaces/api-interfaces";
 import { ICart, ICartSettings } from "../interfaces/cart-interfaces";
-import { returnCurtSum, changeCartProductCount } from "../utilities/cart-utilities";
+import { returnCurtSum, changeCartProductCount, returnDiscountSumma } from "../utilities/cart-utilities";
+import { PROMO_LIST } from "../constants/constants";
 
 export const CurtComponent = async () => {
   const allProducts = await returnAllProducts();
@@ -32,9 +33,22 @@ export const CurtComponent = async () => {
         <h2 class="summary__head"> Summary </h2>
         <article class="summary__description">
           <p class="summary__products">Products:  <span class="summary__products_count">${cartSumCount[1]}</span> </p>
-          <p class="summary__products">Total:  <span class="summary__products_summa">${cartSumCount[0]}</span> </p>
+          <p class="summary__products">Total: <span class="summary__products_summa">€${cartSumCount[0]}</span> </p>
+          <p class="summary__products_discount">Total: €<span class="summary__products_discount">${cartSumCount[0]}</span> </p>
           <input class="summary__products_input btn" type="text" placeholder="Insert your promo code">
-          <div class="summary__promocode"></div>
+          <div class="summary__promo">
+            <p class="summary__promo_example">Promo for test: 'RSS', 'JS', 'TS'</p>
+            <div class="summary__promo_find">
+              <span class="summary__promo_text"></span>
+              <span class="summary__promo_value"></span>
+              %
+              <button class="summary__promo_add btn">ADD</button>
+            </div>
+            <div class="summary__applied">
+              <h3 class="summary__applied_title">Applied promo codes</h3>
+              <div class="summary__applied_list"></div>
+            </div>            
+          </div>
           <button class="summary__buy btn">Buy now</button>
         </article>
       </aside>
@@ -49,8 +63,19 @@ export const CurtComponent = async () => {
   const prevPageBtn = <HTMLElement>document.querySelector('.cart__pages_prev');
   const nextPageBtn = <HTMLElement>document.querySelector('.cart__pages_next');
 
+  const promoInput = <HTMLInputElement>document.querySelector('.summary__products_input');
+  const promoFindDiv = <HTMLElement>document.querySelector('.summary__promo_find');
+  const promoNameSpan = <HTMLElement>document.querySelector('.summary__promo_text');
+  const promoValueSpan = <HTMLElement>document.querySelector('.summary__promo_value');
+  const promoAddBtn = <HTMLButtonElement>document.querySelector('.summary__promo_add');
 
-  function renderPagination() {
+  const promoAppliedWrapper = <HTMLElement>document.querySelector('.summary__applied');
+  const promoAppliedDiv = <HTMLElement>document.querySelector('.summary__applied_list');
+  
+  const discountPrice = <HTMLElement>document.querySelector('.summary__products_discount');
+
+  
+  async function renderPagination() {
     if (!localStorage.getItem('cartSettings')) {
       const startSettings: ICartSettings = {
         perPage: 3,
@@ -68,31 +93,27 @@ export const CurtComponent = async () => {
     const startElement = cartSettings.perPage*(cartSettings.currPage-1);
     const partOfCartList = cartList.splice(startElement, cartSettings.perPage)
 
-    renderCartProducts(partOfCartList)
+    renderCartProducts(partOfCartList, startElement )
   }
   renderPagination();
 
 
   
-  function renderCartProducts(cartList: Array<ICart>):void {
+  function renderCartProducts(cartList: Array<ICart>, startIndex: number):void {
     if (cartItemsList) cartItemsList.innerHTML=''
-    //const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
-    console.log('cartList renderCartProducts()=', cartList)    
+       
     cartList.map((item: ICart, index:number)=> {
       const product = document.createElement('div');
       product.classList.add('cart__item');
       product.innerHTML=`
-      <p class="cart__item_position">${index+1}</p>
+      <p class="cart__item_position">${index+1+startIndex}</p>
       <div class="cart__item_picture" style="background-image: url(${copyAllProducts[item.id-1].images[0]})" ></div>
       <div class="item__info">
         <h3 class="item__info_title">${copyAllProducts[item.id-1].title}</h3>
         <p class="item__info_description">${copyAllProducts[item.id-1].description}</p>
         <p class="item__properties"> 
-          Rating:  
-          <span class="item__properties_rating">${copyAllProducts[item.id-1].rating}    </span>  
-          Discount:  
-          <span class="item__properties_discount">${copyAllProducts[item.id-1].discountPercentage}</span>
-          %
+         <span>Rating: <span class="item__properties_rating">${copyAllProducts[item.id-1].rating}</span></span>  
+         <span>Discount: <span class="item__properties_discount">${copyAllProducts[item.id-1].discountPercentage}</span>%</span>
         </p>
       </div>
       <div class="item__manager">
@@ -136,25 +157,22 @@ export const CurtComponent = async () => {
         }
 
         const updatedSumCount = returnCurtSum();
-        if (summarySumma) summarySumma.innerHTML = `${updatedSumCount[0]}`
-        if (summaryCount) summaryCount.innerHTML = `${updatedSumCount[1]}`        
-
+        if (summarySumma) summarySumma.innerHTML = `€${updatedSumCount[0]}`;
+        if (summaryCount) summaryCount.innerHTML = `${updatedSumCount[1]}`;        
+        //getPromoCodesFromLS();
+        renderDiscountSumma(returnDiscountSumma());
       }
   }  
   renderPagination()
-
   
   
   itemsPerPageInput.addEventListener('input', setNewCartPage)
   // Set new count of  products per page
   function setNewCartPage(this: HTMLInputElement) {    
     const newPerPage = this.value;
-        
     const newCartSettings: ICartSettings = JSON.parse(localStorage.cartSettings);
-    localStorage.removeItem('cartSettings');    
-
-    newCartSettings.perPage = Number(newPerPage);
-    
+    localStorage.removeItem('cartSettings');
+    newCartSettings.perPage = Number(newPerPage);    
     localStorage.setItem('cartSettings', JSON.stringify(newCartSettings));
     
     renderPagination();
@@ -185,7 +203,120 @@ export const CurtComponent = async () => {
     renderPagination();
   }
 
+  promoInput.addEventListener('input', setPromoSearch);
+  function setPromoSearch(this: HTMLInputElement) {    
+    const cartSettings: ICartSettings = JSON.parse(localStorage.cartSettings);
+    const testCode = this.value;    
+    let isVisible = false;
+
+    for (const key in PROMO_LIST) {
+      if (key == testCode.toLowerCase() && cartSettings.promo.indexOf(key) == -1) {
+        isVisible = true;             
+        promoNameSpan.innerHTML = `${PROMO_LIST[key][0]}`;
+        promoNameSpan.id = `${key}`;
+        promoValueSpan.innerHTML = `${PROMO_LIST[key][1]}`;
+      }
+    }
+    if (isVisible)  {
+      promoFindDiv.style.visibility = 'visible';
+      promoFindDiv.style.opacity = '1';
+      promoAddBtn.disabled = false;
+
+    } else {
+      promoFindDiv.style.visibility = 'hidden';
+      promoFindDiv.style.opacity = '0';
+      promoAddBtn.disabled = true;
+    }
+  }
+
+
+  promoAddBtn.addEventListener('click', ()=> {    
+    const promoItem = document.createElement('div');    
+    promoItem.classList.add('discount__item');
+    promoItem.id = `discount-${promoNameSpan.id}`
+    promoItem.innerHTML =`
+      <span>      
+        <span class="discount__item_text">${promoNameSpan.innerHTML}</span>
+        <span class="discount__item_value">${promoValueSpan.innerHTML}%</span>        
+      </span>
+      <button class="discount__item_drop btn">Drop</button>
+    `
+    promoAppliedDiv.append(promoItem);
+    //Add info about promo code in LS
+    const newCartSettings: ICartSettings = JSON.parse(localStorage.cartSettings);
+    localStorage.removeItem('cartSettings');
+    newCartSettings.promo.push(promoNameSpan.id);
+    localStorage.setItem('cartSettings', JSON.stringify(newCartSettings));
+    promoFindDiv.style.visibility = 'hidden';
+    promoFindDiv.style.opacity = '0';
+    promoAddBtn.disabled = true;
+    discountPrice.classList.add('_is-discount');
+    if (summarySumma) summarySumma.style.textDecoration = 'line-through';
+
+    promoInput.value = '';
+    promoInput.placeholder = 'Promo code applied';
+    setTimeout(()=>{
+      promoInput.placeholder = 'Insert your promo code';
+    },1100);
+    getPromoCodesFromLS();
+  })
+
   
+  function getPromoCodesFromLS() {
+    if (JSON.parse(localStorage.cartSettings).promo.length > 0){
+      promoAppliedDiv.innerHTML='';
+      const promoArray: Array<string> = JSON.parse(localStorage.cartSettings).promo;
+      
+      promoArray.map(element => {
+        const promoItem = document.createElement('div');    
+        promoItem.classList.add('discount__item');
+        promoItem.id = `discount-${element}`
+        promoItem.innerHTML =`
+          <span>
+            <span class="discount__item_text">${PROMO_LIST[element][0]}</span>
+            <span class="discount__item_value">${PROMO_LIST[element][1]}%</span>            
+          </span>
+          <button class="discount__item_drop btn" id="drop-${element}">Drop</button>
+        `
+        promoAppliedDiv.append(promoItem);
+      })
+      promoAppliedWrapper.style.display = 'block';
+
+      // Handler of promo code drop buttons
+      const dropPromoFromApplied = function (this: HTMLButtonElement) {        
+        
+        const newCartSettings: ICartSettings = JSON.parse(localStorage.cartSettings);
+        localStorage.removeItem('cartSettings');
+        const id = this.id.slice(5);
+        newCartSettings.promo = newCartSettings.promo.filter(item => item !== id)
+        localStorage.setItem('cartSettings', JSON.stringify(newCartSettings));
+        // Switch reRender of Summary block
+        getPromoCodesFromLS()
+      }
+
+      const promoRemoveBtnList: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.discount__item_drop');
+      [...promoRemoveBtnList].map((btn: HTMLButtonElement) => {
+        btn.addEventListener('click', dropPromoFromApplied)
+      });
+      discountPrice.classList.add('_is-discount');
+      renderDiscountSumma(returnDiscountSumma());
+      
+    } else {
+      promoAppliedWrapper.style.display = 'none';
+      discountPrice.classList.remove('_is-discount');
+      if (summarySumma) summarySumma.style.textDecoration = 'none';
+      renderDiscountSumma(returnDiscountSumma());
+    }
+  }
+  getPromoCodesFromLS()
+
+
+  function renderDiscountSumma(sum: number) {
+    const cartSumCount = returnCurtSum();
+    const discountSumma = cartSumCount[0]*(100-sum)/100;
+    discountPrice.innerHTML = `Total: €${discountSumma}`;    
+  }
+
   returnCurtSum();
 
   //add handler for curt button "Buy now"
@@ -195,4 +326,8 @@ export const CurtComponent = async () => {
       modal.style.display = "flex";
   }
   
+
+  renderDiscountSumma(returnDiscountSumma());
 } 
+
+

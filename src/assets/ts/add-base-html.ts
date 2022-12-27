@@ -10,7 +10,7 @@ const baseHtml=  `
                   <!-- <h1>ONLINE STORE</h1> -->
               </div>
               <div class="header__total-curt">
-                  <p class="total-curt">Total: <span class="total-sum">0</span></p>
+                  <p class="total-curt">Total: €<span class="total-sum">0</span></p>
               </div>
               <div class="header__curt">                  
                   <a href="#/curt">

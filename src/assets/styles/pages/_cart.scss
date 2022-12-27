@@ -12,6 +12,7 @@
       width:75%;
       background-color : $color-background;
       border-radius: 1rem;
+      @include font(2rem, 1.2rem, 400);
 
 
       .cart__head {
@@ -109,18 +110,19 @@
       padding: 1rem;      
       background-color : $color-background;
       border-radius: 1rem;
+      @include font(2rem, 1.2rem, 400);
 
       .summary__head {
         position: relative;
         width: 100%;
-        margin: 1rem 0 1.5rem 0;
+        margin: 2.5rem 0 2.5rem 0;
       }
       .summary__head::before {
         position: absolute;
         content: '';
         height: 2px;
         width: 80%;
-        bottom: -1.4rem;
+        bottom: -3.3rem;
         left: calc( 50% - 40%);
         background-color: $color-border;
         border-radius: 1px;
@@ -129,9 +131,117 @@
       
 
       .summary__description{
+        width: 100%;
 
-        .summary__products_input{          
+        .summary__products_count,
+        .summary__products_summa{
+          color: $color-brand;
+        }
+
+        .summary__products_input{
+          width: 90%;       
           text-transform: lowercase;
+        }
+
+        .summary__products_discount{
+          visibility: hidden;
+          opacity: 0;
+          color: $color-error;
+          @extend %transition;
+        }
+        .summary__products_discount._is-discount{
+          visibility: visible;
+          opacity: 1;
+          color: $color-error;
+          @extend %transition;
+        }
+
+
+        .summary__promo{
+          
+
+          &_example{
+            margin: 0.2rem 0;
+            color: $color-border;
+            @include font(1.2rem, 1.2rem, 400);
+
+          }
+
+          &_find{
+            opacity: 0;
+            visibility: hidden;
+            @include font(1.4rem, 1.2rem, 400);           
+          }
+
+          .summary__applied{
+            display: none;
+            padding: 1rem;
+            border: solid 1px $color-border;            
+            border-radius: 1rem;
+            width: 100%;
+            @include font(1.4rem, 1.2rem, 400);
+
+
+            &_title{              
+              width: 100%;
+              margin: 0.5rem 0 1.5rem 0;
+              position: relative;
+
+            }
+            &_title::before{
+              position: absolute;
+              content: '';
+              height: 2px;
+              width: 80%;
+              bottom: -0.7rem;
+              left: calc( 50% - 40%);
+              background-color: $color-border;
+              border-radius: 1px;
+              @extend %transition;
+            }
+            
+            &_list{
+              width: 100%;
+
+              .discount__item{
+                position: relative;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 1rem 0;
+
+
+
+
+                &_drop{
+                  @include font(1.4rem, 1.2rem, 400);
+                }
+              }
+              .discount__item::before {
+                position: absolute;
+                content: '';
+                height: 1px;
+                width: 90%;
+                bottom: -0.55rem;
+                left: calc( 50% - 45%);
+                background-color: $color-border;
+                border-radius: 1px;
+                @extend %transition;
+              }
+            }
+
+          }
+
+        }
+        .summary__applied:hover{
+
+          & > .summary__applied_title::before{
+            height: 3px;       
+            width: 98%;        
+            left: calc( 50% - 49%);
+            background-color: $color-brand-opacity;
+            @extend %transition;
+          }
         }
 
         .summary__buy {
