@@ -10,9 +10,9 @@ import { zeroProduct,
    getSearchByInput,
    getAllFilters
     } from "../utilities/utilities"
-import { returnCurtSum } from "../utilities/cart-utilities";
+import { returnCurtSum } from "../utilities/cart-utilities"
 import {controlFromRange, controlToRange, updateSlider } from "../rangeAction"
-import { ICart } from "../interfaces/cart-interfaces";
+import { ICart } from "../interfaces/cart-interfaces"
 
 export let filteredArray: IProduct[] = zeroProduct;
 
