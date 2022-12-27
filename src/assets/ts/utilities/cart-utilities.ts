@@ -1,5 +1,6 @@
 import { ICart } from "../interfaces/cart-interfaces";
 import { totalCount, totalSum } from "../add-base-html";
+import { PROMO_LIST } from "../constants/constants";
 
 export function returnCurtSum(): Array<number> {
   const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList')));
@@ -10,12 +11,11 @@ export function returnCurtSum(): Array<number> {
       summa += element.price * element.count;
       count += element.count;
     });
-  }
-  console.log('returnCurtSum()', )         
+  }          
   if (totalSum) totalSum.innerHTML = `${summa}`;
   if (totalCount) totalCount.innerHTML = `${count}`;
   
-  return [summa, count]
+  return [summa, count];
 }
 
 
@@ -31,15 +31,14 @@ function reFreshCartList(id: number, count: number){
       return element;
     })
     .filter(element => element.count !== 0);
-    localStorage.setItem('cartList', JSON.stringify(newCartList));
-    console.log('reFreshCartList=', newCartList)
+    localStorage.setItem('cartList', JSON.stringify(newCartList));    
   }
   returnCurtSum();
 }
 
 
 export function changeCartProductCount(id: number, price:number, step: number, stock: number, countSpan: HTMLElement, summaSpan: HTMLElement): boolean {
-  console.log('id=', id, 'step=', step, 'stock=', stock)
+  //console.log('id=', id, 'step=', step, 'stock=', stock)
   let isDelete = false;
   const count = Number(countSpan.innerHTML) + step;
   const summa = count * price;
@@ -58,4 +57,14 @@ export function changeCartProductCount(id: number, price:number, step: number, s
   }
   reFreshCartList(id, count)
   return isDelete;
+}
+
+export function returnDiscountSumma():number {
+  let discountSum = 0;
+  const promoArray: Array<string> = JSON.parse(localStorage.cartSettings).promo;
+  promoArray.map(element => {
+    discountSum += PROMO_LIST[element][1];
+    return;
+  })
+  return discountSum;
 }

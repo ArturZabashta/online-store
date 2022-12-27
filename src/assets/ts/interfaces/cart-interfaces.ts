@@ -9,3 +9,7 @@ export interface ICartSettings {
   currPage: number,
   promo: Array<string>
 }
+
+export interface IPromo {
+  [key: string] : [string, number]
+}

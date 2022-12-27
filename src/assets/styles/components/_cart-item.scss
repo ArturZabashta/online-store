@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   position: relative;
+  @include font(2rem, 1.2rem, 400);
 
   &_position{
     display: flex;
@@ -16,8 +17,8 @@
 
   &_picture{
     display: block;
-    min-width: 12rem;
-    min-height: 12rem;
+    min-width: 17rem;
+    min-height: 17rem;
     border-radius: 0.7rem;
     margin: 0.5rem;
     background-size: cover;
@@ -32,15 +33,17 @@
     align-items: center;
     padding: 0;
     margin: 0;
+    gap: 0.5rem;
 
 
     &_title {
       margin: 0;
+      @include font(2.4rem, 2.4rem, 400);
     }
 
     &_description {
       margin: 0.5rem;
-      @include font(1.4rem, 2.4rem, 400);
+      @include font(1.7rem, 2.4rem, 400);
     }
 
     .item__properties {
@@ -56,6 +59,7 @@
     flex: 0 0 11rem;
     flex-direction: column;
     align-items: center;
+    gap: 1rem;
     
     .item__stock {
       margin: 0.5rem;
