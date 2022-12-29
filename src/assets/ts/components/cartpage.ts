@@ -299,6 +299,7 @@ export const CurtComponent = async () => {
         btn.addEventListener('click', dropPromoFromApplied)
       });
       discountPrice.classList.add('_is-discount');
+      if (summarySumma) summarySumma.style.textDecoration = 'line-through';
       renderDiscountSumma(returnDiscountSumma());
       
     } else {

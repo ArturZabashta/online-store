@@ -23,6 +23,7 @@ const PROMO_LIST: IPromo = {
   'rss': ['The RS School code', 10],
   'js': ['JavaScript code', 5],
   'ts': ['TypeScript code', 15],
+  'oop': ['OOP promo code', 10],
 }
 
 export { API_URL, ApiMethods, ApiStatus, PROMO_LIST };
