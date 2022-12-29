@@ -1,5 +1,6 @@
 
 import {returnOneProduct} from "../utilities/utilities"
+import { ICart } from "../interfaces/cart-interfaces"
 
 export const ItemComponent = async():Promise<void> => {
     const product = await returnOneProduct();
@@ -30,7 +31,7 @@ export const ItemComponent = async():Promise<void> => {
             <div class="product-details__info">
                 <div class="product-details__price">Price: <span>${product?.price}€</span></div>
                 <div class="product-details__buttons">
-                    <button class="item__addcurt btn">Drop from Cart</button>
+                    <button class="item__addcurt btn" id="btnadd"></button>
                     <button class="item__details btn" id="btnbuy">Buy now</button>  
                 </div>
                 <div class="product-details__features">
@@ -52,8 +53,77 @@ export const ItemComponent = async():Promise<void> => {
     `;
     checkImage(product?.images)
     // addAllImages(product?.images)
+    
     setQueryToURL()
     btnBuyHandler()
+
+    const btnAdd: HTMLInputElement = document.querySelector('#btnadd') as HTMLInputElement;
+
+    if(product)checkBtnName(product.id, product.price)
+    // if(product)btnAddHandler(product.id, product.price)
+
+    function checkBtnName(id: number, price: number){
+        const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
+        console.log(cartList)
+        if (cartList) {
+            const reNewCartLis = cartList.every((item)=> item.id !== id)
+            btnAdd.innerHTML = reNewCartLis? 'Add to Cart' : 'Drop from cart';
+    
+        }
+        btnAddHandler(id, price, cartList)
+    }
+
+    function btnAddHandler(id: number, price: number, cartList: Array<ICart>){
+        // const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList')));
+        // localStorage.removeItem('cartList');
+        if(btnAdd)btnAdd.onclick = function(){
+    
+            console.log(cartList)
+            // localStorage.removeItem('cartList');
+            const cartItem = {
+                    'id': id,
+                    'count': 1,
+                    'price': price
+                }
+    
+                if (btnAdd.innerHTML == 'Add to Cart') {
+                    btnAdd.innerHTML = 'Drop from cart'; 
+                    console.log('Add to Cart');
+
+                    if (cartList) {
+                        cartList.push(cartItem);
+                        // cartList = [...new Set(cartList)]
+                        const json_array = cartList.map(el => JSON.stringify(el));
+                        console.log(json_array)
+                        const set = new Set(json_array);
+                        const new_array = Array.from(set);
+                        console.log(new_array)
+                        
+                        localStorage.setItem('cartList', JSON.stringify(new_array))
+                        
+                        // console.log(cartList)
+                    }
+            
+                    return;
+                } 
+                
+                if (btnAdd.innerHTML == 'Drop from cart') {
+                    btnAdd.innerHTML = 'Add to Cart'; 
+                    console.log('Drop from cart');
+                    
+                    if (cartList) {
+                        const reNewCartLis = cartList.filter((item)=> item.id !== id)
+                        
+                        localStorage.setItem('cartList', JSON.stringify(reNewCartLis))
+                        console.log(reNewCartLis)
+                    }
+                    return;
+                }
+            // cartList.splice(0); 
+        
+        }
+        // cartList.splice(0); 
+    }
     
 }
 
@@ -130,3 +200,63 @@ function btnBuyHandler(){
         modal.style.display = "flex";
     }
 }
+
+// function checkBtnName(id: number, price: number){
+//     const btnAdd: HTMLInputElement = document.querySelector('#btnadd') as HTMLInputElement;
+//     const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
+//     console.log(cartList)
+//     if (cartList) {
+//         const reNewCartLis = cartList.every((item)=> item.id !== id)
+//         btnAdd.innerHTML = reNewCartLis? 'Add to Cart' : 'Drop from cart';
+
+//     }
+//     btnAddHandler(id,price)
+// }
+
+// function btnAddHandler(id: number, price: number){
+//     // localStorage.removeItem('cartList');
+//     const btnAdd: HTMLInputElement = document.querySelector('#btnadd') as HTMLInputElement;
+//     const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList')));
+//     if(btnAdd)btnAdd.onclick = function(){
+
+//         console.log(cartList)
+//         // localStorage.removeItem('cartList');
+//         const cartItem = {
+//                 'id': id,
+//                 'count': 1,
+//                 'price': price
+//             }
+
+//             if (btnAdd.innerHTML == 'Add to Cart') {
+                
+//                 btnAdd.innerHTML = 'Drop from cart'; 
+//                 console.log('Add to Cart');
+//                 if (cartList) {
+//                     cartList = [cartItem, ...cartList]
+//                     cartList.push(cartItem);
+//                     localStorage.setItem('cartList', JSON.stringify(cartList))
+//                     console.log(cartList)
+//                 }
+        
+//                 return;
+//             } 
+            
+//             if (btnAdd.innerHTML == 'Drop from cart') {
+//                 btnAdd.innerHTML = 'Add to Cart'; 
+//                 console.log('Drop from cart');
+                
+//                 if (cartList) {
+                
+//                 const reNewCartLis = cartList.filter((item)=> item.id !== id)
+//                 console.log("reNewCartLis",reNewCartLis)
+//                 localStorage.setItem('cartList', JSON.stringify(reNewCartLis))
+//                 }
+
+//                 console.log(cartList)
+//                 return;
+//             }
+        
+    
+//     }
+//     cartList.splice(0); 
+// }

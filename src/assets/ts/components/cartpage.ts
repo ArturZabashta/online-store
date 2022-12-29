@@ -318,5 +318,16 @@ export const CurtComponent = async () => {
   }
 
   returnCurtSum();
+
+  //add handler for curt button "Buy now"
+  const curtBtn: HTMLInputElement | null = document.querySelector('.summary__buy');
+  if(curtBtn)curtBtn.onclick = function(){
+      const modal: HTMLElement = document.querySelector('.modal') as HTMLElement;
+      modal.style.display = "flex";
+  }
+  
+
   renderDiscountSumma(returnDiscountSumma());
-  } 
+} 
+
+

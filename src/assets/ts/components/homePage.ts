@@ -10,9 +10,9 @@ import { zeroProduct,
    getSearchByInput,
    getAllFilters
     } from "../utilities/utilities"
-import { returnCurtSum } from "../utilities/cart-utilities";
+import { returnCurtSum } from "../utilities/cart-utilities"
 import {controlFromRange, controlToRange, updateSlider } from "../rangeAction"
-import { ICart } from "../interfaces/cart-interfaces";
+import { ICart } from "../interfaces/cart-interfaces"
 
 export let filteredArray: IProduct[] = zeroProduct;
 
@@ -151,7 +151,7 @@ export const HomeComponent = async():Promise<void> => {
         
         function listenerFunction(this: HTMLButtonElement) {
           const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
-          localStorage.removeItem('cartList');
+          // localStorage.removeItem('cartList');
           // handler of addToCart button
           const id = Number(this.id.slice(8));
           const cartItem = {
@@ -608,18 +608,13 @@ export const HomeComponent = async():Promise<void> => {
       btnDetails.addEventListener("click", function(e){
         const element = e.target as HTMLElement;
         const current = element.parentNode?.parentNode as HTMLElement;
-        // console.log(current.id )
         localStorage.setItem('currentId',current.id )
-        // location.href=`#/item-details/${el.id}`;
         location.href=`#/product-details`;
       })
   
     })
   }
   itemClickHandler()
-
-  
-  
-  
+ 
 }
 
