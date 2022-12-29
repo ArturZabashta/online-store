@@ -151,7 +151,7 @@ export const HomeComponent = async():Promise<void> => {
         
         function listenerFunction(this: HTMLButtonElement) {
           const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
-          localStorage.removeItem('cartList');
+          // localStorage.removeItem('cartList');
           // handler of addToCart button
           const id = Number(this.id.slice(8));
           const cartItem = {

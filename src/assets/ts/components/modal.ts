@@ -171,8 +171,6 @@ const modal: HTMLElement = document.querySelector('.modal') as HTMLElement;
         this.value += ' ';
     });
 
-
-
     //change bank logo
     function checkImageCart(symb: string): void{
         switch (symb) {
