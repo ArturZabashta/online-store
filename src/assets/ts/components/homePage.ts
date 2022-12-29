@@ -14,14 +14,14 @@ import { returnCurtSum } from "../utilities/cart-utilities"
 import {controlFromRange, controlToRange, updateSlider } from "../rangeAction"
 import { ICart } from "../interfaces/cart-interfaces"
 
-export let filteredArray: IProduct[] = zeroProduct;
 
 export const HomeComponent = async():Promise<void> => {
   const allProducts = await returnAllProducts();
   const allCategories = await returnAllCategories(); 
   const allBrands = await returnAllBrands();
   const copyAllProducts:IProduct[] = allProducts? Array.from(allProducts.products) : zeroProduct;
-  
+  let filteredArray: IProduct[] = zeroProduct;
+
   const main: HTMLElement | null = document.getElementById('app');
   (<HTMLElement>main).innerHTML  =`
     <div class="shop">
@@ -259,6 +259,7 @@ export const HomeComponent = async():Promise<void> => {
       filteredArray = getSearchByInput(filteredArray, searchValue)
       setSearchValue(searchValue);
     }
+    console.log('filteredArray after filtration', filteredArray)
     setQueryStringToURL();
     renderProductList(filteredArray);
     itemClickHandler()
@@ -269,13 +270,13 @@ export const HomeComponent = async():Promise<void> => {
 
 
   function getCategoryCount(category: string): number{
-    const filtered = filteredArray;
+    const filtered = [...filteredArray];
     const result = filtered.filter(item => (item.category).toLowerCase() === category);
     return result.length
   }
 
   function getBrandCount(brand: string): number{
-    const filtered = filteredArray;
+    const filtered = [...filteredArray];
     const result = filtered.filter(item => (item.brand).toLowerCase() === brand);
     return result.length
   }
@@ -335,10 +336,11 @@ export const HomeComponent = async():Promise<void> => {
   
   
   function updateRangesAfterFiltration() {
+    console.log('updateRangesAfterFiltration(), filteredArray =', filteredArray);
     const allPrice: number[] = [];
     const allStock: number[] = [];
 
-    if (filteredArray.length > 2) {
+    if (filteredArray.length >= 2) {
       filteredArray.forEach((item: IProduct) => {
       allPrice.push(item.price)
       allStock.push(item.stock)
@@ -371,6 +373,7 @@ export const HomeComponent = async():Promise<void> => {
     updateRange();
   }
   function resetRangesAfterFiltration() {
+    console.log('resetRangesAfterFiltration()');
     localStorage.removeItem('rangeArray');
     const allPrice: number[] = [];
     const allStock: number[] = [];
@@ -550,7 +553,8 @@ export const HomeComponent = async():Promise<void> => {
     getFilteredProductsList().then(()=> {
       updateBrandCountSpan();
       updateCategoryCountSpan();
-      (searchValue !== "")? updateRangesAfterFiltration(): resetRangesAfterFiltration();
+      resetRangesAfterFiltration();
+      updateRangesAfterFiltration();
     })
   })
 

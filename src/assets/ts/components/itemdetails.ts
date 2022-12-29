@@ -32,7 +32,7 @@ export const ItemComponent = async():Promise<void> => {
             <div class="product-details__info">
                 <div class="product-details__price">Price: <span>${product?.price}€</span></div>
                 <div class="product-details__buttons">
-                    <button class="item__addcurt btn" id="btnadd"></button>
+                    <button class="item__addcart btn" id="btnadd"></button>
                     <button class="item__details btn" id="btnbuy">Buy now</button>  
                 </div>
                 <div class="product-details__features">
@@ -116,7 +116,7 @@ export const ItemComponent = async():Promise<void> => {
     }
 
     /*
-    function btnAddHandler(id: number, price: number, oldcartList: Array<ICart>){
+    function btnAddHandler(id: number, price: number, cartList: Array<ICart>){
         const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList')));
         localStorage.removeItem('cartList');
         if(btnAdd)btnAdd.onclick = function(){

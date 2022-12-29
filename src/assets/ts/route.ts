@@ -1,8 +1,8 @@
 import {HomeComponent} from './components/homePage';
-import {CurtComponent} from './components/cartpage';
+import {CurtComponent} from './components/cartPage';
 import {ErrorComponent} from './components/errorPage';
-import {ItemComponent} from './components/itemdetails';
-import {IRoutes} from './interfaces/routeInterfaces'
+import {ItemComponent} from './components/itemDetails';
+import {IRoutes} from './interfaces/route-interfaces';
 
 const routes: IRoutes[] = [
     { path: '#/curt', component: CurtComponent, },
