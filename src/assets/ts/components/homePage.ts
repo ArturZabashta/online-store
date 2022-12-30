@@ -547,7 +547,7 @@ export const HomeComponent = async():Promise<void> => {
   }
   
   searchInput.addEventListener('input', () => {
-    const searchValue = searchInput.value   
+    const searchValue = searchInput.value;   
     if (searchValue !== "") localStorage.setItem('searchValue', JSON.stringify(searchValue))
     else localStorage.removeItem('searchValue');
     getFilteredProductsList().then(()=> {
@@ -575,7 +575,8 @@ export const HomeComponent = async():Promise<void> => {
     resetButton.addEventListener('click', () => {
       const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
       localStorage.clear();
-      localStorage.setItem('cartList', JSON.stringify(cartList))
+      localStorage.setItem('cartList', JSON.stringify(cartList));
+      searchInput.value = '';
 
       getFilteredProductsList().then(()=> {
         updateBrandCountSpan()
