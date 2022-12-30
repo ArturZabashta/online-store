@@ -1,9 +1,10 @@
 
-export const renderModal = () =>{ 
+export const renderModal = async() =>{ 
+    console.log(112)
 
     const modalPage = `
 
-    <div class="modal">
+    
         <div class="modal__wrapper">
             <form id="myform" action='#/'>
                 <fieldset class="modal__personal-info">
@@ -19,7 +20,7 @@ export const renderModal = () =>{
                         <span class="error card-phone">Error</span>
                     </div>
                     <div class="personal-info">
-                        <input type="text" id="card-address" pattern="^[a-zA-ZА-Яа-я]{5,}\\s[a-zA-ZА-Яа-я]{5,}\\s[a-zA-ZА-Яа-я]{5,}$" 
+                        <input type="text" id="card-address" pattern="^[a-zA-ZА-Яа-я0-9]{5,}\\s[a-zA-ZА-Яа-я0-9]{5,}\\s[a-zA-ZА-Яа-я0-9]{5,}$" 
                         placeholder="Dilivery adress" title="Dilivery adress should contain 3 words" required>
                         <span class="error card-address">Error</span>
                     </div>
@@ -34,14 +35,14 @@ export const renderModal = () =>{
                     <div class="bank-card">
                         <div class="card-back">
                             <div class="card-back__line"></div>
-                            <input type="text" id="card-cvv" placeholder="cvv" pattern="^(\\d{3})$" maxlength="3"
+                            <input type="number" id="card-cvv" placeholder="cvv" pattern="^(\\d{3})$" min='100'
                             title="cvv should only contain 3 numbers e.g  777" required>
                         </div>
                         <div class="card-front">
                             <input type="text" id="card-number" placeholder="Card number" pattern="^([0-9]{4}\\s[0-9]{4}\\s[0-9]{4}\\s[0-9]{4})$"
                                 title="should only contain numbers. e.g. 7777 7777 7777 7777" required >
                             <label for="card-monthYear" class="card-valid" >VALID</label>
-                            <input type="text" id="card-date" placeholder="MM/YY" pattern="^(0?[1-9]|1[12])\\/(22|23|24)$" maxlength="5"
+                            <input type="text" id="card-date" placeholder="MM/YY" pattern="^(0?[1-9]|1[12])\\/(23|24|25|26|27)$" maxlength="5"
                                 title="Date should only contain 4 numbers. e.g. 12/23" required>
                             <img class="card-logo" src="./assets/cardlogo.png" alt="visa">
                         </div>
@@ -58,12 +59,12 @@ export const renderModal = () =>{
                 </fieldset>
             </form>
         </div>
-    </div>    
+      
 `
 
 const myFragment = document.createRange().createContextualFragment(modalPage);
-const main: Element = document.querySelector('.main') as Element;
-main.appendChild(myFragment);
+const modal: HTMLElement = document.querySelector('.modal') as HTMLElement;
+modal.appendChild(myFragment);
 
 
 const cardName = <HTMLInputElement>document.querySelector('#card-name'); //name
@@ -76,7 +77,7 @@ const cardDate = <HTMLInputElement>document.querySelector('#card-date'); //date
 const btnConfirm = <HTMLButtonElement>document.querySelector('#confirm'); //button
 const myform = <HTMLFormElement>document.querySelector('#myform'); //form
 const imgForm = <HTMLFormElement>document.querySelector('.card-logo'); //image
-const modal: HTMLElement = document.querySelector('.modal') as HTMLElement;
+// const modal: HTMLElement = document.querySelector('.modal') as HTMLElement;
 
 
 //close modal and redirect on main page
@@ -87,11 +88,14 @@ const modal: HTMLElement = document.querySelector('.modal') as HTMLElement;
             <h3 class="modal__subtitle">Заказ оформлен</h3>
         </div>`
         setTimeout(() => {
+            modal.innerHTML = modalPage;
             modal.style.display = "none";
             cleanCurt()
             location.href=`#/`;
             return true
         }, 5000)
+
+
     }
 
     function cleanCurt(){
@@ -137,6 +141,11 @@ const modal: HTMLElement = document.querySelector('.modal') as HTMLElement;
     cvv.oninput = () => checkCVV(); 
     function checkCVV(){
         const err: HTMLElement | null = document.querySelector('.card-cvv');
+        // checkValidate(cvv,err)
+        const m = cvv.value.length+1;
+
+        if (m > 3 )
+        cvv.value= cvv.value.slice(0,3);
         checkValidate(cvv,err)
     }
 
@@ -192,8 +201,9 @@ const modal: HTMLElement = document.querySelector('.modal') as HTMLElement;
     }
 
     //change date form
-    cardDate.addEventListener('input', function() {
+    cardDate.addEventListener("keypress",function(e){
         const val:string = (`${this.value}`).replace('/', '') as string
+    if ( (e.key).charCodeAt(0) < 48 || (e.key).charCodeAt(0) > 57) e.returnValue= false;
     if(val.length>2) {
         this.value= '';
         this.value = val.slice(0,2)+ '/'+ val.slice(2,val.length);
