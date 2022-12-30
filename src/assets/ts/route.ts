@@ -1,7 +1,7 @@
 import {HomeComponent} from './components/homePage';
-import {CurtComponent} from './components/cartPage';
+import {CurtComponent} from './components/cartpage';
 import {ErrorComponent} from './components/errorPage';
-import {ItemComponent} from './components/itemDetails';
+import {ItemComponent} from './components/itemdetails';
 import {IRoutes} from './interfaces/route-interfaces';
 
 const routes: IRoutes[] = [

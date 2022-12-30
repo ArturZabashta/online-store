@@ -24,6 +24,7 @@ const baseHtml=  `
       <main class="main">
           <div id="app" class="wrapper">
           </div>
+          <div class="modal"></div>
           
       </main>
 
