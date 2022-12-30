@@ -336,7 +336,7 @@ export const HomeComponent = async():Promise<void> => {
   
   
   function updateRangesAfterFiltration() {
-    console.log('updateRangesAfterFiltration(), filteredArray =', filteredArray);
+    // console.log('updateRangesAfterFiltration(), filteredArray =', filteredArray);
     const allPrice: number[] = [];
     const allStock: number[] = [];
 
@@ -373,7 +373,7 @@ export const HomeComponent = async():Promise<void> => {
     updateRange();
   }
   function resetRangesAfterFiltration() {
-    console.log('resetRangesAfterFiltration()');
+    // console.log('resetRangesAfterFiltration()');
     localStorage.removeItem('rangeArray');
     const allPrice: number[] = [];
     const allStock: number[] = [];
@@ -405,7 +405,7 @@ export const HomeComponent = async():Promise<void> => {
     const rangeArray: Array<string> = []
     rangeArray.push(minPriceValue.innerHTML,maxPriceValue.innerHTML,minStockValue.innerHTML,maxStockValue.innerHTML)
     localStorage.setItem('rangeArray', JSON.stringify(rangeArray))
-    console.log('rangeArray from updateRange()',rangeArray)
+    // console.log('rangeArray from updateRange()',rangeArray)
     getFilteredProductsList().then(()=> {
       updateBrandCountSpan()
       updateCategoryCountSpan()

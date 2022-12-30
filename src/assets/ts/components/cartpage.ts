@@ -93,7 +93,12 @@ export const CurtComponent = async () => {
     const startElement = cartSettings.perPage*(cartSettings.currPage-1);
     const partOfCartList = cartList.splice(startElement, cartSettings.perPage)
 
-    renderCartProducts(partOfCartList, startElement )
+    renderCartProducts(partOfCartList, startElement);
+
+    // Set query parameters to URL
+    const currentItem: number = Number(localStorage.getItem('currentId')) as number;
+    const refresh = window.location.protocol + "//" + window.location.host + `#/cart`+ `?page=${cartSettings.currPage}&&limit=${cartSettings.perPage} `  ;  
+    window.history.pushState({ path: refresh }, '', refresh);
   }
   renderPagination();
 
@@ -360,4 +365,4 @@ export const CurtComponent = async () => {
   if (cartList.length == 0 ) main.innerHTML = `
     <div class="cart__empty"> There is no products in the cart </div>
   `
-} 
+}
