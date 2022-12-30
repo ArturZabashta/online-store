@@ -96,7 +96,7 @@ export const CurtComponent = async () => {
     renderCartProducts(partOfCartList, startElement);
 
     // Set query parameters to URL
-    const currentItem: number = Number(localStorage.getItem('currentId')) as number;
+    
     const refresh = window.location.protocol + "//" + window.location.host + `#/cart`+ `?page=${cartSettings.currPage}&&limit=${cartSettings.perPage} `  ;  
     window.history.pushState({ path: refresh }, '', refresh);
   }
@@ -362,7 +362,9 @@ export const CurtComponent = async () => {
 
   renderDiscountSumma(returnDiscountSumma());
 
-  if (cartList.length == 0 ) main.innerHTML = `
-    <div class="cart__empty"> There is no products in the cart </div>
-  `
+  if (cartList.length == 0 ) {
+    main.innerHTML = `<div class="cart__empty"> There is no products in the cart </div>`;
+    const refresh = window.location.protocol + "//" + window.location.host + `#/cart`;  
+    window.history.pushState({ path: refresh }, '', refresh);
+  }
 }
