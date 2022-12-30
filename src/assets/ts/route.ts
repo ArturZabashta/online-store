@@ -1,11 +1,11 @@
 import {HomeComponent} from './components/homePage';
-import {CurtComponent} from './components/cartpage';
+import {CurtComponent} from './components/cartPage';
 import {ErrorComponent} from './components/errorPage';
-import {ItemComponent} from './components/itemdetails';
+import {ItemComponent} from './components/itemDetails';
 import {IRoutes} from './interfaces/route-interfaces';
 
 const routes: IRoutes[] = [
-    { path: '#/curt', component: CurtComponent, },
+    { path: '#/cart', component: CurtComponent, },
     { path: '#/product-details', component: ItemComponent, },
     { path: '#/', component: HomeComponent, },
 ];
