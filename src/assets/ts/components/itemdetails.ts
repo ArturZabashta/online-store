@@ -2,7 +2,7 @@
 import {returnOneProduct} from "../utilities/utilities"
 import { ICart } from "../interfaces/cart-interfaces"
 import { returnCurtSum } from "../utilities/cart-utilities";
-import { renderModal } from "../components/modal";
+import { renderModal } from "./modal";
 
 export const ItemComponent = async():Promise<void> => {
     const product = await returnOneProduct();
