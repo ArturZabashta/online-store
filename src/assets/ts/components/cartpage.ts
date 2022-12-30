@@ -10,8 +10,8 @@ export const CurtComponent = async () => {
   const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
   const cartSumCount = returnCurtSum();
 
-  const main: HTMLElement | null = document.getElementById('app');
-  (<HTMLElement>main).innerHTML  =  `
+  const main = <HTMLElement>document.getElementById('app');
+  main.innerHTML  =  `
     <div class="cart">
       <section class="cart__products">
         <article class="cart__head">
@@ -60,8 +60,8 @@ export const CurtComponent = async () => {
   const currPageSpan =  <HTMLElement>document.querySelector('.cart__pages_current');
   const summaryCount: HTMLElement | null = document.querySelector('.summary__products_count');
   const summarySumma: HTMLElement | null = document.querySelector('.summary__products_summa');
-  const prevPageBtn = <HTMLElement>document.querySelector('.cart__pages_prev');
-  const nextPageBtn = <HTMLElement>document.querySelector('.cart__pages_next');
+  const prevPageBtn = <HTMLButtonElement>document.querySelector('.cart__pages_prev');
+  const nextPageBtn = <HTMLButtonElement>document.querySelector('.cart__pages_next');
 
   const promoInput = <HTMLInputElement>document.querySelector('.summary__products_input');
   const promoFindDiv = <HTMLElement>document.querySelector('.summary__promo_find');
@@ -96,6 +96,40 @@ export const CurtComponent = async () => {
     renderCartProducts(partOfCartList, startElement )
   }
   renderPagination();
+
+  prevPageBtn.addEventListener('click', setSaveCartPage)
+  nextPageBtn.addEventListener('click', setSaveCartPage)
+  // Switch prev/next page with products
+  function setSaveCartPage(this: HTMLButtonElement) {    
+    let step = 0;
+    if (this.innerHTML == '&lt;') step = -1;
+    if (this.innerHTML == '&gt;') step = 1;
+
+    const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];    
+    const newCartSettings: ICartSettings = JSON.parse(localStorage.cartSettings);
+    //localStorage.removeItem('cartSettings');    
+    
+    const perPage = newCartSettings.perPage;
+    const oldPage = newCartSettings.currPage;
+    let newPage = oldPage + step;
+    // console.log('newPage BEFORE', newPage);
+    // console.log(' (cartList.length/perPage)',  (cartList.length/perPage));
+    // console.log(' Math.ceil(cartList.length/perPage)',  Math.ceil(cartList.length/perPage));
+    if (newPage <= 1 ) newPage = 1;
+    if (newPage > 1 && newPage < Math.ceil(cartList.length/perPage)) {      
+      newPage = oldPage + step;
+    }
+    if (newPage == Math.ceil(cartList.length/perPage)) {      
+      newPage = Math.ceil(cartList.length/perPage);
+    }
+    if (newPage > Math.ceil(cartList.length/perPage)) {      
+      newPage = oldPage;
+    } 
+
+    newCartSettings.currPage = newPage;    
+    localStorage.setItem('cartSettings', JSON.stringify(newCartSettings));    
+    renderPagination();    
+  }
 
 
   
@@ -153,23 +187,37 @@ export const CurtComponent = async () => {
         const isDelete = changeCartProductCount(id, currentPrice, step, currentStock, currentCountSpan, currentSummaSpan);
         
         if (isDelete) {
-          renderPagination()
+          
+          renderPagination();
+          const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
+          const newCartSettings: ICartSettings = JSON.parse(localStorage.cartSettings);
+          const perPage = newCartSettings.perPage;
+
+          // Move to prev page if current page is empty
+          if (cartList.length/perPage + 1 == newCartSettings.currPage) {           
+          const bindSetSaveCartPage = setSaveCartPage.bind(prevPageBtn);
+          bindSetSaveCartPage()
+          }
+          
+          // Render empty cart
+          if (cartList.length == 0) CurtComponent();
         }
 
         const updatedSumCount = returnCurtSum();
         if (summarySumma) summarySumma.innerHTML = `€${updatedSumCount[0]}`;
         if (summaryCount) summaryCount.innerHTML = `${updatedSumCount[1]}`;        
         //getPromoCodesFromLS();
-        renderDiscountSumma(returnDiscountSumma());
+        //renderDiscountSumma(returnDiscountSumma());
       }
   }  
   renderPagination()
   
   
-  itemsPerPageInput.addEventListener('input', setNewCartPage)
+  itemsPerPageInput.addEventListener('input', setNewPertPageCount)
   // Set new count of  products per page
-  function setNewCartPage(this: HTMLInputElement) {    
+  function setNewPertPageCount(this: HTMLInputElement) {    
     const newPerPage = this.value;
+    if (Number(newPerPage) <= 0 ) return;
     const newCartSettings: ICartSettings = JSON.parse(localStorage.cartSettings);
     localStorage.removeItem('cartSettings');
     newCartSettings.perPage = Number(newPerPage);    
@@ -178,30 +226,10 @@ export const CurtComponent = async () => {
     renderPagination();
   }
 
-  prevPageBtn.addEventListener('click', setSaveCartPage)
-  nextPageBtn.addEventListener('click', setSaveCartPage)
-  // Switch prev/next page with products
-  function setSaveCartPage(this: HTMLButtonElement) {    
-    let step = 0;
-    if (this.innerHTML == '&lt;') step = -1;
-    if (this.innerHTML == '&gt;') step = 1;
-        
-    const newCartSettings: ICartSettings = JSON.parse(localStorage.cartSettings);
-    localStorage.removeItem('cartSettings');    
-    
-    const perPage = newCartSettings.perPage;
-    const oldPage = newCartSettings.currPage;
-    let newPage = oldPage + step;
-    
-    if (newPage < 1 ) newPage = 1;
-    if (newPage > Math.ceil(cartList.length/perPage)) newPage = Math.ceil(cartList.length/perPage);
+  
 
-    newCartSettings.currPage = newPage;
-    
-    localStorage.setItem('cartSettings', JSON.stringify(newCartSettings));
-    
-    renderPagination();
-  }
+
+  // Promo code logics
 
   promoInput.addEventListener('input', setPromoSearch);
   function setPromoSearch(this: HTMLInputElement) {    
@@ -227,8 +255,7 @@ export const CurtComponent = async () => {
       promoFindDiv.style.opacity = '0';
       promoAddBtn.disabled = true;
     }
-  }
-
+  }  
 
   promoAddBtn.addEventListener('click', ()=> {    
     const promoItem = document.createElement('div');    
@@ -329,6 +356,8 @@ export const CurtComponent = async () => {
   
 
   renderDiscountSumma(returnDiscountSumma());
+
+  if (cartList.length == 0 ) main.innerHTML = `
+    <div class="cart__empty"> There is no products in the cart </div>
+  `
 } 
-
-

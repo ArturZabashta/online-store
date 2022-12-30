@@ -162,7 +162,7 @@ export const HomeComponent = async():Promise<void> => {
           //console.log(this.innerHTML)
           if (this.innerHTML == 'Add to Cart') {
             this.innerHTML = 'Drop from cart'; 
-            console.log('Add to Cart');
+            //console.log('Add to Cart');
             if (cartList) {
               cartList.push(cartItem);
               
@@ -173,7 +173,7 @@ export const HomeComponent = async():Promise<void> => {
           }
           if (this.innerHTML == 'Drop from cart') {
             this.innerHTML = 'Add to Cart'; 
-            console.log('Drop from cart');
+            //console.log('Drop from cart');
             
             if (cartList) {
               
@@ -259,7 +259,7 @@ export const HomeComponent = async():Promise<void> => {
       filteredArray = getSearchByInput(filteredArray, searchValue)
       setSearchValue(searchValue);
     }
-    console.log('filteredArray after filtration', filteredArray)
+    //console.log('filteredArray after filtration', filteredArray)
     setQueryStringToURL();
     renderProductList(filteredArray);
     itemClickHandler()
@@ -302,7 +302,7 @@ export const HomeComponent = async():Promise<void> => {
 
  // Render of products Brands 
   async function renderBrandList() { 
-    console.log('filteredArray', filteredArray) 
+    //console.log('filteredArray', filteredArray) 
     if (brandsList) brandsList.innerHTML = '';
     for (const brand in allBrands) {    
       const count: number = getBrandCount(brand);  
