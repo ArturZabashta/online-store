@@ -162,7 +162,7 @@ export const HomeComponent = async():Promise<void> => {
           //console.log(this.innerHTML)
           if (this.innerHTML == 'Add to Cart') {
             this.innerHTML = 'Drop from cart'; 
-            console.log('Add to Cart');
+            //console.log('Add to Cart');
             if (cartList) {
               cartList.push(cartItem);
               
@@ -173,7 +173,7 @@ export const HomeComponent = async():Promise<void> => {
           }
           if (this.innerHTML == 'Drop from cart') {
             this.innerHTML = 'Add to Cart'; 
-            console.log('Drop from cart');
+            //console.log('Drop from cart');
             
             if (cartList) {
               
@@ -259,7 +259,7 @@ export const HomeComponent = async():Promise<void> => {
       filteredArray = getSearchByInput(filteredArray, searchValue)
       setSearchValue(searchValue);
     }
-    console.log('filteredArray after filtration', filteredArray)
+    //console.log('filteredArray after filtration', filteredArray)
     setQueryStringToURL();
     renderProductList(filteredArray);
     itemClickHandler()
@@ -302,7 +302,7 @@ export const HomeComponent = async():Promise<void> => {
 
  // Render of products Brands 
   async function renderBrandList() { 
-    console.log('filteredArray', filteredArray) 
+    //console.log('filteredArray', filteredArray) 
     if (brandsList) brandsList.innerHTML = '';
     for (const brand in allBrands) {    
       const count: number = getBrandCount(brand);  
@@ -336,7 +336,7 @@ export const HomeComponent = async():Promise<void> => {
   
   
   function updateRangesAfterFiltration() {
-    console.log('updateRangesAfterFiltration(), filteredArray =', filteredArray);
+    // console.log('updateRangesAfterFiltration(), filteredArray =', filteredArray);
     const allPrice: number[] = [];
     const allStock: number[] = [];
 
@@ -373,7 +373,7 @@ export const HomeComponent = async():Promise<void> => {
     updateRange();
   }
   function resetRangesAfterFiltration() {
-    console.log('resetRangesAfterFiltration()');
+    // console.log('resetRangesAfterFiltration()');
     localStorage.removeItem('rangeArray');
     const allPrice: number[] = [];
     const allStock: number[] = [];
@@ -405,7 +405,7 @@ export const HomeComponent = async():Promise<void> => {
     const rangeArray: Array<string> = []
     rangeArray.push(minPriceValue.innerHTML,maxPriceValue.innerHTML,minStockValue.innerHTML,maxStockValue.innerHTML)
     localStorage.setItem('rangeArray', JSON.stringify(rangeArray))
-    console.log('rangeArray from updateRange()',rangeArray)
+    // console.log('rangeArray from updateRange()',rangeArray)
     getFilteredProductsList().then(()=> {
       updateBrandCountSpan()
       updateCategoryCountSpan()
@@ -547,7 +547,7 @@ export const HomeComponent = async():Promise<void> => {
   }
   
   searchInput.addEventListener('input', () => {
-    const searchValue = searchInput.value   
+    const searchValue = searchInput.value;   
     if (searchValue !== "") localStorage.setItem('searchValue', JSON.stringify(searchValue))
     else localStorage.removeItem('searchValue');
     getFilteredProductsList().then(()=> {
@@ -575,7 +575,8 @@ export const HomeComponent = async():Promise<void> => {
     resetButton.addEventListener('click', () => {
       const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
       localStorage.clear();
-      localStorage.setItem('cartList', JSON.stringify(cartList))
+      localStorage.setItem('cartList', JSON.stringify(cartList));
+      searchInput.value = '';
 
       getFilteredProductsList().then(()=> {
         updateBrandCountSpan()
