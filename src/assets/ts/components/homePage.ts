@@ -238,13 +238,13 @@ export const HomeComponent = async():Promise<void> => {
       //localStorage.setItem('queryStr', JSON.stringify(queryStr))          
     }         
     //Add query parameters to URL  
-    const refresh = window.location.protocol + "//" + window.location.host + window.location.pathname + queryStr;    
+    const refresh = window.location.protocol + "//" + window.location.host + window.location.pathname + '#/shop' + queryStr;    
     window.history.pushState({ path: refresh }, '', refresh);
     return queryStr;
   }
 
   async function getFilteredProductsList(){
-    const [brandsArray, categoriesArray, rangeArray, sortName, searchValue, sizeItem] = [...getAllFilters()]
+    const [brandsArray, categoriesArray, rangeArray, sortName, searchValue] = [...getAllFilters()]
     // Make copy of all products data to do a filtration
     filteredArray = [...copyAllProducts]
     // Apply filters to array with all products

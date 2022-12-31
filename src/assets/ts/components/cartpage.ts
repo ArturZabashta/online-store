@@ -4,7 +4,7 @@ import { ICart, ICartSettings } from "../interfaces/cart-interfaces";
 import { returnCurtSum, changeCartProductCount, returnDiscountSumma } from "../utilities/cart-utilities";
 import { PROMO_LIST } from "../constants/constants";
 
-export const CurtComponent = async () => {
+export const CartComponent = async () => {
   const allProducts = await returnAllProducts();
   const copyAllProducts:IProduct[] = allProducts? Array.from(allProducts.products) : zeroProduct;
   const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
@@ -205,7 +205,7 @@ export const CurtComponent = async () => {
           }
           
           // Render empty cart
-          if (cartList.length == 0) CurtComponent();
+          if (cartList.length == 0) CartComponent();
         }
 
         const updatedSumCount = returnCurtSum();
