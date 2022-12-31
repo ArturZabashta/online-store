@@ -2,7 +2,7 @@
 import { returnOneProduct } from "../utilities/utilities"
 import { ICart } from "../interfaces/cart-interfaces"
 import { returnCurtSum } from "../utilities/cart-utilities";
-import { renderModal } from "./modal";
+//import { renderModal } from "./modal";
 
 export const ItemComponent = async():Promise<void> => {
     const product = await returnOneProduct();
@@ -11,7 +11,7 @@ export const ItemComponent = async():Promise<void> => {
     (<HTMLElement>main).innerHTML  =`
     <nav class="breadcrumb">
         <ul class="breadcrumb__list">
-            <li class="breadcrumb__text"><a href="#">Store</a></li>
+            <li class="breadcrumb__text"><a href="#/shop">Store</a></li>
             <li class="breadcrumb__symbol"></li>
             <li class="breadcrumb__text"><a>${product?.category}</a></li>
             <li class="breadcrumb__symbol"></li>
@@ -39,7 +39,7 @@ export const ItemComponent = async():Promise<void> => {
                 <div class="product-details__features">
                     <ul class="features">
                         <li class="feature">Description: <span>${product?.description}</span></li>
-                        <li class="feature">Discount Percentage:<span>${product?.discountPercentage}</span></li>
+                        <li class="feature">Discount Percentage:<span>${product?.discountPercentage}%</span></li>
                         <li class="feature">Rating: <span>${product?.rating}</span></li>
                         <li class="feature">Stock: <span>${product?.stock}</span></li>
                         <li class="feature">Brand: <span>${product?.brand}</span></li>
@@ -61,9 +61,9 @@ export const ItemComponent = async():Promise<void> => {
     const btnAdd: HTMLInputElement = document.querySelector('#btnadd') as HTMLInputElement;
     const btnBuy: HTMLInputElement = document.querySelector('#btnbuy') as HTMLInputElement;
 
-    if(product)checkBtnName(product.id, product.price)
+    if(product)checkBtnName(product.id)
 
-    function checkBtnName(id: number, price: number){
+    function checkBtnName(id: number){
         const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
         console.log(cartList)
         if (cartList) {
