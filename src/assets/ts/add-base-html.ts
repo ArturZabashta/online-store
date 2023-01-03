@@ -6,7 +6,7 @@ const baseHtml=  `
       <header class="header">
           <div class="wrapper header__wrapper">
               <div class="header__logo">
-                  <a href="#/"><img class="logo" src="./assets/logo2.svg" alt="logo"></a>
+                  <a href="#/shop"><img class="logo" src="./assets/logo2.svg" alt="logo"></a>
                   <!-- <h1>ONLINE STORE</h1> -->
               </div>
               <div class="header__total-curt">

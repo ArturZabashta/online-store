@@ -1,10 +1,7 @@
 
 export const renderModal = async() =>{ 
-    console.log(112)
-
+  
     const modalPage = `
-
-    
         <div class="modal__wrapper">
             <form id="myform" action='#/'>
                 <fieldset class="modal__personal-info">
@@ -85,7 +82,7 @@ const imgForm = <HTMLFormElement>document.querySelector('.card-logo'); //image
         e.preventDefault();
         modal.innerHTML=`
         <div class="modal__wrapper">
-            <h3 class="modal__subtitle">Заказ оформлен</h3>
+            <h3 class="modal__subtitle">The order has been placed</h3>
         </div>`
         setTimeout(() => {
             modal.innerHTML = modalPage;

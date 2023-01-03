@@ -10,7 +10,7 @@ export const ItemComponent = async():Promise<void> => {
     (<HTMLElement>main).innerHTML  =`
     <nav class="breadcrumb">
         <ul class="breadcrumb__list">
-            <li class="breadcrumb__text"><a href="#">Store</a></li>
+            <li class="breadcrumb__text"><a href="#/shop">Store</a></li>
             <li class="breadcrumb__symbol"></li>
             <li class="breadcrumb__text"><a>${product?.category}</a></li>
             <li class="breadcrumb__symbol"></li>
@@ -38,7 +38,7 @@ export const ItemComponent = async():Promise<void> => {
                 <div class="product-details__features">
                     <ul class="features">
                         <li class="feature">Description: <span>${product?.description}</span></li>
-                        <li class="feature">Discount Percentage:<span>${product?.discountPercentage}</span></li>
+                        <li class="feature">Discount Percentage:<span>${product?.discountPercentage}%</span></li>
                         <li class="feature">Rating: <span>${product?.rating}</span></li>
                         <li class="feature">Stock: <span>${product?.stock}</span></li>
                         <li class="feature">Brand: <span>${product?.brand}</span></li>
