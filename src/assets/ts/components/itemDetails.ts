@@ -64,7 +64,7 @@ export const ItemComponent = async():Promise<void> => {
 
     function checkBtnName(id: number){
         const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
-        console.log(cartList)
+        // console.log(cartList)
         if (cartList) {
             const reNewCartLis = cartList.every((item)=> item.id !== id)
             btnAdd.innerHTML = reNewCartLis? 'Add to Cart' : 'Drop from cart';
@@ -168,34 +168,28 @@ function addAllImages(images:string[] | undefined){
 // let imgSize: number[]
 
 function checkImage(images:string[] | undefined){
-    const imgSize: Array<number> =[]
-    // const imgArray:  Array<string> = []
+    const imgSize: Array<string> =[]
 
     if(images){
-        // console.log(images)
         images.map((image,i) =>{
-            const img = new Image();
-            img.src = image;
+            const url = image;
+            const req = new XMLHttpRequest();
+            req.open("GET", url, false);
+            req.send();
+            const size: string = req.getResponseHeader('content-length') as string;
 
-            // img.onload = function() {
-
-                if(imgSize.includes(img.height)){
-                    // console.log(false)
-                    images.splice(i, 1);
-                    // console.log(images) 
-
-                }else{
-                    // console.log(true)
-                    imgSize.push(img.height)
-                    // imgArray.push(image)
-                }
-            // }
+            if(imgSize.includes(size as string)){
+                images.splice(i, 1);
+            }else{
+                imgSize.push(size)
+            }
         })
         addAllImages(images)
     }
      
 
 }
+
 
 function setQueryToURL(){
         const currentItem: number = Number(localStorage.getItem('currentId')) as number;
