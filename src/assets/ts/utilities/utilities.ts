@@ -1,5 +1,6 @@
 import { IProducts, IProduct, AllBrands, AllCategories } from "../interfaces/api-interfaces";
 import httpClient from "../API/api"
+import { SizeOnlySource } from "webpack-sources";
 
 
 export const zeroProduct: Array<IProduct> = [
@@ -166,3 +167,4 @@ export async function returnOneProduct():  Promise<IProduct | undefined> {
   const productDetails = await httpClient.getOneProduct(currentItem);
   return productDetails;
 }
+
