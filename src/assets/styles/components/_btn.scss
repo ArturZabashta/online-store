@@ -16,5 +16,6 @@
     &:hover{
         background: $color-brand-opacity;
         color: $color-light;
+        @extend %transition;
     }
 }
