@@ -21,7 +21,7 @@ export const HomeComponent = async():Promise<void> => {
   const allBrands = await returnAllBrands();
   const copyAllProducts:IProduct[] = allProducts? Array.from(allProducts.products) : zeroProduct;
   let filteredArray: IProduct[] = zeroProduct;
-
+console.log(copyAllProducts)
   const main: HTMLElement | null = document.getElementById('app');
   (<HTMLElement>main).innerHTML  =`
     <div class="shop">
