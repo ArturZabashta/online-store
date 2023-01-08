@@ -1,6 +1,7 @@
 import { IProducts, IProduct, Categories } from '../interfaces/api-interfaces';
 import { API_URL, ApiMethods, ApiStatus } from '../constants/constants';
 
+
 class HTTPClient {
   
   async getAllProducts(): Promise<IProducts | undefined> {     
