@@ -111,9 +111,7 @@ export const HomeComponent = async():Promise<void> => {
       const item = document.createElement('div');
       item.classList.add('item')
       item.id = `${element.id}`;
-      // item.onclick = () => showItemdetails()
-      // item.href ="";
-      // item.style.backgroundImage = `url('${element.images[0]}`
+      
       const backgroundImage = `url('${element.images[0]}')`
       item.innerHTML = `
         <h3 class="item__title">${element.title}</h3>
@@ -151,7 +149,7 @@ export const HomeComponent = async():Promise<void> => {
         
         function listenerFunction(this: HTMLButtonElement) {
           const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];
-          // localStorage.removeItem('cartList');
+          
           // handler of addToCart button
           const id = Number(this.id.slice(8));
           const cartItem = {
@@ -159,10 +157,10 @@ export const HomeComponent = async():Promise<void> => {
           'count': 1,
           'price': copyAllProducts[id-1].price
         }
-          //console.log(this.innerHTML)
+          
           if (this.innerHTML == 'Add to Cart') {
             this.innerHTML = 'Drop from cart'; 
-            //console.log('Add to Cart');
+            
             if (cartList) {
               cartList.push(cartItem);
               
@@ -173,7 +171,7 @@ export const HomeComponent = async():Promise<void> => {
           }
           if (this.innerHTML == 'Drop from cart') {
             this.innerHTML = 'Add to Cart'; 
-            //console.log('Drop from cart');
+            
             
             if (cartList) {
               
@@ -183,7 +181,7 @@ export const HomeComponent = async():Promise<void> => {
             }
             return;
           }
-          console.log(this.id.slice(8))
+          
           cartList.splice(0); 
         }
       })
@@ -259,7 +257,7 @@ export const HomeComponent = async():Promise<void> => {
       filteredArray = getSearchByInput(filteredArray, searchValue)
       setSearchValue(searchValue);
     }
-    //console.log('filteredArray after filtration', filteredArray)
+    
     setQueryStringToURL();
     renderProductList(filteredArray);
     itemClickHandler()
@@ -302,7 +300,7 @@ export const HomeComponent = async():Promise<void> => {
 
  // Render of products Brands 
   async function renderBrandList() { 
-    //console.log('filteredArray', filteredArray) 
+     
     if (brandsList) brandsList.innerHTML = '';
     for (const brand in allBrands) {    
       const count: number = getBrandCount(brand);  
@@ -336,7 +334,7 @@ export const HomeComponent = async():Promise<void> => {
   
   
   function updateRangesAfterFiltration() {
-    // console.log('updateRangesAfterFiltration(), filteredArray =', filteredArray);
+    
     const allPrice: number[] = [];
     const allStock: number[] = [];
 
@@ -373,7 +371,7 @@ export const HomeComponent = async():Promise<void> => {
     updateRange();
   }
   function resetRangesAfterFiltration() {
-    // console.log('resetRangesAfterFiltration()');
+    
     localStorage.removeItem('rangeArray');
     const allPrice: number[] = [];
     const allStock: number[] = [];
@@ -405,7 +403,7 @@ export const HomeComponent = async():Promise<void> => {
     const rangeArray: Array<string> = []
     rangeArray.push(minPriceValue.innerHTML,maxPriceValue.innerHTML,minStockValue.innerHTML,maxStockValue.innerHTML)
     localStorage.setItem('rangeArray', JSON.stringify(rangeArray))
-    // console.log('rangeArray from updateRange()',rangeArray)
+    
     getFilteredProductsList().then(()=> {
       updateBrandCountSpan()
       updateCategoryCountSpan()
@@ -416,7 +414,7 @@ export const HomeComponent = async():Promise<void> => {
 
   const checkLocalRangeArray = (arrName:string):void =>{
     const localArr: Array<string> = JSON.parse(String(localStorage.getItem(arrName)));
-    // console.log(localArr);
+    
     if(localArr){
       [minPriceValue.innerHTML,maxPriceValue.innerHTML,minStockValue.innerHTML,maxStockValue.innerHTML] = [...localArr];
       updateSlider(minPriceValue.innerHTML, maxPriceValue.innerHTML, minRangePrice, maxRangePrice)
@@ -456,7 +454,7 @@ export const HomeComponent = async():Promise<void> => {
     const categoriesArray: Array<string> = []
     Array.from(categoriesInput).map(el => {if(el.checked) categoriesArray.push(el.id) })
     localStorage.setItem('categoriesArray', JSON.stringify(categoriesArray))
-    // console.log('categoriesArray',categoriesArray)
+    
     getFilteredProductsList().then(()=> {
       updateBrandCountSpan()
       updateCategoryCountSpan()
@@ -473,7 +471,7 @@ export const HomeComponent = async():Promise<void> => {
     const brandsArray: Array<string> = []
     Array.from(brandsInput).map(el => {if(el.checked) brandsArray.push(el.id)})
     localStorage.setItem('brandsArray', JSON.stringify(brandsArray))
-    // console.log('brandsArray',brandsArray)
+    
     getFilteredProductsList().then(()=> {
       updateBrandCountSpan()
       updateCategoryCountSpan()
@@ -486,7 +484,7 @@ export const HomeComponent = async():Promise<void> => {
   //
   const checkLocalCheckboxArr = (arrName:string):void =>{
     const localArr: Array<string> | null =JSON.parse(localStorage.getItem(arrName) as string);
-    //console.log(localArr)
+    
     if (localArr) localArr.map(el => {
         const element: HTMLElement | null = document.getElementById(`${el}`)
         if(element) element.setAttribute('checked', 'checked');
@@ -496,7 +494,7 @@ export const HomeComponent = async():Promise<void> => {
   checkLocalCheckboxArr('brandsArray');
 
 
-  //lisener size items
+  //listener size items
   function listenSizeItem(){
     const size:string | null = localStorage.getItem('sizeItem');
     const itemShort: HTMLElement | null = document.querySelector('.shop__view_short');
@@ -594,8 +592,7 @@ export const HomeComponent = async():Promise<void> => {
       copyButton.innerHTML = 'Copying';
       copyButton.classList.add('__copying');
       const queryStr = setQueryStringToURL();
-      localStorage.setItem('queryStr', JSON.stringify(queryStr))
-      console.log('save queryStr', queryStr);
+      localStorage.setItem('queryStr', JSON.stringify(queryStr))      
       setTimeout(()=>{
         copyButton.innerHTML = 'Copy Lynk'
         copyButton.classList.remove('__copying');

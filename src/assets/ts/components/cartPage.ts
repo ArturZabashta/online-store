@@ -112,14 +112,11 @@ export const CartComponent = async () => {
 
     const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList'))) || [];    
     const newCartSettings: ICartSettings = JSON.parse(localStorage.cartSettings);
-    //localStorage.removeItem('cartSettings');    
-    
+        
     const perPage = newCartSettings.perPage;
     const oldPage = newCartSettings.currPage;
     let newPage = oldPage + step;
-    // console.log('newPage BEFORE', newPage);
-    // console.log(' (cartList.length/perPage)',  (cartList.length/perPage));
-    // console.log(' Math.ceil(cartList.length/perPage)',  Math.ceil(cartList.length/perPage));
+   
     if (newPage <= 1 ) newPage = 1;
     if (newPage > 1 && newPage < Math.ceil(cartList.length/perPage)) {      
       newPage = oldPage + step;
@@ -211,8 +208,7 @@ export const CartComponent = async () => {
         const updatedSumCount = returnCurtSum();
         if (summarySumma) summarySumma.innerHTML = `€${updatedSumCount[0]}`;
         if (summaryCount) summaryCount.innerHTML = `${updatedSumCount[1]}`;        
-        //getPromoCodesFromLS();
-        //renderDiscountSumma(returnDiscountSumma());
+        renderDiscountSumma(returnDiscountSumma());
       }
   }  
   renderPagination()
@@ -229,10 +225,8 @@ export const CartComponent = async () => {
     localStorage.setItem('cartSettings', JSON.stringify(newCartSettings));
     
     renderPagination();
-  }
-
+  } 
   
-
 
   // Promo code logics
 
