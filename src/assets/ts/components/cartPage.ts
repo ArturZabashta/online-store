@@ -3,6 +3,7 @@ import { IProduct } from "../interfaces/api-interfaces";
 import { ICart, ICartSettings } from "../interfaces/cart-interfaces";
 import { returnCurtSum, changeCartProductCount, returnDiscountSumma } from "../utilities/cart-utilities";
 import { PROMO_LIST } from "../constants/constants";
+import { renderModal } from "../components/modal";
 
 export const CartComponent = async () => {
   const allProducts = await returnAllProducts();
@@ -349,6 +350,7 @@ export const CartComponent = async () => {
   //add handler for curt button "Buy now"
   const curtBtn: HTMLInputElement | null = document.querySelector('.summary__buy');
   if(curtBtn)curtBtn.onclick = function(){
+      renderModal()
       const modal: HTMLElement = document.querySelector('.modal') as HTMLElement;
       modal.style.display = "flex";
   }

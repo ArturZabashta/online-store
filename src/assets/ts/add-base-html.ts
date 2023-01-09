@@ -1,5 +1,4 @@
 import './route.ts'
-import {renderModal} from "./components/modal"
 
 const baseHtml=  `
   <div id="root" class="root">
@@ -45,7 +44,6 @@ const myFragment = document.createRange().createContextualFragment(baseHtml);
 
 document.body.appendChild(myFragment);
 
-renderModal()
 
 export const totalSum = document.querySelector('.total-sum');
 export const totalCount = document.querySelector('.total-count')

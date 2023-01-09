@@ -3,7 +3,7 @@ export const renderModal = async() =>{
   
     const modalPage = `
         <div class="modal__wrapper">
-            <form id="myform" action='#/'>
+            <form id="myform" >
                 <fieldset class="modal__personal-info">
                     <h3 class="modal__subtitle">Personal details</h3>
                     <div class="personal-info">
@@ -85,10 +85,10 @@ const imgForm = <HTMLFormElement>document.querySelector('.card-logo'); //image
             <h3 class="modal__subtitle">The order has been placed</h3>
         </div>`
         setTimeout(() => {
-            modal.innerHTML = modalPage;
+            modal.innerHTML = '';
             modal.style.display = "none";
             cleanCurt()
-            location.href=`#/`;
+            location.href=`#/shop`;
             return true
         }, 5000)
 

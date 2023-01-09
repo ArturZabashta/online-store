@@ -2,6 +2,7 @@
 import { returnOneProduct } from "../utilities/utilities"
 import { ICart } from "../interfaces/cart-interfaces"
 import { returnCurtSum } from "../utilities/cart-utilities";
+import { renderModal } from "../components/modal";
 
 export const ItemComponent = async():Promise<void> => {
     const product = await returnOneProduct();
@@ -126,8 +127,8 @@ export const ItemComponent = async():Promise<void> => {
               returnCurtSum();
             }
         }
-        location.href=`#/curt`;
-
+        location.href=`#/cart`;
+        renderModal();
         const modal: HTMLElement | null = document.querySelector('.modal') as HTMLElement;
         modal.style.display = "flex";
     }
