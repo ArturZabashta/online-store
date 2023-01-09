@@ -8,6 +8,13 @@
         height: 10rem;
         overflow: auto;
       }
+
+      .select {
+        overflow: overlay;
+      }
+      .select::-webkit-scrollbar {
+        display: none;
+      }
       
       label {
         display: block;
@@ -21,3 +28,4 @@
       
       }
 }
+
