@@ -139,7 +139,7 @@ export const ItemComponent = async():Promise<void> => {
 }
 
 //add and listen images
-function addAllImages(images:string[] | undefined){
+export function addAllImages(images:string[] | undefined){
     // console.log(images)
     const smallImages = document.querySelector('.small-images')
     const bigImage = document.querySelector('.big-image')
@@ -161,13 +161,14 @@ function addAllImages(images:string[] | undefined){
             }
         })
     }
+
 }
 
 
 
 // let imgSize: number[]
 
-function checkImage(images:string[] | undefined){
+export function checkImage(images:string[] | undefined){
     const imgSize: Array<string> =[]
 
     if(images){
@@ -186,8 +187,7 @@ function checkImage(images:string[] | undefined){
         })
         addAllImages(images)
     }
-     
-
+    return images;
 }
 
 
