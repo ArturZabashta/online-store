@@ -80,7 +80,7 @@ export const HomeComponent = async():Promise<void> => {
           <input class="shop__head_search" type="text" placeholder="Search product">
           <div class="shop__view">
             <button class="shop__view_short btn" >SHORT</button>
-            <button class="shop__view_full btn" >FULL</button>
+            <button class="shop__view_full btn btn__activated " >FULL</button>
           </div>
         </article>
         <article class="shop__list"></article>
