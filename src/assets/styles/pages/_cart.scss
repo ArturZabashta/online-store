@@ -11,14 +11,9 @@
       padding: 1rem;
       width:75%;
       background-color : $color-background;
-      border-radius: 1rem;
-      @include font(2.5rem, 1.2rem, 400);
-      @include media-laptop{
-        @include font(2rem, 2rem, 400);
-        
-      }
-      @include media-tablet{
-        @include font(1.4rem, 2rem, 400);
+      border-radius: 0.1rem;
+      box-shadow: 0 0px 4px rgb(0 0 0 / 25%);     
+      @include media-tablet{        
         width:55%;
       }
 
@@ -29,12 +24,22 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1.5rem;
+        @include font(2.2rem, 1.2rem, 400);
+        @include media-laptop{
+          @include font(1.8rem, 1.2rem, 400);
+          //width:45%;
+        }
         @include media-tablet{
           flex-direction: column;
         }
 
         &_title{
           margin: 0;
+          @include font(2.5rem, 2.5rem, 400);
+          @include media-laptop{
+            @include font(2rem, 2rem, 400);
+            
+          }
         }
 
 
@@ -54,7 +59,7 @@
            width: 3rem;
            height: 3.1rem;
            padding: 0;
-           @include font(2rem, 2.4rem, 400);
+           
            text-align: center;
           }
           &_per-page::-webkit-outer-spin-button,
@@ -70,7 +75,7 @@
             justify-content: center;
             align-items: center;
             margin-left: 1rem;
-            @include font(2rem, 2.4rem, 400);
+            
 
             &_current{
               width: 3rem;
@@ -121,10 +126,11 @@
       width:30%;
       padding: 1rem;      
       background-color : $color-background;
-      border-radius: 1rem;
-      @include font(2.5rem, 1.2rem, 400);
+      border-radius: 0.1rem;
+      box-shadow: 0 0px 4px rgb(0 0 0 / 25%);
+      @include font(2.2rem, 1.2rem, 400);
       @include media-laptop{
-        @include font(2rem, 1.2rem, 400);
+        @include font(1.8rem, 1.2rem, 400);
         //width:45%;
       }
       @include media-tablet{
@@ -137,31 +143,42 @@
         justify-content: center;
         align-items: center;
         position: relative;
+        top: 1.3rem;
         width: 100%;
-        margin: 2.5rem 0 2.5rem 0;
-        @include media-tablet{  
-          @include font(2.2rem, 2rem, 400);        
-          height: 3.3rem;
-        }
+        margin: 0.5rem 0 0.5rem 0;
+        @include font(2.5rem, 2.5rem, 400);
+          @include media-laptop{
+            @include font(2rem, 2rem, 400);
+            margin: 0.4rem 0 0.4rem 0;
+            top: 1rem;        
+          }
+          @include media-tablet{
+            margin: 2rem 0 2rem 0;
+            top: 0.3rem;             
+          }
       }
       .summary__head::before {
         position: absolute;
         content: '';
         height: 2px;
         width: 80%;
-        bottom: -3.3rem;
+        bottom: -2.2rem;
         left: calc( 50% - 40%);
         background-color: $color-border;
         border-radius: 1px;
         @extend %transition;
+        bottom: -2.2rem;
+        @include media-tablet{
+          bottom: -3.2rem;            
+        }
       }
       
 
       .summary__description{
         width: 100%;
+        margin-top: 2rem;
         @include media-tablet{  
-          @include font(1.6rem, 1.2rem, 400);        
-          
+          @include font(1.6rem, 1.2rem, 400);          
         }
 
         .summary__products_count,
@@ -172,10 +189,12 @@
         .summary__products_input{
           width: 90%;       
           text-transform: lowercase;
-          @include font(2rem, 1.2rem, 400);
+          @include font(1.8rem, 1.2rem, 400);
+          @include media-laptop{  
+            @include font(1.6rem, 1.2rem, 400);
+          }
           @include media-tablet{  
-            @include font(1.4rem, 1.2rem, 400);        
-            
+            @include font(1.4rem, 1.2rem, 400);
           }
         }
 

@@ -4,9 +4,9 @@
   position: relative;
   text-align: center;
   margin-bottom: 2rem;
-  @include font(2.5rem, 1.2rem, 400);
+  @include font(2.2rem, 1.2rem, 400);
   @include media-laptop{
-    @include font(2rem, 2rem, 400);
+    @include font(1.8rem, 2rem, 400);
     
   }
   @include media-tablet{
@@ -33,12 +33,12 @@
   &_picture{
     display: block;
     min-width: 17rem;
-    min-height: 17rem;
-    border-radius: 0.7rem;
+    min-height: 17rem;    
     margin: 0.7rem;
     background-size: cover;
     background-position: top;
     background-repeat: no-repeat;
+    box-shadow: 0 0 10px #009789;
   }
 
   .item__info {

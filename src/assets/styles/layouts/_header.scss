@@ -20,9 +20,13 @@
         }
     }
 
+    &__total-curt{
+      @include font(1.8rem, 2.4rem, 400);
+    }
+
     &__curt{
       position: relative;
-
+      
         .total-count{
           position: absolute;
           top: 0.4rem;
