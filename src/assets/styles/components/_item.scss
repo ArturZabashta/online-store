@@ -7,6 +7,10 @@
     padding: 1rem;
     box-shadow: 0 0px 4px rgb(0 0 0 / 25%);
 
+    @include media-laptop{
+        width: 250px;
+        height: 300px;
+    }
 
     &__title{
         margin: 0 0 1rem;
@@ -41,6 +45,11 @@
         background-size: cover;
         background-repeat: no-repeat;
         margin: auto;
+
+        @include media-laptop{
+            width: 150px;
+            height: 150px;
+        }
     }
     .image-short{
         width: 200px;
@@ -68,6 +77,10 @@
         left: 0;
         width: 60%;
         height: 25%;
+
+        @include media-laptop{
+            width: 50%;
+        }
         p{
             margin: .1rem auto;
             font-family: 'Jura', sans-serif;

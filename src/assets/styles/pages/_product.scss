@@ -20,8 +20,9 @@
         text-align: center;
         font-family: 'Jura', sans-serif;
         @include font(2.4rem, 5.4rem, 600);
+        
         @include media-laptop{
-            @include font(2, 2.4rem, 600);
+            @include font(1.6, 2.4rem, 600);
         }
     }
 
