@@ -144,9 +144,7 @@ const imgForm = <HTMLFormElement>document.querySelector('.card-logo'); //image
         if (m > 3 )
         cvv.value= cvv.value.slice(0,3);
         checkValidate(cvv,err)
-    }
-
-    module.exports = checkCVV;
+    }    
 
     cardNumber.oninput = () => checkCardNumber(); 
     function checkCardNumber(){
