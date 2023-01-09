@@ -138,7 +138,7 @@ const imgForm = <HTMLFormElement>document.querySelector('.card-logo'); //image
     cvv.oninput = () => checkCVV(); 
     function checkCVV(){
         const err: HTMLElement | null = document.querySelector('.card-cvv');
-        // checkValidate(cvv,err)
+        
         const m = cvv.value.length+1;
 
         if (m > 3 )

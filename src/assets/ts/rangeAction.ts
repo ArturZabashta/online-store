@@ -27,7 +27,7 @@ export function updateSlider(min: string, max: string, minSlider: HTMLInputEleme
 function updatePrice(min: HTMLElement, max: HTMLElement, minSlider: HTMLInputElement, maxSlider: HTMLInputElement): void {
     const minPrice = minPriceG;
     const maxPrice = maxPriceG;
-    // console.log(minPriceG,maxPriceG)
+    
     min.textContent = `€${Math.floor((maxPrice - minPrice) * (Number(minSlider.value)) / 100 + minPrice)}` ;
     max.textContent   = `€${Math.floor((maxPrice - minPrice) * (Number(maxSlider.value)) / 100 + minPrice)}`;
   }
