@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "D": "^1.0.0",
+    "node-fetch": "^3.3.0",
     "sass": "^1.56.2",
     "sass-loader": "^13.2.0"
   }
