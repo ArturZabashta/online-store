@@ -58,9 +58,13 @@
           &_per-page {
            width: 3rem;
            height: 3.1rem;
-           padding: 0;
-           
+           padding: 0;           
            text-align: center;
+           @include font(2.2rem, 2.5rem, 400);
+            @include media-laptop{
+              @include font(1.8rem, 2rem, 400);
+              
+            }
           }
           &_per-page::-webkit-outer-spin-button,
           &_per-page::-webkit-inner-spin-button {
