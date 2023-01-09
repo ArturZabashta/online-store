@@ -4,6 +4,10 @@
     height: 80vh;
     gap: 2%;
 
+    @include media-laptop{
+        padding: 2rem 0;
+    }
+
     &__filters{
         display: flex;
         flex-direction: column;
