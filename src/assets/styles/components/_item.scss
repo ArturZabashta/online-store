@@ -34,6 +34,8 @@
         top: 10%;
         right: 2%;
         color: red;
+        background-color: $color-brand-opacity;
+        box-shadow: 0 0 10px #009789;
         span{
             color: red;
         }
@@ -72,11 +74,13 @@
         position: absolute;
         flex-direction: column;
         color: $color-light;
-        background-color: $color-brand;
-        top: 55%;
+        background-color: $color-brand-opacity;
+        box-shadow: 0 0 10px #009789;
+        top: 53%;
         left: 0;
-        width: 60%;
-        height: 25%;
+        width: 55%;
+        height: 30%;
+        padding: 1rem;
 
         @include media-laptop{
             width: 50%;
