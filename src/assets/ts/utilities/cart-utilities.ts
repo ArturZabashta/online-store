@@ -19,7 +19,7 @@ export function returnCurtSum(): Array<number> {
 }
 
 
-function reFreshCartList(id: number, count: number){
+export function reFreshCartList(id: number, count: number){
   const cartList: Array<ICart> = JSON.parse(String(localStorage.getItem('cartList')));
   localStorage.removeItem('cartList')
   if (cartList && cartList.length > 0) {
