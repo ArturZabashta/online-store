@@ -2,17 +2,27 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    @include media-laptop{
+        gap: .5rem;
+    }
 
  .feature{
     list-style-type: none;
     font-family: 'Jura', sans-serif;
     @include font(1.8rem, 2.4rem, 600);
     color: $color-brand;
+    @include media-laptop{
+        @include font(1.6rem, 2rem, 600);
+    }
 
     span{
         color: $color-text;
         margin-left: 2rem;
         @include font(1.6rem, 2.4rem, 400);
+
+        @include media-laptop{
+            @include font(1.4rem, 2rem, 400);
+        }
     }
 
  }
