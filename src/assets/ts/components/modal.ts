@@ -210,6 +210,7 @@ const imgForm = <HTMLFormElement>document.querySelector('.card-logo'); //image
     modal.addEventListener('click', (e) =>{
         const tearget:HTMLElement = e.target as HTMLElement;
         if (tearget.classList[0] === 'modal'){
+            modal.innerHTML = '';
             modal.style.display = "none";
         }
     })
