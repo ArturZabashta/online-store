@@ -1,9 +1,8 @@
 .shop__head {
   position: fixed;
-  // top: 11vh;
   display: flex;
-  width: 65%;
-  justify-content: space-between;  
+  width: 60%;
+  justify-content: space-around;  
 
   @include media-laptop{
     width: 65%;
