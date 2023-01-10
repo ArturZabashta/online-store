@@ -592,7 +592,17 @@ export const HomeComponent = async():Promise<void> => {
       copyButton.innerHTML = 'Copying';
       copyButton.classList.add('__copying');
       const queryStr = setQueryStringToURL();
-      localStorage.setItem('queryStr', JSON.stringify(queryStr))      
+      localStorage.setItem('queryStr', JSON.stringify(queryStr));
+
+      const refresh = window.location.protocol + "//" + window.location.host + window.location.pathname + '#/shop' + queryStr;
+      navigator.clipboard.writeText(refresh)
+      .then(data => {
+        return data;
+      })
+      .catch(err => {
+        console.warn('Something went wrong', err);
+      });
+
       setTimeout(()=>{
         copyButton.innerHTML = 'Copy Lynk'
         copyButton.classList.remove('__copying');
