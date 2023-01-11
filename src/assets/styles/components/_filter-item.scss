@@ -1,0 +1,31 @@
+.filter-item{
+    // display: flex;
+    margin: 1rem 0;
+    background-color: #fff;
+
+    .select {
+        padding: 10px 0;
+        height: 10rem;
+        overflow: auto;
+      }
+
+      .select {
+        overflow: overlay;
+      }
+      .select::-webkit-scrollbar {
+        display: none;
+      }
+      
+      label {
+        display: block;
+        cursor: pointer;
+        margin-bottom: 5px;
+
+        
+        @include media-laptop{
+          @include font(1.4rem, 2rem, 400);
+      }
+      
+      }
+}
+

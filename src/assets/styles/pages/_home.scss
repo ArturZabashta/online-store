@@ -1,0 +1,31 @@
+.shop{
+    display: flex;
+    padding: 2rem;
+    height: 84vh;
+    gap: 2%;
+
+    @include media-laptop{
+        padding: 2rem 0;
+    }
+
+    &__filters{
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        width:30%;
+        background-color : $color-background;
+    }
+    &__wrapper{
+        display: flex;
+        //justify-content: center;
+        flex-direction: column;
+        width:70%;
+        // background-color: #f5f5f5;
+        margin-top: 0.1vh;
+        padding: 2rem;
+        //flex-wrap: wrap;
+        overflow: overlay;
+        gap: 1rem;
+        
+    }
+}

@@ -1,0 +1,114 @@
+.item{
+    position: relative;
+    width: 270px;
+    height: 400px;
+    background-color: $color-light;
+    border: 1px solid $color-background;
+    padding: 1rem;
+    box-shadow: 0 0px 4px rgb(0 0 0 / 25%);
+
+    @include media-laptop{
+        width: 250px;
+        height: 300px;
+    }
+
+    &__title{
+        margin: 0 0 1rem;
+        text-align: center;
+        max-height: 2.5rem;
+        overflow: hidden;
+    }
+
+    .title-short{
+        margin: 0;
+    }
+
+    &__price{
+        text-align: end;
+        span{
+            color: $color-brand;
+        }
+    }
+    .price-short{
+        position: absolute;
+        top: 10%;
+        right: 2%;
+        color: red;
+        background-color: $color-brand-opacity;
+        box-shadow: 0 0 10px #009789;
+        span{
+            color: red;
+        }
+    }
+
+    &__image{
+        width: 250px;
+        height: 250px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        margin: auto;
+
+        @include media-laptop{
+            width: 150px;
+            height: 150px;
+        }
+    }
+    .image-short{
+        width: 200px;
+        height: 200px;
+    }
+
+    &__buttons{
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .buttons-short{
+        position: absolute;
+        display: flex;
+        top: 85%;
+        left: 10%;
+    }
+
+    &__settings{
+        position: absolute;
+        flex-direction: column;
+        color: $color-light;
+        background-color: $color-brand-opacity;
+        box-shadow: 0 0 10px #009789;
+        top: 53%;
+        left: 0;
+        width: 55%;
+        height: 30%;
+        padding: 1rem;
+
+        @include media-laptop{
+            width: 50%;
+            height: 38%;
+            padding: 0.5rem;
+            top: 40%;
+
+        }
+        p{
+            margin: .1rem auto;
+            font-family: 'Jura', sans-serif;
+            @include font(1rem, 1.4rem, 300);
+        }
+    }
+    .settings-short{
+        display:none
+    }
+
+}
+
+.item-short{
+    position: relative;
+    width: 250px;
+    height: 250px;
+    background-color: $color-light;
+    border: 1px solid $color-background;
+    // padding: .2rem 1rem;
+    margin: 0;
+    padding: 0;
+    box-shadow: 0 0px 4px rgb(0 0 0 / 25%);
+}

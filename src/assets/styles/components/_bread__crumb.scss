@@ -1,0 +1,39 @@
+.breadcrumb{
+    padding: 2rem 5rem;
+
+    &__list{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+    }
+
+    &__symbol, &__text{
+        list-style-type: none;
+        margin: 1rem 2rem;
+
+        @include media-laptop{
+            margin: 1rem;
+        }
+    }
+
+    &__symbol{
+        background: url("https://img.icons8.com/sf-ultralight-filled/25/009789/chevron-right.png");
+        width: 25px;
+        height: 25px;
+    }
+
+    &__text{
+        a{
+            text-decoration: none;
+            font-family: 'Jura', sans-serif;
+            @include font(2.4rem, 2.4rem, 600);
+            color: $color-brand;
+
+            @include media-laptop{
+                @include font(2rem, 2.4rem, 600);
+            }
+        }
+    }
+
+}

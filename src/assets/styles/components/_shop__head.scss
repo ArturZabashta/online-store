@@ -1,0 +1,32 @@
+.shop__head {
+  position: fixed;
+  display: flex;
+  width: 60%;
+  justify-content: space-around;  
+
+  @include media-laptop{
+    width: 65%;
+  }
+
+  &_search{
+    @include media-laptop{
+      width: 13rem;
+    }
+  }
+
+  .shop__view{
+
+    &_short{
+      @include media-laptop{
+        padding: 0;
+        margin: 0;
+      }
+    }
+    &_full{
+      @include media-laptop{
+        padding: 0;
+        margin: 0;
+      }
+    }
+  }
+}
