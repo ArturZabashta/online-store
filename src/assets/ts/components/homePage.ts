@@ -604,7 +604,7 @@ export const HomeComponent = async():Promise<void> => {
       });
 
       setTimeout(()=>{
-        copyButton.innerHTML = 'Copy Lynk'
+        copyButton.innerHTML = 'Copy Link'
         copyButton.classList.remove('__copying');
       },1200)
     });
